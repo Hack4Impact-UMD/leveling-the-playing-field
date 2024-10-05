@@ -3,10 +3,9 @@ import IconSoccer from './SportsIcons/soccer';
 import IconBaseballOutline from './SportsIcons/baseball';
 import IconTennisBall from './SportsIcons/tennis';
 import IconBasketballOutline from './SportsIcons/basketball';
+import { List } from 'postcss/lib/list';
 
 interface Props {
-    onSelect: () => void,
-    onQuantity: () => void,
     onRemove: () => void
 }
 
@@ -17,7 +16,14 @@ const sportsIconsMap = new Map<string, JSX.Element>([
     ['basketball', <IconBasketballOutline key="basketball" className="w-6 h-6" />]
 ]);
 
-const SelectEquipment = ({ onSelect, onQuantity, onRemove }: Props) => {
+const sportsItemsMap = new Map<string, string[]>([
+    ['soccer', ['Soccer Cleats']],
+    ['baseball', ['Baseball Mitts']],
+    ['tennis', ['Tennis Rackets']],
+    ['basketball', ['Basketball']]
+]);
+
+const SelectEquipment = ({ onRemove }: Props) => {
     const [sportSelected, setSportSelected] = useState(false);
     const [quantity, setQuantity] = useState<number>(0);
     const [sport, setSport] = useState<string>("");
@@ -60,23 +66,24 @@ const SelectEquipment = ({ onSelect, onQuantity, onRemove }: Props) => {
             ) : (
                 <>
                     <button
-                        className="flex-1 flex-row items-center bg-teal-700 text-white py-2 px-2 rounded-md font-semibold"        
+                        className="flex-1 flex-row items-center bg-teal-700 text-white py-2 px-2 rounded-md font-semibold"
                         onClick={() => handleSportSelected(false)}
                     >
                         <div className="flex items-center justify-center">
                             {sportsIconsMap.get(sport)}
-                        </div>  
-                    </button>    
+                        </div>
+                    </button>
                     <select
                         value={equipment}
                         className="bg-teal-700 text-white text-center py-2.5 px-4 rounded-md font-semibold"
                         onChange={handleEquipment}
                     >
                         <option value="" disabled>Select Equipment</option>
-                        <option value="soccer">Soccer Cleats</option>
-                        <option value="basketball">Basketball</option>
-                        <option value="baseball">Baseball Mitts</option>
-                        <option value="tennis">Tennis Rackets</option>
+                        {
+                            sportsItemsMap.get(sport)?.map((item, index) => (
+                                <option value={sport} key={index}>{item}</option>
+                            ))
+                        }
                     </select>
                     <input
                         type="number"

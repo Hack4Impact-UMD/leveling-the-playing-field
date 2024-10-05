@@ -14,14 +14,6 @@ const Checkout = () => {
     ]);
   };
 
-  const handleSelect = () => {
-    console.log("Equipment selected");
-  };
-
-  const handleQuantity = () => {
-    console.log("Quantity selected");
-  };
-
   const handleRemove = (id: number) => {
     setEquipmentList(equipmentList.filter((item) => item.id !== id));
   };
@@ -37,8 +29,6 @@ const Checkout = () => {
         {equipmentList.map((item) => (
           <SelectEquipment
             key={item.id}
-            onSelect={handleSelect}
-            onQuantity={handleQuantity}
             onRemove={() => handleRemove(item.id)}
           />
         ))}
