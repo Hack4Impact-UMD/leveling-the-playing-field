@@ -3,7 +3,6 @@ import IconSoccer from './SportsIcons/soccer';
 import IconBaseballOutline from './SportsIcons/baseball';
 import IconTennisBall from './SportsIcons/tennis';
 import IconBasketballOutline from './SportsIcons/basketball';
-import { List } from 'postcss/lib/list';
 
 interface Props {
     onRemove: () => void
@@ -37,6 +36,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
     const handleSport = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
         setSport(String(value));
+        setEquipment("");
         handleSportSelected(true);
     }
 
