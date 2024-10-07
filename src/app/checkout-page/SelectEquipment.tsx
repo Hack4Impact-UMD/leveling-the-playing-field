@@ -50,12 +50,12 @@ const SelectEquipment = ({ onRemove }: Props) => {
     }
 
     return (
-        <div className="flex justify-between space-x-4 items-center">
+        <div className="flex justify-between space-x-4 items-center w-full">
             {!sportSelected ? (
                 <select
                     value={sport}
                     onChange={handleSport}
-                    className="flex-1 bg-teal text-white text-center py-2.5 rounded-md font-semibold"
+                    className="flex-1 bg-teal text-white text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
                 >
                     <option value="" disabled>Select Sport</option>
                     <option value="soccer">Soccer</option>
@@ -66,7 +66,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
             ) : (
                 <>
                     <button
-                        className="flex-1 flex-row items-center bg-teal text-white py-2 px-2 rounded-md font-semibold"
+                        className="flex-1 flex-row items-center bg-teal text-white py-2 px-2 rounded-md font-semibold w-full sm:w-auto"
                         onClick={() => handleSportSelected(false)}
                     >
                         <div className="flex items-center justify-center">
@@ -75,7 +75,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
                     </button>
                     <select
                         value={equipment}
-                        className="bg-teal text-white text-center py-2.5 px-4 rounded-md font-semibold"
+                        className="bg-teal text-white text-center py-2.5 px-4 rounded-md font-semibold w-full sm:w-auto"
                         onChange={handleEquipment}
                     >
                         <option value="" disabled>Select Equipment</option>
@@ -90,10 +90,10 @@ const SelectEquipment = ({ onRemove }: Props) => {
                         placeholder="Quantity"
                         value={quantity}
                         onChange={handleQuantity}
-                        className="border rounded-md bg-teal text-white w-24 py-2 px-4"
+                        className="border rounded-md bg-teal text-white w-24 py-2 px-4 w-full sm:w-24"
                     />
                     <button
-                        className="border border-teal text-red-600 font-bold py-2 px-2 rounded-md text-lg"
+                        className="text-red-600 font-bold py-2 px-2 rounded-md text-lg sm:w-auto"
                         onClick={onRemove}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">

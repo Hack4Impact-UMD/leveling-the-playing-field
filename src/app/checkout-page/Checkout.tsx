@@ -21,7 +21,7 @@ const Checkout = () => {
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
       <div className="mb-6">
-        <img src="/lpf-logo.jpeg" alt="LPF Logo" className="w-20 h-auto" />
+        <img src="/_images/logo.png" alt="LPF Logo" className="w-20 h-auto" />
       </div>
       <h1 className="text-3xl font-bold mb-8 text-black">Checkout</h1>
 
