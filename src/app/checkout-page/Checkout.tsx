@@ -8,9 +8,10 @@ const Checkout = () => {
   ]);
 
   const addEquipment = () => {
+    const last = equipmentList.at(equipmentList.length - 1)?.id ?? 0;
     setEquipmentList([
       ...equipmentList,
-      { id: equipmentList.length + 1, name: "Select Equipment", quantity: 1 },
+      { id: last + 1, name: "Select Equipment", quantity: 1 },
     ]);
   };
 

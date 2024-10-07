@@ -68,7 +68,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
                 <>
                     <button
                         className="flex-row flex-none items-center bg-teal text-white py-2 px-2 rounded-md font-semibold"
-                        onClick={() => handleSportSelected(false)}
+                        onClick={() => { handleSportSelected(false); setSport(""); }}
                     >
                         <div className="flex items-center justify-center">
                             {sportsIconsMap.get(sport)}
