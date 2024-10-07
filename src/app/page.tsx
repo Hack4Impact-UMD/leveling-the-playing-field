@@ -16,7 +16,7 @@ export default function Home() {
 
       {/* Centered Login Button */}
       <div className="login-button">
-        <Image src="/lpf-logo.png" alt="LPF Logo" width={32} height={32} />
+      <Image src="/_images/logo.png" alt="LPF Logo" width={32} height={32} />
         <div>
           <p className="text-xs font-semibold leading-none">LPF</p>
           <p className="text-[10px] leading-none">LEVELING THE PLAYING FIELD</p>
