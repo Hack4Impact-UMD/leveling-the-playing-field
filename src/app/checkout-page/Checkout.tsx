@@ -19,7 +19,7 @@ const Checkout = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-200 h-screen p-8 overflow-scroll">
+    <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
       <div className="mb-6">
         <img src="/lpf-logo.jpeg" alt="LPF Logo" className="w-20 h-auto" />
       </div>
@@ -35,14 +35,14 @@ const Checkout = () => {
 
         <button
           onClick={addEquipment}
-          className="w-full bg-teal-700 text-white py-2 px-4 rounded-md font-semibold"
+          className="w-full bg-teal text-white py-2 px-4 rounded-md font-semibold"
         >
           + Add Equipment
         </button>
       </div>
 
       <div className="w-full max-w-md mt-auto">
-        <button className="w-full bg-teal-700 text-white py-3 rounded-md mt-8 font-semibold">
+        <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
           CHECKOUT
         </button>
       </div>
