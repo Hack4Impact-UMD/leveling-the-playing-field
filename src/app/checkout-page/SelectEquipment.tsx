@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import IconSoccer from './SportsIcons/soccer';
-import IconBaseballOutline from './SportsIcons/baseball';
-import IconTennisBall from './SportsIcons/tennis';
-import IconBasketballOutline from './SportsIcons/basketball';
+import IconSoccer from '../svgs/soccer';
+import IconBaseballOutline from '../svgs/baseball';
+import IconTennisBall from '../svgs/tennis';
+import IconBasketballOutline from '../svgs/basketball';
 
 interface Props {
     onRemove: () => void
@@ -37,6 +37,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
         const value = event.target.value;
         setSport(String(value));
         setEquipment("");
+        setQuantity(0);
         handleSportSelected(true);
     }
 
@@ -50,7 +51,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
     }
 
     return (
-        <div className="flex justify-between space-x-4 items-center w-full">
+        <div className="flex justify-between space-x-2 items-center w-full">
             {!sportSelected ? (
                 <select
                     value={sport}
@@ -66,7 +67,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
             ) : (
                 <>
                     <button
-                        className="flex-1 flex-row items-center bg-teal text-white py-2 px-2 rounded-md font-semibold w-full sm:w-auto"
+                        className="flex-row flex-none items-center bg-teal text-white py-2 px-2 rounded-md font-semibold"
                         onClick={() => handleSportSelected(false)}
                     >
                         <div className="flex items-center justify-center">
@@ -75,7 +76,7 @@ const SelectEquipment = ({ onRemove }: Props) => {
                     </button>
                     <select
                         value={equipment}
-                        className="bg-teal text-white text-center py-2.5 px-4 rounded-md font-semibold w-full sm:w-auto"
+                        className="bg-teal flex-auto text-white text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                         onChange={handleEquipment}
                     >
                         <option value="" disabled>Select Equipment</option>
@@ -90,10 +91,10 @@ const SelectEquipment = ({ onRemove }: Props) => {
                         placeholder="Quantity"
                         value={quantity}
                         onChange={handleQuantity}
-                        className="border rounded-md bg-teal text-white w-24 py-2 px-4 w-full sm:w-24"
+                        className="border flex-auto rounded-md bg-teal text-white w-16 py-2 px-4 sm:w-12"
                     />
                     <button
-                        className="text-red-600 font-bold py-2 px-2 rounded-md text-lg sm:w-auto"
+                        className="text-red-600 flex-none font-bold py-2 rounded-md text-lg sm:w-auto"
                         onClick={onRemove}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="size-6">
