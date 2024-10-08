@@ -12,7 +12,7 @@ const NotFound: React.FC = () => {
             Go Back
           </span>
           <img
-            src="/eva_arrow-back-outline.png"
+            src="/_images/eva_arrow-back-outline.png"
             alt="Arrow"
           />
         </button>
