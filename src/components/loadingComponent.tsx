@@ -8,7 +8,7 @@ const LoadingComponent = () => {
         <div className="bg-orange-400 rounded-full h-9 w-9 m-1"></div>
         <div className="bg-orange-light rounded-full h-9 w-9 m-1"></div>
       </div>
-      <h1 className="text-black text-3xl" style={{ fontFamily: 'var(--font-geist-sans)', fontWeight: 'bold' }}>Loading page, please wait...</h1>
+      <h1 className="text-black text-3xl text-center" style={{ fontFamily: 'var(--font-geist-sans)', fontWeight: 'bold' }}>Loading, please wait...</h1>
     </div>
   )
 }
