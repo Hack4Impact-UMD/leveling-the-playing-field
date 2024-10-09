@@ -11,7 +11,7 @@ interface GeneralHeaderProps {
 
 export default function ProfileHeader({ title }: GeneralHeaderProps) {
     return (
-        <div className="w-3/4 bg-[#14676B99] p-4 my-8 rounded-lg">
+        <div className="w-3/4 bg-[#14676B99] p-4 mt-8 rounded-lg">
             <h2 className={`text-black text-2xl font-medium ${cabinCondensed.className}`}>{title}</h2>
         </div>
     );

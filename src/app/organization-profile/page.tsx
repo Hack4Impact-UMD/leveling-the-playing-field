@@ -1,12 +1,18 @@
 "use client"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Bree_Serif } from 'next/font/google';
 import Image from 'next/image';
 import profile_pic from "../_images/profile_pic.svg"
 import ContactHeader from './components/ContactHeader';
 import ContactEntry from './components/ContactEntry';
 import ProfileHeader from './components/ProfileHeader';
+import { Cabin_Condensed } from 'next/font/google';
+
+const cabinCondensed = Cabin_Condensed({
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+});
 
 const breeSerif = Bree_Serif({
     subsets: ['latin'],
@@ -27,6 +33,18 @@ const initContacts: Contact[] = [
 
 export default function OrganizationProfile() {
     const [contacts, setContacts] = useState<Contact[]>(initContacts);
+    const [location, setLocation] = useState<string>('');
+    const [contactNumber, setContactNumber] = useState<string>('');
+
+    useEffect(() => {
+        // placeholder location
+        setLocation('100 Sunshine Lane City State ZipCode');
+    }, []);
+
+    useEffect(() => {
+        // placeholder number
+        setContactNumber('000-000-0000');
+    }, []);
 
     const handleAddContact = () => {
         const newContact: Contact = {
@@ -54,8 +72,26 @@ export default function OrganizationProfile() {
         </div>
 
         <ProfileHeader title="Location" />
+        <div className="w-3/4">
+            <div className="flex flex-row justify-between items-center py-2">
+                <div className="flex flex-col">
+                    <h3 className={`text-gray-500 text-lg ${cabinCondensed.className}`}>Location</h3>
+                    <p className={`text-black text-2xl ${cabinCondensed.className}`}>{location}</p>
+                </div>
+            </div>
+            <hr className="border-[#00000066] border-2" />
+        </div>
 
         <ProfileHeader title="Contact Number" />
+        <div className="w-3/4">
+            <div className="flex flex-row justify-between items-center py-2">
+                <div className="flex flex-col">
+                    <h3 className={`text-gray-500 text-lg ${cabinCondensed.className}`}>Phone Number</h3>
+                    <p className={`text-black text-2xl ${cabinCondensed.className}`}>{contactNumber}</p>
+                </div>
+            </div>
+            <hr className="border-[#00000066] border-2" />
+        </div>
         
       </div>
     );
