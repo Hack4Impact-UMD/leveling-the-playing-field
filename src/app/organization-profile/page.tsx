@@ -1,24 +1,11 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import { Bree_Serif } from 'next/font/google';
-import Image from 'next/image';
-import profile_pic from "../_images/profile_pic.svg"
-import ContactHeader from './components/ContactHeader';
+import ProfileIcon from '../../components/icons/ProfileIcon'
+import ContactButton from './components/ContactButton';
 import ContactEntry from './components/ContactEntry';
 import ProfileHeader from './components/ProfileHeader';
-import { Cabin_Condensed } from 'next/font/google';
-
-const cabinCondensed = Cabin_Condensed({
-    subsets: ['latin'],
-    weight: ['400', '500', '600', '700'],
-});
-
-const breeSerif = Bree_Serif({
-    subsets: ['latin'],
-    weight: '400',
-});
-
+import EditableField from './components/EditableField';
 interface Contact {
     id: number;
     name: string;
@@ -32,17 +19,15 @@ const initContacts: Contact[] = [
 ];
 
 export default function OrganizationProfile() {
+    const [orgName, setOrgName] = useState<string>('');
     const [contacts, setContacts] = useState<Contact[]>(initContacts);
     const [location, setLocation] = useState<string>('');
     const [contactNumber, setContactNumber] = useState<string>('');
 
     useEffect(() => {
-        // placeholder location
+        //placeholder values
+        setOrgName('XYZ Org.');
         setLocation('100 Sunshine Lane City State ZipCode');
-    }, []);
-
-    useEffect(() => {
-        // placeholder number
         setContactNumber('000-000-0000');
     }, []);
 
@@ -54,45 +39,68 @@ export default function OrganizationProfile() {
         };
         setContacts([...contacts, newContact]);
     };
+
+    //temp functionality: remove last contact in the list
+    const handleRemoveContact = () => {
+        if (contacts.length > 0) {
+            setContacts(contacts.slice(0, -1));
+          }
+    };
+
+    const handleEditContact = (updatedContact: Contact) => {
+        setContacts(
+            contacts.map((contact) => (contact.id === updatedContact.id ? updatedContact : contact))
+        );
+    };
   
     return (
-      <div className="flex flex-col items-center container mx-auto my-12">
-        <h2 className={`text-black text-3xl ${breeSerif.className}`}>Organization Profile</h2> 
+      <div className="flex flex-col items-center container mx-auto my-6">
+        <h2 className="text-black text-3xl font-bree-serif">Organization Profile</h2> 
         
-        <div className="w-3/4 flex flex-row justify-start items-center my-4"> 
-            <Image className="mt-1" src={profile_pic} alt="profile picture"/>
-            <h2 className={`text-black text-4xl ml-2 ${breeSerif.className}`}>XYZ  Org.</h2> 
+        <div className="flex flex-row justify-start items-center mt-4"> 
+            <ProfileIcon />
+            <h2 className="text-black text-4xl ml-2 font-bree-serif">{orgName}</h2> 
         </div>
 
-        <ContactHeader onAddContact={handleAddContact} />
-        <div className="w-3/4 pl-2">
+        <ProfileHeader title="Points of contact" />
+        <div className="w-11/12 pl-2">
             {contacts.map((contact) => (
-                <ContactEntry key={contact.id} name={contact.name} email={contact.email} />
+                <ContactEntry 
+                    key={contact.id} name={contact.name}    
+                    email={contact.email} 
+                    onEdit={(updatedFields: { name: string; email: string }) =>
+                    handleEditContact({ ...contact, ...updatedFields })
+                } />
             ))}
         </div>
 
-        <ProfileHeader title="Location" />
-        <div className="w-3/4">
-            <div className="flex flex-row justify-between items-center py-2">
-                <div className="flex flex-col">
-                    <h3 className={`text-gray-500 text-lg ${cabinCondensed.className}`}>Location</h3>
-                    <p className={`text-black text-2xl ${cabinCondensed.className}`}>{location}</p>
-                </div>
-            </div>
-            <hr className="border-[#00000066] border-2" />
+        <div className="w-11/12 flex flex-row justify-between pt-4">
+            <ContactButton
+                label="Remove Contact"
+                onClick={handleRemoveContact}
+                className="ml-2"
+            />
+
+            <ContactButton
+                label="Add Contact"
+                onClick={handleAddContact}
+                className="mr-2"
+            />
         </div>
 
+        <ProfileHeader title="Location" />
+        <EditableField
+                label="Location"
+                value={location}
+                onSave={(newLocation: string) => setLocation(newLocation)}
+        />
+
         <ProfileHeader title="Contact Number" />
-        <div className="w-3/4">
-            <div className="flex flex-row justify-between items-center py-2">
-                <div className="flex flex-col">
-                    <h3 className={`text-gray-500 text-lg ${cabinCondensed.className}`}>Phone Number</h3>
-                    <p className={`text-black text-2xl ${cabinCondensed.className}`}>{contactNumber}</p>
-                </div>
-            </div>
-            <hr className="border-[#00000066] border-2" />
-        </div>
-        
+        <EditableField
+                label="Number"
+                value={contactNumber}
+                onSave={(newNumber: string) => setContactNumber(newNumber)}
+        />
       </div>
     );
 };
