@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import EditIcon from '../../../components/icons/EditIcon';
+import EditIcon from '@/components/icons/EditIcon';
 
 interface ContactItemProps {
     name: string;

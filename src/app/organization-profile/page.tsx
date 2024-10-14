@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from 'react';
-import ProfileIcon from '../../components/icons/ProfileIcon'
+import ProfileIcon from '@/components/icons/ProfileIcon'
 import ContactButton from './components/ContactButton';
 import ContactEntry from './components/ContactEntry';
 import ProfileHeader from './components/ProfileHeader';

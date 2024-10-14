@@ -1,4 +1,4 @@
-import PlusIcon from '../../../components/icons/PlusIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
 
 interface ContactButtonProps {
   label: string;
