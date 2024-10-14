@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import LeftArrowIcon from "@/components/icons/LeftArrowIcon";
 
-const NotFound: React.FC = () => {
+export default function NotFound() {
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-white-dark">
       <h1 className="font-bree-serif text-[130px] font-normal leading-[140px] text-teal">404</h1>
@@ -11,14 +12,9 @@ const NotFound: React.FC = () => {
           <span className="font-cabin-condensed text-[25px] font-normal leading-[30.38px] text-white flex-grow text-center">
             Go Back
           </span>
-          <img
-            src="/_images/eva_arrow-back-outline.png"
-            alt="Arrow"
-          />
+          <LeftArrowIcon />
         </button>
       </Link>
     </div>
   );
 };
-
-export default NotFound;
