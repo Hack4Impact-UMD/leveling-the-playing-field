@@ -3,13 +3,13 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const breeSerif = localFont({
-  src: "@/../public/fonts/BreeSerif-Regular.ttf",
+  src: "../../public/fonts/BreeSerif-Regular.ttf",
   weight: "400",
   style: "normal",
   variable: "--font-bree-serif",
 });
 const cabin = localFont({
-  src: "@/../public/fonts/Cabin-Regular.ttf",
+  src: "../../public/fonts/Cabin-Regular.ttf",
   weight: "400",
   style: "normal",
   variable: "--font-cabin",
@@ -17,12 +17,12 @@ const cabin = localFont({
 const cabinCondensed = localFont({
   src: [
     {
-      path: "@/../public/fonts/CabinCondensed-Regular.ttf",
+      path: "../../public/fonts/CabinCondensed-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "@/../public/fonts/CabinCondensed-Medium.ttf",
+      path: "../../public/fonts/CabinCondensed-Medium.ttf",
       weight: "500",
       style: "normal",
     }
@@ -30,7 +30,7 @@ const cabinCondensed = localFont({
   variable: "--font-cabin-condensed",
 });
 const ubuntuCondensed = localFont({
-  src: "@/../public/fonts/UbuntuCondensed-Regular.ttf",
+  src: "../../public/fonts/UbuntuCondensed-Regular.ttf",
   weight: "400",
   style: "normal",
   variable: "--font-ubuntu-condensed",
