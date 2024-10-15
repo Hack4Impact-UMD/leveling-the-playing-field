@@ -1,3 +1,7 @@
+import LoadingComponent from '../components/loadingComponent'
+
 export default function Home() {
-  return <></>;
+  return <>
+    <LoadingComponent />
+  </>;
 }
