@@ -1,4 +1,4 @@
-import LoadingComponent from '../components/loadingComponent'
+import LoadingComponent from '../components/Loading'
 
 export default function Home() {
   return <>
