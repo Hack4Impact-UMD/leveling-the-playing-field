@@ -68,7 +68,7 @@ export default function Receipts() {
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
       <h2 className="text-black text-3xl font-bree-serif">Receipts</h2>
-      <Accordion className="mt-8 w-1/3" type="single" collapsible>
+      <Accordion className="mt-8 md:w-3/5" type="single" collapsible>
         {sortedReceipts.map((receipt, index) => (
           <AccordionItem className="bg-teal-light border-teal-800 border-4 rounded-2xl shadow-lg mt-4" key={index} value={`item-${index}`}>
             <AccordionTrigger>
