@@ -27,7 +27,7 @@ function IconButton({ defaultIcon, selectedIcon, label, isSelected, onClick }: I
             <button className="group-hover:text-white-dark">
                 {isSelected ? selectedIcon : defaultIcon}
             </button>
-            <h1 className="text-sm mt-2 group-hover:text-white-dark">{label}</h1>
+            <h1 className="text-sm mt-2 group-hover:text-white-dark font-cabin-condensed">{label}</h1>
         </div>
     );
 }
