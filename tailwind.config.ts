@@ -17,7 +17,8 @@ const config: Config = {
         foreground: "var(--foreground)",
         'teal': {
           DEFAULT: '#14676B',
-          light: '#70A8AB'
+          light: '#70A8AB',
+          dark: '#0E4F54'
         },
         'orange': {
           DEFAULT: '#FF753B',
