@@ -81,7 +81,7 @@ export default function Receipts() {
               </div>
             </AccordionTrigger>
             <AccordionContent className="p-8 bg-teal-light text-white border-t-2">
-              <h2 className="font-bold text-lg">Order Details</h2>
+              <h2 className="font-medium text-lg">Order Details</h2>
               <table className="table-auto w-full text-left">
                 <thead>
                   <tr>
