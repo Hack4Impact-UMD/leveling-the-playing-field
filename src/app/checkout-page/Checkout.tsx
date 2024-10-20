@@ -3,29 +3,55 @@ import React, { useState } from "react";
 import SelectEquipment from "./SelectEquipment";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 
+type Sport = "soccer" | "tennis" | "baseball" | "basketball"
+
+interface Equipment {
+  name: string,
+  quantity: number,
+  sport: Sport
+}
+
 const Checkout = () => {
-  const [equipmentList, setEquipmentList] = useState([
-    { id: 1, name: "Select Equipment", quantity: 1 },
-  ]);
+  // const [equipmentList, setEquipmentList] = useState([
+  //   { id: 1, name: "Select Equipment", quantity: 1 },
+  // ]);
 
-  const [sport, setSport] = useState<string>("")
+  const [equipmentList, setEquipmentList] = useState<Map<Sport, Equipment[]>>(new Map);
 
-  const addEquipment = () => {
-    const last = equipmentList.at(equipmentList.length - 1)?.id ?? 0;
-    setEquipmentList([
-      ...equipmentList,
-      { id: last + 1, name: "Select Equipment", quantity: 1 },
-    ]);
-  };
+  const addSport = (sport: Sport) => {
+    setEquipmentList((prevMap) => {
+      if (prevMap.has(sport)) return prevMap;
 
-  const handleRemove = (id: number) => {
-    setEquipmentList(equipmentList.filter((item) => item.id !== id));
-  };
-
-  const handleSport = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-    setSport(String(value));
+      return new Map(prevMap).set(sport, []);
+    });
   }
+
+  const removeSport = (sport: Sport) => {
+    setEquipmentList((prevMap) => {
+      if (!prevMap.has(sport)) return prevMap;
+
+      const newMap = new Map(prevMap);
+      newMap.delete(sport);
+      return newMap;
+    });
+  };
+
+  // const addEquipment = () => {
+  //   const last = equipmentList.at(equipmentList.length - 1)?.id ?? 0;
+  //   setEquipmentList([
+  //     ...equipmentList,
+  //     { id: last + 1, name: "Select Equipment", quantity: 1 },
+  //   ]);
+  // };
+
+  // const handleRemove = (id: number) => {
+  //   setEquipmentList(equipmentList.filter((item) => item.id !== id));
+  // };
+
+  // const handleSport = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = event.target.value;
+  //   setSport(String(value));
+  // }
 
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
@@ -36,8 +62,8 @@ const Checkout = () => {
 
       <div className="w-full max-w-md space-y-4">
         <select
-          value={sport}
-          onChange={handleSport}
+          // value={sport}
+          // onChange={handleSport}
           className="w-full bg-teal text-white py-2 px-4 rounded-md font-semibold text-center"
         >
           <option value="" disabled>Select Sport</option>
@@ -46,12 +72,12 @@ const Checkout = () => {
           <option value="baseball">Baseball</option>
           <option value="tennis">Tennis</option>
         </select>
-        {equipmentList.map((item) => (
+        {/* {equipmentList.map((item) => (
           <SelectEquipment
             key={item.id}
             onRemove={() => handleRemove(item.id)}
           />
-        ))}
+        ))} */}
 
         {/* <button
           onClick={addEquipment}
