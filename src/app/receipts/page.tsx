@@ -70,7 +70,7 @@ export default function Receipts() {
       <h2 className="text-black text-3xl font-bree-serif">Receipts</h2>
       <Accordion className="mt-8 md:w-3/5" type="single" collapsible>
         {sortedReceipts.map((receipt, index) => (
-          <AccordionItem className="bg-teal-light border-teal-800 border-4 rounded-2xl shadow-lg mt-4" key={index} value={`item-${index}`}>
+          <AccordionItem className="bg-teal-light border-teal border-4 rounded-2xl shadow-lg mt-4" key={index} value={`item-${index}`}>
             <AccordionTrigger>
               <div className="px-8 py-2 w-full text-left text-white">
                 <div>{receipt.city}, {receipt.state}</div>
