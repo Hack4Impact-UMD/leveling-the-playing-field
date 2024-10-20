@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-const appp = () => {
+export default const AppointmentsPage = () => {
     // Sort appointments by date
     const appointmentsDatessorted = appointments.sort((a, b) => new Date(a.date) - new Date(b.date));
   
@@ -11,7 +11,7 @@ const appp = () => {
         <div id="positionimg">
           {/* <img src={appointmentImage} alt="Appointments"/> */}
         </div>
-        <h2 className="appointments-text">Appointments</h2>
+        <h2 className="appointments-text bg-teal">Appointments</h2>
         {/* Loop thru sorted appointments and display them with the component */}
         {appointmentsDatessorted.map((appointment, x) => (
             <appointmentcomponents
@@ -22,5 +22,3 @@ const appp = () => {
       </div>
     );
   };
-  
-export default appp;
