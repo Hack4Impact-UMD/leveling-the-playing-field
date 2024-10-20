@@ -7,26 +7,24 @@ import ReceiptIcon from "./icons/ReceiptIcon";
 import React, { useState } from "react";
 
 type IconButtonProps = {
-    defaultIcon: React.ReactNode;
-    selectedIcon: React.ReactNode;
-    isSelected: boolean;
+    icon: React.ReactNode;
     onClick: () => void;
 };
 
-function IconButton({ defaultIcon, selectedIcon, isSelected, onClick }: IconButtonProps) {
+function IconButton({ icon, onClick }: IconButtonProps) {
     return (
         <div
             className={`group flex flex-col items-center p-4 rounded-mini hover:bg-teal-light`}
             onClick={onClick}
         >
             <button className="${isSelected ? text-white : text-teal} group-hover:text-white-dark">
-                {isSelected ? selectedIcon : defaultIcon}
+                {icon}
             </button>
         </div>
     );
 }
 
-export default function NavBar() {
+export default function Navbar() {
     const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
     const handleIconClick = (label: string) => {
@@ -36,36 +34,22 @@ export default function NavBar() {
     return (
         <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-custom">
             <IconButton
-                defaultIcon={<ProfileIcon size={50} viewBoxSize={75}/>
-            }
-                selectedIcon={<ProfileIcon size = {50} viewBoxSize = {75} showCircle/>}
-                isSelected={selectedIcon === "Profile"}
+                icon={<ProfileIcon size = {50} viewBoxSize = {75} showCircle={selectedIcon === "Profile"}/>}
                 onClick={() => handleIconClick("Profile")}
             />
 
             <IconButton
-                defaultIcon={<SearchIcon size={50} viewBoxSize={60}  transform='translate(10,10)'/>
-            }
-                selectedIcon={<SearchIcon size = {50} viewBoxSize = {60}  transform = 'translate(5,5)' showCircle/>}
-              
-                isSelected={selectedIcon === "Search"}
+                icon={<SearchIcon size = {50} viewBoxSize = {60}  transform = 'translate(5,5)' showCircle={selectedIcon === "Search"}/>}              
                 onClick={() => handleIconClick("Search")}
             />
 
             <IconButton
-                defaultIcon={<ShoppingCartIcon size={55} viewBoxSize={50}  />}
-                selectedIcon={<ShoppingCartIcon size={55} viewBoxSize={50} showCircle/> }
-                
-                isSelected={selectedIcon === "Appointments"}
+                icon={<ShoppingCartIcon size={55} viewBoxSize={50} showCircle={selectedIcon === "Appointments"}/> }
                 onClick={() => handleIconClick("Appointments")}
             />
 
             <IconButton
-                defaultIcon={<ReceiptIcon size={50} viewBoxSize={65} transform="translate(7,7)" />
-            }
-                selectedIcon={<ReceiptIcon size={50} viewBoxSize={65}  transform='translate(7,7)' showCircle/>}
-                
-                isSelected={selectedIcon === "Receipts"}
+                icon={<ReceiptIcon size={50} viewBoxSize={65}  transform='translate(7,7)' showCircle={selectedIcon === "Receipts"}/>}
                 onClick={() => handleIconClick("Receipts")}
             />
         </div>
