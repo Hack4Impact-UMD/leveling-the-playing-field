@@ -19,6 +19,10 @@ const config: Config = {
       },
     },
     extend: {
+      borderRadius: {
+        'custom': '50px', 
+        'mini': '25px'
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
