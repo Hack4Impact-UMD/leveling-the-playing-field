@@ -4,10 +4,12 @@ import EditIcon from '@/components/icons/EditIcon';
 interface EditableFieldProps {
     label: string;
     value: string;
+    type: string;
+    pattern?: RegExp; 
     onSave: (newValue: string) => void;
 }
 
-export default function EditableField({ label, value, onSave }: EditableFieldProps) {
+export default function EditableField({ label, type, value, pattern, onSave }: EditableFieldProps) {
     const [isEditable, setIsEditable] = useState(false);
     const [inputValue, setInputValue] = useState(value);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -16,27 +18,37 @@ export default function EditableField({ label, value, onSave }: EditableFieldPro
         setInputValue(value);
     }, [value]);
 
+    const validateField = () => {
+        if (pattern && !pattern.test(inputValue)) {
+            return false;
+        }
+        if (!inputValue) {
+            return false;
+        }
+        return true;
+    };
+
     const handleEditClick = () => {
         setIsEditable(true);
         setTimeout(() => inputRef.current && inputRef.current.focus(), 0);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && validateField()) {
             setIsEditable(false);
             onSave(inputValue); 
         }
     };
 
     return (
-        <div className="w-11/12 pl-2">
+        <div className="w-full pl-2">
             <div className="flex flex-row justify-between items-center py-2">
                 <div className="flex flex-col w-full">
                     <h3 className="text-gray-500 text-lg font-cabin-condensed">{label}</h3>
                     {isEditable ? (
                         <>
                             <input
-                                type="text"
+                                type={type}
                                 value={inputValue}
                                 ref={inputRef}
                                 onChange={(e) => setInputValue(e.target.value)}

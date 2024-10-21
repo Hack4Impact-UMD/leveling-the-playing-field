@@ -9,13 +9,13 @@ import EditableField from './components/EditableField';
 interface Contact {
     id: number;
     name: string;
+    phoneNumber: string
     email: string;
 }
 
 // temp data for testing
 const initContacts: Contact[] = [
-    { id: 1, name: 'Name1', email: 'contactemail1@gmail.com' },
-    { id: 2, name: 'Name2', email: 'contactemail2@gmail.com' },
+    { id: 1, name: 'Name1', phoneNumber : '000-000-0000', email: 'contactemail1@gmail.com' },
 ];
 
 export default function OrganizationProfile() {
@@ -35,17 +35,17 @@ export default function OrganizationProfile() {
         const newContact: Contact = {
           id: contacts.length + 1,
           name: `Name${contacts.length + 1}`,
+          phoneNumber: '000-000-000',
           email: `contactemail${contacts.length + 1}@gmail.com`,
         };
         setContacts([...contacts, newContact]);
     };
 
-    //temp functionality: remove last contact in the list
-    const handleRemoveContact = () => {
-        if (contacts.length > 0) {
-            setContacts(contacts.slice(0, -1));
-          }
-    };
+    // const handleRemoveContact = () => {
+    //     if (contacts.length > 0) {
+    //         setContacts(contacts.slice(0, -1));
+    //       }
+    // };
 
     const handleEditContact = (updatedContact: Contact) => {
         setContacts(
@@ -54,7 +54,7 @@ export default function OrganizationProfile() {
     };
   
     return (
-      <div className="flex flex-col items-center container mx-auto my-6">
+      <div className="flex flex-col items-center container mx-auto my-6 pb-32">
         <h2 className="text-black text-3xl font-bree-serif">Organization Profile</h2> 
         
         <div className="flex flex-row justify-start items-center mt-4"> 
@@ -63,34 +63,29 @@ export default function OrganizationProfile() {
         </div>
 
         <ProfileHeader title="Points of contact" />
-        <div className="w-11/12 pl-2">
+        <div className="w-full pl-2">
             {contacts.map((contact) => (
                 <ContactEntry 
                     key={contact.id} name={contact.name}    
                     email={contact.email} 
-                    onEdit={(updatedFields: { name: string; email: string }) =>
+                    phoneNumber={contact.phoneNumber}
+                    onEdit={(updatedFields: { name: string; phoneNumber: string; email: string }) =>
                     handleEditContact({ ...contact, ...updatedFields })
                 } />
             ))}
         </div>
 
-        <div className="w-11/12 flex flex-row justify-between pt-4">
-            <ContactButton
-                label="Remove Contact"
-                onClick={handleRemoveContact}
-                className="ml-2"
-            />
-
+        <div className="w-11/12 flex flex-row justify-end pt-4">
             <ContactButton
                 label="Add Contact"
                 onClick={handleAddContact}
-                className="mr-2"
             />
         </div>
 
         <ProfileHeader title="Location" />
         <EditableField
                 label="Location"
+                type="text"
                 value={location}
                 onSave={(newLocation: string) => setLocation(newLocation)}
         />
@@ -98,7 +93,9 @@ export default function OrganizationProfile() {
         <ProfileHeader title="Contact Number" />
         <EditableField
                 label="Number"
+                type="tel"
                 value={contactNumber}
+                pattern={/^\d{3}-\d{3}-\d{4}$/}
                 onSave={(newNumber: string) => setContactNumber(newNumber)}
         />
       </div>
