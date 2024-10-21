@@ -58,7 +58,7 @@ export default function OrganizationProfile() {
         <h2 className="text-black text-3xl font-bree-serif">Organization Profile</h2> 
         
         <div className="flex flex-row justify-start items-center mt-4"> 
-            <ProfileIcon />
+            <ProfileIcon color='black'/>
             <h2 className="text-black text-4xl ml-2 font-bree-serif">{orgName}</h2> 
         </div>
 
@@ -75,7 +75,7 @@ export default function OrganizationProfile() {
             ))}
         </div>
 
-        <div className="w-11/12 flex flex-row justify-end pt-4">
+        <div className="w-full flex flex-row justify-end pt-4">
             <ContactButton
                 label="Add Contact"
                 onClick={handleAddContact}
