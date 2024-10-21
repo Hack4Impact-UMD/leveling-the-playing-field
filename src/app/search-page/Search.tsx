@@ -26,6 +26,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import SearchIcon from '@/components/icons/SmallSearchIcon';
+import FilterIcon from '@/components/icons/FilterIcon';
+import LocationIcon from '@/components/icons/LocationIcon';
+import RightArrowIcon from '@/components/icons/RightArrowIcon';
 
 interface Equipment {
   name: string;
@@ -41,12 +45,13 @@ const SearchPage = () => {
   const [selectedSport, setSelectedSport] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false); 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [appliedFilters, setAppliedFilters] = useState({
     warehouse: 'all',
     sport: 'all'
   });
+  
 
   // Sample data with quantities
   const equipmentList = [
@@ -102,40 +107,48 @@ const SearchPage = () => {
     });
   };
 
+  // useEffect(() => {
+  //   setFilteredEquipmentList(applyFilters())
+  // }, [selectedSport, selectedWarehouse])
+  // const [filteredEquipmentList, setFilteredEquipmentList] = useState(applyFilters())
   const filteredEquipmentList = applyFilters();
 
   return (
     <div className="p-4">
       <div className="flex items-center space-x-2 mb-4">
-        <div className="relative flex-grow">
+        <div className="relative flex-grow border-black bg-teal-light rounded-3xl space-x-10 text-white">
+          <div className="absolute left-2 top-1 bottom-2">
+            <SearchIcon />
+          </div>
           <Input
             value={searchTerm}
             onChange={handleSearch}
             placeholder={`Search by ${searchMode === 'equipment' ? 'Equipment' : 'Location'}`}
-            className="pr-20"
+            className="pr-15 w-6/11 border-teal-light bg-teal-light rounded-3xl text-white font-ubuntu-condensed"
           />
           <Button
             onClick={toggleSearchMode}
-            className="absolute right-0 top-0 bottom-0"
+            className="absolute right-0 top-0 bottom-0 bg-teal hover:bg-teal focus:bg-teal rounded-3xl font-ubuntu-condensed px-6"
           >
             {searchMode === 'equipment' ? 'Location' : 'Equipment'}
           </Button>
         </div>
-        <Button onClick={handleFilterToggle}>
-          Filter
+        <Button onClick={handleFilterToggle} className="bg-orange-light hover:bg-orange-light focus:bg-orange-light h-12 rounded-2xl">
+          <FilterIcon />
         </Button>
       </div>
 
       {showFilter && (
-        <div className="p-4 border rounded mb-4 space-y-4">
+        <div className="p-4 border rounded mb-4 space-y-4 bg-orange-light">
+          <h2 className="text-lg font-cabin-condensed text-white">Filter</h2>
           {searchMode === 'equipment' && (
             <div>
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-2 font-cabin-condensed text-white">
                 <span>Warehouse Location</span>
-                <Button onClick={resetWarehouse} variant="outline" size="sm">Reset</Button>
+                <Button onClick={resetWarehouse} variant="link" size="sm" className="underline text-white">Reset</Button>
               </div>
               <Select onValueChange={setSelectedWarehouse} value={selectedWarehouse}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-3/4 h-25 rounded-3xl shadow-lg shadow-black-500">
                   <SelectValue placeholder="Select a warehouse" />
                 </SelectTrigger>
                 <SelectContent>
@@ -149,12 +162,12 @@ const SearchPage = () => {
           )}
 
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <span>Sport Category</span>
-              <Button onClick={resetSport} variant="outline" size="sm">Reset</Button>
+            <div className="flex justify-between items-center mb-2 font-cabin-condensed">
+              <span className="text-white">Sport Category</span>
+              <Button onClick={resetSport} variant="link" size="sm" className="underline text-white">Reset</Button>
             </div>
             <Select onValueChange={setSelectedSport} value={selectedSport}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-3/4 h-10 rounded-3xl shadow-lg shadow-black-500">
                 <SelectValue placeholder="Select sport" />
               </SelectTrigger>
               <SelectContent>
@@ -167,38 +180,64 @@ const SearchPage = () => {
           </div>
 
           <div className="flex justify-end mt-4">
-            <Button onClick={handleApplyFilters}>Apply</Button>
+            <Button onClick={handleApplyFilters} className="bg-teal-light h-5 rounded-3xl font-cabin-condensed underline">Apply</Button>
           </div>
         </div>
       )}
 
+      {/* Basic information of each warehouse/location */}
       <div className="grid grid-cols-1 gap-4">
         {filteredEquipmentList.map((item) => (
           <Button
             key={item.name}
             onClick={() => handleEquipmentClick(item)}
-            className="p-6 rounded text-left flex flex-col items-start w-full h-auto"
+            className="p-0 rounded-2xl w-full h-full"
             variant="outline"
           >
-            <span className="font-semibold text-lg mb-2">
-              {searchMode === 'equipment' ? item.name : item.warehouse}
-            </span>
-            {searchMode === 'equipment' && (
-              <span className="text-sm text-gray-600">
-                {`Location(s) Available: ${item.warehouse}`}
-              </span>
-            )}
-            {searchMode === 'location' && (
-              <span className="text-sm text-gray-600">
-                {`Equipment Available: ${item.name}`}
-              </span>
-            )}
+            <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-1 rounded-2xl">
+              <div className="flex flex-col justify-start">
+                <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed">
+                  {searchMode === 'equipment' ? (
+                    <div className="flex space-x-2 items-baseline">
+                      <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed leading-tight">
+                        {item.name}
+                      </span>
+                      <div className="bg-white-dark opacity-50 rounded-3xl text-sm text-black font-ubuntu-condensed leading-tight px-2">
+                        {item.sport}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex space-x-2 items-baseline">
+                      <LocationIcon />
+                      <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed">
+                        {item.warehouse}
+                      </span>
+                    </div>
+                  )}
+                </span>
+                {searchMode === 'equipment' && (
+                  <div className="flex space-x-2">
+                    <LocationIcon />
+                    <span className="text-sm text-white font-ubuntu-condensed">
+                      {`Location(s) Available: ${item.warehouse}`}
+                    </span>
+                  </div>
+                )}
+                {searchMode === 'location' && (
+                  <span className="text-sm text-white font-ubuntu-condensed">
+                    {`Equipment Available: ${item.name}`}
+                  </span>
+                )}
+              </div>
+              <RightArrowIcon />
+            </div>
           </Button>
         ))}
       </div>
 
+      {/* pop-up box for more information */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-teal text-white font-ubuntu-condensed">
           <DialogHeader>
             <DialogTitle>
               {searchMode === 'equipment' 
@@ -208,7 +247,7 @@ const SearchPage = () => {
             <DialogClose />
           </DialogHeader>
           {selectedEquipment && (
-            <div className="p-4">
+            <div className="p-4 bg-teal text-white font-ubuntu-condensed">
               {searchMode === 'equipment' ? (
                 <>
                   <p>Warehouse: {selectedEquipment.warehouse}</p>
@@ -226,7 +265,7 @@ const SearchPage = () => {
                   }</p>
                 </>
               )}
-              <Button onClick={() => setIsDialogOpen(false)} className="mt-4">
+              <Button onClick={() => setIsDialogOpen(false)} className="mt-4 rounded-2xl bg-orange hover:bg-orange focus:bg-orange">
                 Close
               </Button>
             </div>
