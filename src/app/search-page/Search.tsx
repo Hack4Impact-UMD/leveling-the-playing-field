@@ -90,11 +90,22 @@ const SearchPage = () => {
 
   const resetWarehouse = () => {
     setSelectedWarehouse('all');
+    handleApplyFilters();
   };
 
   const resetSport = () => {
     setSelectedSport('all');
+    handleApplyFilters();
   };
+
+  useEffect(() => {
+    if ((selectedSport === 'all' || !selectedSport) && (selectedWarehouse === 'all' || !selectedWarehouse)) {
+      setFilteredEquipmentList(equipmentList)
+    } else {
+      setFilteredEquipmentList(applyFilters())
+    }
+  }, [appliedFilters])
+  const [filteredEquipmentList, setFilteredEquipmentList] = useState(equipmentList)
 
   const applyFilters = () => {
     return equipmentList.filter((item) => {
@@ -107,11 +118,7 @@ const SearchPage = () => {
     });
   };
 
-  // useEffect(() => {
-  //   setFilteredEquipmentList(applyFilters())
-  // }, [selectedSport, selectedWarehouse])
-  // const [filteredEquipmentList, setFilteredEquipmentList] = useState(applyFilters())
-  const filteredEquipmentList = applyFilters();
+  // const filteredEquipmentList = applyFilters();
 
   return (
     <div className="p-4">
