@@ -263,10 +263,10 @@ const SearchPage = () => {
           >
             <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-1 rounded-2xl">
               <div className="flex flex-col justify-start">
-                <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed leading-tight">
+                <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed leading-tight">
                   {searchMode === 'equipment' ? (
                     <div className="flex space-x-2 items-baseline">
-                      <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed leading-tight">
+                      <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed leading-tight">
                         {(item as GroupedEquipment).name}
                       </span>
                       <div className="bg-white-dark opacity-50 rounded-3xl text-sm text-black font-ubuntu-condensed leading-tight px-2">
@@ -276,27 +276,27 @@ const SearchPage = () => {
                   ) : (
                     <div className="flex space-x-2 items-baseline">
                       <LocationIcon />
-                      <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed">
+                      <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed">
                         {(item as LocationEquipment).warehouse}
                       </span>
                     </div>
                   )}
                 </span>
                 {searchMode === 'equipment' && 'locations' in item && (
-                  <div className="flex flex-col">
-                    <span className="text-sm text-white font-ubuntu-condensed mb-1 truncate">
-                      Locations available: {
-                        item.locations.length > 2
-                          ? `${item.locations.slice(0, 2).map(location => location.warehouse).join(', ')}...`
-                          : item.locations.map(location => location.warehouse).join(', ')
-                      }
+                  <div className="flex space-x-2">
+                    <LocationIcon />
+
+                    <span className="text-sm text-white font-ubuntu-condensed mb-1">
+                      Location(s) available: {item.locations.length}
                     </span>
                   </div>
                 )}
                 {searchMode === 'location' && 'equipment' in item && (
-                  <span className="text-sm text-white font-ubuntu-condensed">
-                    {`Equipment Available: ${item.equipment.length} types`}
-                  </span>
+                  <div className="flex space-x-2">
+                    <span className="text-sm text-white font-ubuntu-condensed">
+                      {`Equipment Available: ${item.equipment.length} types`}
+                    </span>
+                  </div>
                 )}
               </div>
               <RightArrowIcon />
