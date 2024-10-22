@@ -2,14 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -30,27 +22,43 @@ import SearchIcon from '@/components/icons/SmallSearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
 import RightArrowIcon from '@/components/icons/RightArrowIcon';
+import { Input } from "@/components/ui/input"
 
 interface Equipment {
   name: string;
   quantity: number;
   sport: string;
   warehouse: string;
+  totalQuantity?: number; 
+  locations?: { warehouse: string; quantity: number }[]; 
 }
-import { Input } from "@/components/ui/input"
+
+interface GroupedEquipment {
+  name: string;
+  sport: string;
+  totalQuantity: number;
+  locations: { warehouse: string; quantity: number }[];
+}
+
+interface LocationEquipment {
+  warehouse: string;
+  equipment: { name: string; sport: string; quantity: number }[];
+}
 
 const SearchPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>(undefined);
   const [selectedSport, setSelectedSport] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(null);
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | GroupedEquipment | LocationEquipment | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [appliedFilters, setAppliedFilters] = useState({
     warehouse: 'all',
     sport: 'all'
   });
+  const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
+  const [locationEquipmentList, setLocationEquipmentList] = useState<LocationEquipment[]>([]);
   
 
   // Sample data with quantities
@@ -58,6 +66,14 @@ const SearchPage = () => {
     { name: 'Soccer Ball', quantity: 10, sport: 'Soccer', warehouse: 'Baltimore, Maryland' },
     { name: 'Basketball', quantity: 5, sport: 'Basketball', warehouse: 'College Park, Maryland' },
     { name: 'Tennis Racket', quantity: 15, sport: 'Tennis', warehouse: 'McLean, Virginia' },
+    { name: 'Tennis Balls', quantity: 30, sport: 'Tennis', warehouse: 'McLean, Virginia' },
+    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'College Park, Maryland' },
+    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'McLean, Virginia' },
+    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'Baltimore, Maryland' }
+
+
+
+
   ];
   const warehouses = ['Baltimore, Maryland', 'College Park, Maryland', 'McLean, Virginia'];
   const sports = ['Soccer', 'Basketball', 'Tennis'];
@@ -70,15 +86,15 @@ const SearchPage = () => {
     setShowFilter(!showFilter);
   };
 
-  const handleEquipmentClick = (equipment: Equipment) => {
+  const handleEquipmentClick = (equipment: Equipment | GroupedEquipment | LocationEquipment) => {
     setSelectedEquipment(equipment);
-    setIsDialogOpen(true); // Open the dialog when equipment is clicked
+    setIsDialogOpen(true);
   };
 
   const toggleSearchMode = () => {
     setSearchMode(prevMode => prevMode === 'equipment' ? 'location' : 'equipment');
     setSearchTerm('');
-    setSelectedWarehouse('all'); // Reset warehouse filter when switching to location mode
+    setSelectedWarehouse('all'); 
   };
 
   const handleApplyFilters = () => {
@@ -99,26 +115,67 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
+    const groupedEquipment = equipmentList.reduce((acc: GroupedEquipment[], item) => {
+      const existingItem = acc.find(g => g.name === item.name);
+      if (existingItem) {
+        existingItem.totalQuantity += item.quantity;
+        existingItem.locations.push({ warehouse: item.warehouse, quantity: item.quantity });
+      } else {
+        acc.push({
+          name: item.name,
+          sport: item.sport,
+          totalQuantity: item.quantity,
+          locations: [{ warehouse: item.warehouse, quantity: item.quantity }]
+        });
+      }
+      return acc;
+    }, []);
+    setGroupedEquipmentList(groupedEquipment);
+
+    const locationEquipment = equipmentList.reduce((acc: LocationEquipment[], item) => {
+      const existingLocation = acc.find(l => l.warehouse === item.warehouse);
+      if (existingLocation) {
+        existingLocation.equipment.push({ name: item.name, sport: item.sport, quantity: item.quantity });
+      } else {
+        acc.push({
+          warehouse: item.warehouse,
+          equipment: [{ name: item.name, sport: item.sport, quantity: item.quantity }]
+        });
+      }
+      return acc;
+    }, []);
+    setLocationEquipmentList(locationEquipment);
+  }, []);
+
+  useEffect(() => {
     if ((selectedSport === 'all' || !selectedSport) && (selectedWarehouse === 'all' || !selectedWarehouse)) {
-      setFilteredEquipmentList(equipmentList)
+      setFilteredEquipmentList(searchMode === 'equipment' ? groupedEquipmentList : locationEquipmentList);
     } else {
-      setFilteredEquipmentList(applyFilters())
+      setFilteredEquipmentList(applyFilters());
     }
-  }, [appliedFilters])
-  const [filteredEquipmentList, setFilteredEquipmentList] = useState(equipmentList)
+  }, [appliedFilters, groupedEquipmentList, locationEquipmentList, selectedSport, selectedWarehouse, searchMode]);
+
+  // Update the state type to include both possibilities
+  const [filteredEquipmentList, setFilteredEquipmentList] = useState<GroupedEquipment[] | LocationEquipment[]>([]);
 
   const applyFilters = () => {
-    return equipmentList.filter((item) => {
-      const warehouseMatch = searchMode === 'location' || !appliedFilters.warehouse || appliedFilters.warehouse === 'all' || item.warehouse === appliedFilters.warehouse;
-      const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || item.sport === appliedFilters.sport;
-      const searchMatch = searchMode === 'equipment'
-        ? item.name.toLowerCase().includes(searchTerm.toLowerCase())
-        : item.warehouse.toLowerCase().includes(searchTerm.toLowerCase());
-      return warehouseMatch && sportMatch && searchMatch;
-    });
+    if (searchMode === 'equipment') {
+      return groupedEquipmentList.filter((item) => {
+        const warehouseMatch = !appliedFilters.warehouse || appliedFilters.warehouse === 'all' || item.locations.some(loc => loc.warehouse === appliedFilters.warehouse);
+        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || item.sport === appliedFilters.sport;
+        const searchMatch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        return warehouseMatch && sportMatch && searchMatch;
+      });
+    } else {
+      return locationEquipmentList.filter((item) => {
+        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || item.equipment.some(e => e.sport === appliedFilters.sport);
+        const searchMatch = item.warehouse.toLowerCase().includes(searchTerm.toLowerCase());
+        return sportMatch && searchMatch;
+      });
+    }
   };
 
-  // const filteredEquipmentList = applyFilters();
 
   return (
     <div className="p-4">
@@ -194,45 +251,48 @@ const SearchPage = () => {
 
       {/* Basic information of each warehouse/location */}
       <div className="grid grid-cols-1 gap-4">
-        {filteredEquipmentList.map((item) => (
+        {applyFilters().map((item) => (
           <Button
-            key={item.name}
+            key={searchMode === 'equipment' ? (item as GroupedEquipment).name : (item as LocationEquipment).warehouse}
             onClick={() => handleEquipmentClick(item)}
             className="p-0 rounded-2xl w-full h-full"
             variant="outline"
           >
             <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-1 rounded-2xl">
               <div className="flex flex-col justify-start">
-                <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed">
+                <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed leading-tight">
                   {searchMode === 'equipment' ? (
                     <div className="flex space-x-2 items-baseline">
                       <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed leading-tight">
-                        {item.name}
+                        {(item as GroupedEquipment).name}
                       </span>
                       <div className="bg-white-dark opacity-50 rounded-3xl text-sm text-black font-ubuntu-condensed leading-tight px-2">
-                        {item.sport}
+                        {(item as GroupedEquipment).sport}
                       </div>
                     </div>
                   ) : (
                     <div className="flex space-x-2 items-baseline">
                       <LocationIcon />
                       <span className="font-semibold text-lg mb-2 text-white font-ubuntu-condensed">
-                        {item.warehouse}
+                        {(item as LocationEquipment).warehouse}
                       </span>
                     </div>
                   )}
                 </span>
-                {searchMode === 'equipment' && (
-                  <div className="flex space-x-2">
-                    <LocationIcon />
-                    <span className="text-sm text-white font-ubuntu-condensed">
-                      {`Location(s) Available: ${item.warehouse}`}
+                {searchMode === 'equipment' && 'locations' in item && (
+                  <div className="flex flex-col">
+                    <span className="text-sm text-white font-ubuntu-condensed mb-1 truncate">
+                      Locations available: {
+                        item.locations.length > 2
+                          ? `${item.locations.slice(0, 2).map(location => location.warehouse).join(', ')}...`
+                          : item.locations.map(location => location.warehouse).join(', ')
+                      }
                     </span>
                   </div>
                 )}
-                {searchMode === 'location' && (
+                {searchMode === 'location' && 'equipment' in item && (
                   <span className="text-sm text-white font-ubuntu-condensed">
-                    {`Equipment Available: ${item.name}`}
+                    {`Equipment Available: ${item.equipment.length} types`}
                   </span>
                 )}
               </div>
@@ -248,8 +308,8 @@ const SearchPage = () => {
           <DialogHeader>
             <DialogTitle>
               {searchMode === 'equipment' 
-                ? `${selectedEquipment?.name} Availability`
-                : `Equipment at ${selectedEquipment?.warehouse}`}
+                ? `${(selectedEquipment as GroupedEquipment)?.name} Availability`
+                : `Equipment at ${(selectedEquipment as LocationEquipment)?.warehouse}`}
             </DialogTitle>
             <DialogClose />
           </DialogHeader>
@@ -257,19 +317,31 @@ const SearchPage = () => {
             <div className="p-4 bg-teal text-white font-ubuntu-condensed">
               {searchMode === 'equipment' ? (
                 <>
-                  <p>Warehouse: {selectedEquipment.warehouse}</p>
-                  <p>Sport: {selectedEquipment.sport}</p>
-                  <p>Quantity: {selectedEquipment.quantity}</p>
+                  {'sport' in selectedEquipment && <p>Sport: {selectedEquipment.sport}</p>}
+                  <p>Total Quantity: {
+                    'totalQuantity' in selectedEquipment 
+                      ? selectedEquipment.totalQuantity 
+                      : ('quantity' in selectedEquipment ? selectedEquipment.quantity : 'N/A')
+                  }</p>
+                  <p>Locations:</p>
+                  <ul>
+                    {(selectedEquipment as GroupedEquipment).locations ? 
+                      (selectedEquipment as GroupedEquipment).locations.map((loc, index) => (
+                        <li key={index}>{loc.warehouse}: {loc.quantity}</li>
+                      )) :
+                      <li>{(selectedEquipment as Equipment).warehouse}: {(selectedEquipment as Equipment).quantity}</li>
+                    }
+                  </ul>
                 </>
               ) : (
                 <>
-                  <p>Sport: {selectedSport === 'all' ? 'All Sports' : selectedSport}</p>
-                  <p>Total Equipment: {
-                    equipmentList
-                      .filter(item => item.warehouse === selectedEquipment.warehouse &&
-                                      (selectedSport === 'all' || item.sport === selectedSport))
-                      .reduce((total, item) => total + item.quantity, 0)
-                  }</p>
+                  <p>Total Equipment Types: {(selectedEquipment as LocationEquipment).equipment.length}</p>
+                  <p>Equipment List:</p>
+                  <ul>
+                    {(selectedEquipment as LocationEquipment).equipment.map((eq, index) => (
+                      <li key={index}>{eq.name} ({eq.sport}): {eq.quantity}</li>
+                    ))}
+                  </ul>
                 </>
               )}
               <Button onClick={() => setIsDialogOpen(false)} className="mt-4 rounded-2xl bg-orange hover:bg-orange focus:bg-orange">
