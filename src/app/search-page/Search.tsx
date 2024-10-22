@@ -197,7 +197,10 @@ const SearchPage = () => {
             {searchMode === 'equipment' ? 'Location' : 'Equipment'}
           </Button>
         </div>
-        <Button onClick={handleFilterToggle} className="bg-orange-light hover:bg-orange-light focus:bg-orange-light h-12 rounded-2xl">
+        <Button 
+          onClick={handleFilterToggle} 
+          className="bg-orange-light hover:bg-orange-light focus:bg-orange-light w-[45px] h-[50px] rounded-2xl [&_svg]:w-11 [&_svg]:h-11 [&_svg]:-ml-1 [&_svg]:-mt-1"
+        >
           <FilterIcon />
         </Button>
       </div>
