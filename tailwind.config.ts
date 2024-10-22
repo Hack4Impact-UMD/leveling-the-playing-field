@@ -33,7 +33,7 @@ const config: Config = {
         },
         orange: {
           DEFAULT: "#FF753B",
-          light: "#FFAD8B",
+          light: "#F49066",
         },
         green: {
           DEFAULT: "#42C648",
