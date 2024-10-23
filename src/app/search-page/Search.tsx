@@ -21,7 +21,8 @@ import {
 import SearchIcon from '@/components/icons/SmallSearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
-import RightArrowIcon from '@/components/icons/RightArrowIcon';
+// import RightArrowIcon from '@/components/icons/RightArrowIcon';
+import DownArrowIcon from '@/components/icons/DownArrowIcon';
 import { Input } from "@/components/ui/input"
 
 interface Equipment {
@@ -261,7 +262,7 @@ const SearchPage = () => {
             className="p-0 rounded-2xl w-full h-full"
             variant="outline"
           >
-            <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-1 rounded-2xl">
+            <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-3 rounded-2xl">
               <div className="flex flex-col justify-start">
                 <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed leading-tight">
                   {searchMode === 'equipment' ? (
@@ -299,7 +300,9 @@ const SearchPage = () => {
                   </div>
                 )}
               </div>
-              <RightArrowIcon />
+              <div className="[&_svg]:w-11 [&_svg]:h-11 [&_svg]:-ml-1 [&_svg]:-mb-1">
+                <DownArrowIcon />
+              </div>
             </div>
           </Button>
         ))}
@@ -310,7 +313,7 @@ const SearchPage = () => {
         <DialogContent className="bg-teal text-white font-ubuntu-condensed">
           <DialogHeader>
             <DialogTitle>
-              {searchMode === 'equipment' 
+              {searchMode === 'equipment'
                 ? `${(selectedEquipment as GroupedEquipment)?.name} Availability`
                 : `Equipment at ${(selectedEquipment as LocationEquipment)?.warehouse}`}
             </DialogTitle>
