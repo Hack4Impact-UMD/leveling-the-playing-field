@@ -6,6 +6,8 @@ import ContactButton from './components/ContactButton';
 import ContactEntry from './components/ContactEntry';
 import ProfileHeader from './components/ProfileHeader';
 import EditableField from './components/EditableField';
+import CountryDropdownComponent from './components/CountryDropdown';
+import StateDropdown from './components/StateDropdown';
 interface Contact {
     id: number;
     name: string;
@@ -13,21 +15,38 @@ interface Contact {
     email: string;
 }
 
+interface Location {
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    country: string;
+}
+
 // temp data for testing
 const initContacts: Contact[] = [
     { id: 1, name: 'Name1', phoneNumber : '000-000-0000', email: 'contactemail1@gmail.com' },
 ];
 
+
 export default function OrganizationProfile() {
     const [orgName, setOrgName] = useState<string>('');
     const [contacts, setContacts] = useState<Contact[]>(initContacts);
-    const [location, setLocation] = useState<string>('');
+    //const [location, setLocation] = useState<string>('');
+    const [location, setLocation] = useState<Location>({
+        addressLine1: '100 Sunshine Lane',
+        addressLine2: '100 Sunshine Lane',
+        city: 'City',
+        state: 'Maryland',
+        zipCode: '123456',
+        country: 'United States',
+      });
     const [contactNumber, setContactNumber] = useState<string>('');
 
     useEffect(() => {
         //placeholder values
         setOrgName('XYZ Org.');
-        setLocation('100 Sunshine Lane City State ZipCode');
         setContactNumber('000-000-0000');
     }, []);
 
@@ -41,16 +60,36 @@ export default function OrganizationProfile() {
         setContacts([...contacts, newContact]);
     };
 
-    // const handleRemoveContact = () => {
-    //     if (contacts.length > 0) {
-    //         setContacts(contacts.slice(0, -1));
-    //       }
-    // };
+    const handleRemoveContact = (id: number) => {
+        setContacts(contacts.filter((contact) => contact.id !== id));
+    };
 
     const handleEditContact = (updatedContact: Contact) => {
         setContacts(
             contacts.map((contact) => (contact.id === updatedContact.id ? updatedContact : contact))
         );
+    };
+
+    const handleLocationFieldSave = (field: keyof Location, newValue: string) => {
+        setLocation((prevLocation) => ({
+          ...prevLocation,
+          [field]: newValue,
+        }));
+    };
+    
+    const handleCountryChange = (newCountry: string) => {
+        setLocation((prevLocation) => ({
+          ...prevLocation,
+          country: newCountry,
+          state: '',
+        }));
+    };
+    
+    const handleStateChange = (newState: string) => {
+        setLocation((prevLocation) => ({
+          ...prevLocation,
+          state: newState,
+        }));
     };
   
     return (
@@ -66,12 +105,14 @@ export default function OrganizationProfile() {
         <div className="w-full pl-2">
             {contacts.map((contact) => (
                 <ContactEntry 
-                    key={contact.id} name={contact.name}    
+                    key={contact.id} 
+                    name={contact.name}    
                     email={contact.email} 
                     phoneNumber={contact.phoneNumber}
                     onEdit={(updatedFields: { name: string; phoneNumber: string; email: string }) =>
-                    handleEditContact({ ...contact, ...updatedFields })
-                } />
+                    handleEditContact({ ...contact, ...updatedFields })} 
+                    onDelete={() => handleRemoveContact(contact.id)}
+                    />
             ))}
         </div>
 
@@ -81,14 +122,48 @@ export default function OrganizationProfile() {
                 onClick={handleAddContact}
             />
         </div>
-
+        
         <ProfileHeader title="Location" />
         <EditableField
-                label="Location"
-                type="text"
-                value={location}
-                onSave={(newLocation: string) => setLocation(newLocation)}
+            label="Address Line 1"
+            type="text"
+            value={location.addressLine1}
+            onSave={(newValue) => handleLocationFieldSave('addressLine1', newValue)}
         />
+
+        <EditableField
+            label="Address Line 2"
+            type="text"
+            value={location.addressLine2}
+            onSave={(newValue) => handleLocationFieldSave('addressLine2', newValue)}
+        />
+
+        <div className="flex flex-row justify-between">
+            <EditableField
+                label="City"
+                type="text"
+                value={location.city}
+                onSave={(newValue) => handleLocationFieldSave('city', newValue)}
+            />
+
+            <StateDropdown
+                country={location.country}
+                state={location.state}
+                onStateChange={handleStateChange}
+            />
+
+            <EditableField
+                label="Zipcode"
+                type="text"
+                value={location.zipCode}
+                onSave={(newValue) => handleLocationFieldSave('zipCode', newValue)}
+            />
+
+            <CountryDropdownComponent
+                country={location.country}
+                onCountryChange={handleCountryChange}
+            />
+        </div>        
 
         <ProfileHeader title="Contact Number" />
         <EditableField

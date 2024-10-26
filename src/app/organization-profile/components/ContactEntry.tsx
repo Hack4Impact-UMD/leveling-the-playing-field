@@ -1,16 +1,21 @@
 import { useState, useRef } from 'react';
 import EditIcon from '@/components/icons/EditIcon';
+import XIcon from '@/components/icons/XIcon';
+import ConfirmationModal from './ConfirmationModal';
+
 
 interface ContactItemProps {
     name: string;
     phoneNumber: string;
     email: string;
     onEdit: (updatedContact: { name: string; phoneNumber: string; email: string }) => void;
+    onDelete: () => void;
 }
 
-export default function ContactEntry({ name, phoneNumber, email, onEdit }: ContactItemProps) {
+export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
     const [isNamePhoneEditable, setIsNamePhoneEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [editedName, setEditedName] = useState(name);
     const [editedPhoneNumber, setEditedPhoneNumber] = useState(phoneNumber);
     const [editedEmail, setEditedEmail] = useState(email);
@@ -20,6 +25,24 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit }: Conta
     const handleNamePhoneEditClick = () => {
         setIsNamePhoneEditable(true);
         setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0);
+    };
+
+    const formatPhoneNumber = (phone: string): string => {
+        const cleanedPhone = phone.replace(/\D/g, '');
+        
+        if (cleanedPhone.length <= 3) {
+            return cleanedPhone;
+        }
+        
+        if (cleanedPhone.length <= 6) {
+            return `${cleanedPhone.slice(0, 3)}-${cleanedPhone.slice(3)}`;
+        }
+        
+        return `${cleanedPhone.slice(0, 3)}-${cleanedPhone.slice(3, 6)}-${cleanedPhone.slice(6, 10)}`;
+    };
+
+    const handlePhoneInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEditedPhoneNumber(formatPhoneNumber(e.target.value));
     };
 
     const handleEmailEditClick = () => {
@@ -65,6 +88,19 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit }: Conta
         }
     };
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+    
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+    
+    const handleConfirmDelete = () => {
+        onDelete();
+        closeModal();
+    };
+
     return (
         <div className="w-full mb-4">
             <div className="flex flex-row justify-between items-center pt-2">
@@ -87,7 +123,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit }: Conta
                                 <input
                                     type="tel"
                                     value={editedPhoneNumber}
-                                    onChange={(e) => setEditedPhoneNumber(e.target.value)}
+                                    onChange={handlePhoneInputChange}
                                     onKeyDown={handleNamePhoneKeyDown}
                                     className="text-black text-2xl font-cabin-condensed border-2 border-gray-400 w-full rounded bg-transparent"
                                 />
@@ -133,18 +169,32 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit }: Conta
                         <>
                             <div className="flex flex-col">
                                 <h3 className="text-gray-500 text-lg font-cabin-condensed">Email</h3>
-                                <p className="text-black text-2xl font-cabin-condensed">{email}</p>
+                                <p className="text-black text-2xl font-cabin-condensed break-all whitespace-normal">{email}</p>
                             </div> 
                         </>
                     )}
                 </div>
 
-                <button className="self-start py-2 pr-2" onClick={handleEmailEditClick}>
-                    <EditIcon />
-                </button>
+                <div className="self-start flex flex-col justify-end space-y-5">
+                    <button className="ml-1" onClick={handleEmailEditClick}>
+                        <EditIcon />
+                    </button>
+                    <button onClick={openModal}>
+                        <XIcon />
+                    </button>
+                </div>
             </div>
 
             <hr className="border-[#00000066] border-1 mt-2" />
+            
+            <ConfirmationModal
+                isOpen={isModalOpen}
+                message='Are you sure you want to delete this contact?'
+                onConfirm={handleConfirmDelete}
+                confirmText='Yes'
+                onCancel={closeModal}
+                cancelText='No'
+            />
         </div>
     );
 }
