@@ -76,7 +76,7 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
             ) : (
                 <>
                     <div className="flex justify-between space-x-2 items-center w-full">
-                        <div className="flex-row items-center bg-teal text-white py-2 px-2 rounded-md font-semibold">
+                        <div className="flex-row flex-1 text-center bg-teal text-white py-2 px-2 rounded-md font-semibold">
                             {sport}
                         </div>
                         <button
@@ -146,6 +146,10 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                     ))}
 
                     <div className="flex justify-between space-x-2 items-center w-full">
+                        <div
+                            className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold"
+                        >
+                        </div>
                         <select
                             value={""}
                             className="bg-teal flex-auto text-white text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
