@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import SelectEquipment from "./SelectEquipment";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 
-type Sport = "soccer" | "tennis" | "baseball" | "basketball"
+export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
-interface Equipment {
+export interface Equipment {
   name: string,
   quantity: number,
   sport: Sport
@@ -16,42 +16,51 @@ const Checkout = () => {
   //   { id: 1, name: "Select Equipment", quantity: 1 },
   // ]);
 
-  const [equipmentList, setEquipmentList] = useState<Map<Sport, Equipment[]>>(new Map);
+  const [equipmentList, setEquipmentList] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
 
-  const addSport = (sport: Sport) => {
-    setEquipmentList((prevMap) => {
-      if (prevMap.has(sport)) return prevMap;
+  const removeEquipment = (sport: Sport | "", equipment: Equipment) => {
+    setEquipmentList((prevList) =>
+      prevList.map((item) =>
+        item.sport === sport
+          ? { ...item, equipment: item.equipment.filter((e) => e.name !== equipment.name) }
+          : item
+      )
+    );
+  };
 
-      return new Map(prevMap).set(sport, []);
-    });
-  }
+  const removeSport = (sport: Sport | "") => {
+    setEquipmentList((prevList) => prevList.filter((item) => item.sport !== sport));
+  };
 
-  const removeSport = (sport: Sport) => {
-    setEquipmentList((prevMap) => {
-      if (!prevMap.has(sport)) return prevMap;
+  const selectSport = (index: number, newSport: Sport) => {
+    setEquipmentList((prevList) => {
+      const sportExists = prevList.some((item, i) => item.sport === newSport && i !== index);
 
-      const newMap = new Map(prevMap);
-      newMap.delete(sport);
-      return newMap;
+      if (sportExists) return prevList;
+
+      const updatedList = [...prevList];
+      updatedList[index] = { equipment: [], sport: newSport };
+
+      return updatedList;
     });
   };
 
-  // const addEquipment = () => {
-  //   const last = equipmentList.at(equipmentList.length - 1)?.id ?? 0;
-  //   setEquipmentList([
-  //     ...equipmentList,
-  //     { id: last + 1, name: "Select Equipment", quantity: 1 },
-  //   ]);
-  // };
 
-  // const handleRemove = (id: number) => {
-  //   setEquipmentList(equipmentList.filter((item) => item.id !== id));
-  // };
+  const addSport = (sport: Sport | "") => {
+    setEquipmentList((prevList) => {
+      if (prevList.some((item) => item.sport !== "" && item.sport === sport)) return prevList;
 
-  // const handleSport = (event: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const value = event.target.value;
-  //   setSport(String(value));
-  // }
+      return [...prevList, { sport, equipment: [] }];
+    });
+  };
+
+  const updateEquipmentList = (index: number, newEquipmentList: Equipment[]) => {
+    setEquipmentList((prevList) => {
+      const updatedList = [...prevList];
+      updatedList[index] = { ...updatedList[index], equipment: newEquipmentList };
+      return updatedList;
+    });
+  };
 
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
@@ -59,19 +68,32 @@ const Checkout = () => {
       <div className="mb-6 rounded-full w-24 h-24 bg-teal text-white flex items-center justify-center p-4">
         <ShoppingCartIcon />
       </div>
-
       <div className="w-full max-w-md space-y-4">
-        <select
-          // value={sport}
-          // onChange={handleSport}
+        <button onClick={() => addSport("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
+          Add Sport
+        </button>
+        {equipmentList.map(({ sport, equipment }, index) => (
+          <SelectEquipment
+            key={index}
+            sport={sport}
+            equipmentList={equipment}
+            updateEquipment={(newEquipment: Equipment[]) => updateEquipmentList(index, newEquipment)}
+            removeEquipment={removeEquipment}
+            removeSport={removeSport}
+            selectSport={(newSport: Sport) => selectSport(index, newSport)}
+          />
+        ))}
+        {/* <select
+          value={sport}
+          onChange={handleSport}
           className="w-full bg-teal text-white py-2 px-4 rounded-md font-semibold text-center"
         >
-          <option value="" disabled>Select Sport</option>
+          <option value="" disabled>Add Sport</option>
           <option value="soccer">Soccer</option>
           <option value="basketball">Basketball</option>
           <option value="baseball">Baseball</option>
           <option value="tennis">Tennis</option>
-        </select>
+        </select> */}
         {/* {equipmentList.map((item) => (
           <SelectEquipment
             key={item.id}
