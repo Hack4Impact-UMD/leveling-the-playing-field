@@ -66,7 +66,7 @@ const Checkout = () => {
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
       <h1 className="text-3xl font-bold mb-4 text-black">Add Equipment</h1>
       <div className="mb-6 rounded-full w-24 h-24 bg-teal text-white flex items-center justify-center p-4">
-          <ShoppingCartIcon/>
+        <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
         <button onClick={() => addSport("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
@@ -113,6 +113,7 @@ const Checkout = () => {
         <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
           CHECKOUT
         </button>
+        <div className="w-full mt-20"></div>
       </div>
     </div>
   );
