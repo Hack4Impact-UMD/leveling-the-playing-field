@@ -1,34 +1,17 @@
 import React, { useState } from 'react';
-import IconSoccer from '../svgs/soccer';
-import IconBaseballOutline from '../svgs/baseball';
-import IconTennisBall from '../svgs/tennis';
-import IconBasketballOutline from '../svgs/basketball';
-import { Sport, Equipment } from './Checkout';
+import { Sport, Equipment, sportsItemsMap } from './Checkout';
 
 interface Props {
     removeSport: (sport: Sport | "") => void,
     removeEquipment: (sport: Sport | "", equipment: Equipment) => void,
     selectSport: (newSport: Sport) => void,
     updateEquipment: (newEquipment: Equipment[]) => void,
+    availableSports: Sport[],
     equipmentList: Equipment[],
     sport: Sport | ""
 }
 
-const sportsIconsMap = new Map<string, JSX.Element>([
-    ['soccer', <IconSoccer key="soccer" className="w-6 h-6" />],
-    ['baseball', <IconBaseballOutline key="baseball" className="w-6 h-6" />],
-    ['tennis', <IconTennisBall key="tennis" className="w-6 h-6" />],
-    ['basketball', <IconBasketballOutline key="basketball" className="w-6 h-6" />]
-]);
-
-const sportsItemsMap = new Map<string, string[]>([
-    ['soccer', ['Soccer Cleats', 'Soccer Ball']],
-    ['baseball', ['Baseball Mitts', 'Baseball Bat']],
-    ['tennis', ['Tennis Rackets', 'Tennis Ball']],
-    ['basketball', ['Basketball', 'Basketball Shoes']]
-]);
-
-const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEquipment, sport, equipmentList }: Props) => {
+const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEquipment, availableSports, sport, equipmentList }: Props) => {
 
     const handleQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         let value = Number(event.target.value);
@@ -59,25 +42,29 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
         updateEquipment([...equipmentList, newEquipment])
     };
 
+
     return (
         <div className="flex flex-col space-y-2">
             {sport === "" ? (
                 <select
                     value={sport}
                     onChange={handleSportSelect}
-                    className="flex-1 bg-teal text-white text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
+                    className="flex-1 bg-teal-light text-black text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
                 >
                     <option value="" disabled>Select Sport</option>
-                    <option value="soccer">Soccer</option>
+                    {availableSports.map((sportItem) => (
+                        <option value={sportItem} key={sportItem}>{sportItem.charAt(0).toUpperCase() + sportItem.slice(1)}</option>
+                    ))}
+                    {/* <option value="soccer">Soccer</option>
                     <option value="basketball">Basketball</option>
                     <option value="baseball">Baseball</option>
-                    <option value="tennis">Tennis</option>
+                    <option value="tennis">Tennis</option> */}
                 </select>
             ) : (
                 <>
                     <div className="flex justify-between space-x-2 items-center w-full">
-                        <div className="flex-row flex-1 text-center bg-teal text-white py-2 px-2 rounded-md font-semibold">
-                            {sport}
+                        <div className="flex-row flex-1 text-center bg-green text-black py-2 px-2 rounded-md font-semibold">
+                            Selected: {sport}
                         </div>
                         <button
                             className="text-red-600 flex-none font-bold py-2 rounded-md text-lg sm:w-auto"
@@ -107,7 +94,7 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                             </div>
                             <select
                                 value={equipment.name}
-                                className="bg-teal flex-auto text-white text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
+                                className="bg-green-light flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                                 onChange={handleAddEquipment}
                             >
                                 <option value="" disabled>Select Equipment</option>
@@ -121,7 +108,7 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                                 placeholder="Quantity"
                                 value={equipment.quantity}
                                 onChange={(e) => handleQuantity(index, e)}
-                                className="bg-teal flex-auto rounded-md text-white border w-16 py-2 px-4 sm:w-12"
+                                className="bg-green-light flex-auto rounded-md text-black border w-16 py-2 px-4 sm:w-12"
                             />
                             <button
                                 className="text-red-600 flex-none font-bold py-2 rounded-md text-lg sm:w-auto"
@@ -152,7 +139,7 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                         </div>
                         <select
                             value={""}
-                            className="bg-teal flex-auto text-white text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
+                            className="bg-white-dark flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                             onChange={handleAddEquipment}
                         >
                             <option value="" disabled>Select Equipment</option>

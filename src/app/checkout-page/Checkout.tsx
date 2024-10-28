@@ -2,6 +2,10 @@
 import React, { useState } from "react";
 import SelectEquipment from "./SelectEquipment";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
+import IconSoccer from "../svgs/soccer";
+import IconBaseballOutline from "../svgs/baseball";
+import IconTennisBall from "../svgs/tennis";
+import IconBasketballOutline from "../svgs/basketball";
 
 export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
@@ -10,6 +14,21 @@ export interface Equipment {
   quantity: number,
   sport: Sport
 }
+
+
+export const sportsIconsMap = new Map<string, JSX.Element>([
+  ['soccer', <IconSoccer key="soccer" className="w-6 h-6" />],
+  ['baseball', <IconBaseballOutline key="baseball" className="w-6 h-6" />],
+  ['tennis', <IconTennisBall key="tennis" className="w-6 h-6" />],
+  ['basketball', <IconBasketballOutline key="basketball" className="w-6 h-6" />]
+]);
+
+export const sportsItemsMap = new Map<string, string[]>([
+  ['soccer', ['Soccer Cleats', 'Soccer Ball']],
+  ['baseball', ['Baseball Mitts', 'Baseball Bat']],
+  ['tennis', ['Tennis Rackets', 'Tennis Ball']],
+  ['basketball', ['Basketball', 'Basketball Shoes']]
+]);
 
 const Checkout = () => {
   // const [equipmentList, setEquipmentList] = useState([
@@ -62,6 +81,13 @@ const Checkout = () => {
     });
   };
 
+  const getAvailableSports = (): Sport[] => {
+    const allSports = Array.from(sportsItemsMap.keys()) as Sport[];
+
+    const selectedSports = new Set(equipmentList.map((item) => item.sport));
+    return allSports.filter((sport) => !selectedSports.has(sport));
+  };
+
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
       <h1 className="text-3xl font-bold mb-4 text-black">Add Equipment</h1>
@@ -69,7 +95,14 @@ const Checkout = () => {
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
-        <button onClick={() => addSport("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
+        <button onClick={() => {
+          if (getAvailableSports().length == 0) {
+            return;
+          } else {
+            addSport("");
+          }
+        }
+        } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
           Add Sport
         </button>
         {equipmentList.map(({ sport, equipment }, index) => (
@@ -77,6 +110,7 @@ const Checkout = () => {
             key={index}
             sport={sport}
             equipmentList={equipment}
+            availableSports={getAvailableSports()}
             updateEquipment={(newEquipment: Equipment[]) => updateEquipmentList(index, newEquipment)}
             removeEquipment={removeEquipment}
             removeSport={removeSport}
