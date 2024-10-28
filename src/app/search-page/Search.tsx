@@ -51,8 +51,7 @@ const SearchPage = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>(undefined);
   const [selectedSport, setSelectedSport] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | GroupedEquipment | LocationEquipment | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<GroupedEquipment | LocationEquipment | null>(null);
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [appliedFilters, setAppliedFilters] = useState({
     warehouse: 'all',
@@ -60,7 +59,7 @@ const SearchPage = () => {
   });
   const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
   const [locationEquipmentList, setLocationEquipmentList] = useState<LocationEquipment[]>([]);
-  
+  const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
 
   // Sample data with quantities
   const equipmentList = [
@@ -85,11 +84,6 @@ const SearchPage = () => {
 
   const handleFilterToggle = () => {
     setShowFilter(!showFilter);
-  };
-
-  const handleEquipmentClick = (equipment: Equipment | GroupedEquipment | LocationEquipment) => {
-    setSelectedEquipment(equipment);
-    setIsDialogOpen(true);
   };
 
   const toggleSearchMode = () => {
@@ -177,26 +171,43 @@ const SearchPage = () => {
     }
   };
 
+  const toggleEquipment = (item: GroupedEquipment | LocationEquipment) => {
+    const id = 'warehouse' in item ? item.warehouse : item.name;
+    setSelectedEquipments(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
+  };
+
+  // Add this helper function inside your component
+  const groupEquipmentBySport = (equipment: { name: string; sport: string; quantity: number }[]) => {
+    return equipment.reduce((acc, item) => {
+      if (!acc[item.sport]) {
+        acc[item.sport] = [];
+      }
+      acc[item.sport].push(item);
+      return acc;
+    }, {} as Record<string, typeof equipment>);
+  };
 
   return (
     <div className="p-4">
       <div className="flex items-center space-x-2 mb-4">
-        <div className="relative flex-grow border-black bg-teal-light rounded-3xl space-x-10 text-white">
-          <div className="absolute left-2 top-1 bottom-2">
+        <div className="relative flex-grow border-black bg-teal-light rounded-3xl text-white">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2">
             <SearchIcon />
           </div>
           <Input
             value={searchTerm}
             onChange={handleSearch}
             placeholder={`Search by ${searchMode === 'equipment' ? 'Equipment' : 'Location'}`}
-            className="pr-15 w-6/11 border-teal-light bg-teal-light rounded-3xl text-white font-ubuntu-condensed"
+            className="pl-10 pr-4 w-full border-teal-light bg-teal-light rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
-          <Button
-            onClick={toggleSearchMode}
-            className="absolute right-0 top-0 bottom-0 bg-teal hover:bg-teal focus:bg-teal rounded-3xl font-ubuntu-condensed px-6"
-          >
-            {searchMode === 'equipment' ? 'Location' : 'Equipment'}
-          </Button>
         </div>
         <Button 
           onClick={handleFilterToggle} 
@@ -204,6 +215,22 @@ const SearchPage = () => {
         >
           <FilterIcon />
         </Button>
+      </div>
+
+      <div className="flex items-center space-x-3 mb-4">
+        <span className="text-black font-ubuntu-condensed">Sort by:</span>
+        <Select 
+          onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
+          value={searchMode}
+        >
+          <SelectTrigger className="w-[200px] bg-teal-light text-white rounded-3xl">
+            <SelectValue placeholder="Search by..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="equipment">Equipment</SelectItem>
+            <SelectItem value="location">Location</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {showFilter && (
@@ -254,109 +281,119 @@ const SearchPage = () => {
       )}
 
       {/* Basic information of each warehouse/location */}
-      <div className="grid grid-cols-1 gap-4">
+      <div className="flex flex-col space-y-8 mt-8"> 
         {applyFilters().map((item) => (
-          <Button
-            key={searchMode === 'equipment' ? (item as GroupedEquipment).name : (item as LocationEquipment).warehouse}
-            onClick={() => handleEquipmentClick(item)}
-            className="p-0 rounded-2xl w-full h-full"
-            variant="outline"
-          >
-            <div className="bg-teal w-full h-full flex items-center justify-between pl-4 pt-2 pb-2 pr-3 rounded-2xl">
-              <div className="flex flex-col justify-start">
-                <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed leading-tight">
-                  {searchMode === 'equipment' ? (
-                    <div className="flex space-x-2 items-baseline">
-                      <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed leading-tight">
-                        {(item as GroupedEquipment).name}
+          <div key={'warehouse' in item ? item.warehouse : item.name} className="w-full min-h-[80px]">
+            <Button
+              onClick={() => toggleEquipment(item)}
+              className="p-0 w-full border-0 block h-auto" 
+              variant="outline"
+            >
+              {!selectedEquipments.has('warehouse' in item ? item.warehouse : item.name) ? (
+                <div className="bg-teal w-full flex items-center justify-between p-4 rounded-2xl">
+                  <div className="flex flex-col justify-start w-full">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-semibold text-lg text-white font-ubuntu-condensed flex items-center">
+                        {'name' in item ? item.name : (item as LocationEquipment).warehouse}
+                        {'sport' in item && (
+                          <div className="bg-teal-light rounded-xl inline-block ml-2">
+                            <span className="text-white font-ubuntu-condensed text-sm">
+                              {(item as GroupedEquipment).sport}
+                            </span>
+                          </div>
+                        )}
                       </span>
-                      <div className="bg-white-dark opacity-50 rounded-3xl text-sm text-black font-ubuntu-condensed leading-tight px-2">
-                        {(item as GroupedEquipment).sport}
-                      </div>
+                      <DownArrowIcon />
                     </div>
-                  ) : (
-                    <div className="flex space-x-2 items-baseline">
+                    <div className="flex items-center space-x-2">
                       <LocationIcon />
-                      <span className="font-semibold text-lg mb-1 text-white font-ubuntu-condensed">
-                        {(item as LocationEquipment).warehouse}
+                      <span className="text-sm text-white font-ubuntu-condensed">
+                        {'locations' in item 
+                          ? `${item.locations.length} Locations Available`
+                          : `${(item as LocationEquipment).equipment.length} Equipment Available`
+                        }
                       </span>
                     </div>
-                  )}
-                </span>
-                {searchMode === 'equipment' && 'locations' in item && (
-                  <div className="flex space-x-2">
-                    <LocationIcon />
-
-                    <span className="text-sm text-white font-ubuntu-condensed mb-1">
-                      Location(s) available: {item.locations.length}
-                    </span>
                   </div>
-                )}
-                {searchMode === 'location' && 'equipment' in item && (
-                  <div className="flex space-x-2">
-                    <span className="text-sm text-white font-ubuntu-condensed">
-                      {`Equipment Available: ${item.equipment.length} types`}
-                    </span>
+                </div>
+              ) : (
+                <div className="w-full flex flex-col bg-teal rounded-2xl">
+                  <div className="w-full p-4">
+                    <div className="flex space-x-2 items-center">
+                      {searchMode === 'location' ? (
+                        <>
+                          <span className="text-white font-ubuntu-condensed text-lg">
+                            {(item as LocationEquipment).warehouse}
+                          </span>
+                          {appliedFilters.sport !== 'all' && (
+                            <span className="bg-white-dark opacity-50 rounded-3xl px-3 py-1 text-sm text-black font-ubuntu-condensed">
+                              {appliedFilters.sport}
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-white font-ubuntu-condensed text-lg">
+                            {(item as GroupedEquipment).name}
+                          </span>
+                          <div className="bg-teal-light rounded-xl inline-block">
+                            <span className="text-white font-ubuntu-condensed text-sm">
+                              {(item as GroupedEquipment).sport}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                )}
-              </div>
-              <div className="[&_svg]:w-11 [&_svg]:h-11 [&_svg]:-ml-1 [&_svg]:-mb-1">
-                <DownArrowIcon />
-              </div>
-            </div>
-          </Button>
+                  
+                  <div className="p-6  w-full">
+                    <div className="space-y-4 w-full">
+                      {searchMode === 'location' ? (
+                        // Location mode content
+                        <div className="space-y-6 text-left">
+                          <div className="bg-teal-light rounded-xl p-4">
+                            <p className="text-white font-ubuntu-condensed text-lg mb-4">Equipment available</p>
+                            {Object.entries(groupEquipmentBySport((item as LocationEquipment).equipment))
+                              .filter(([sport]) => appliedFilters.sport === 'all' || sport === appliedFilters.sport)
+                              .map(([sport, equipment]) => (
+                                <div key={sport} className="space-y-2 mb-4 last:mb-0">
+                                  <div className="bg-orange-light rounded-xl px-3 py-1 inline-block">
+                                    <p className="text-white font-ubuntu-condensed text-left">{sport}</p>
+                                  </div>
+                                  <ul className="space-y-2">
+                                    {equipment.map((eq, index) => (
+                                      <li key={index} className="text-white font-ubuntu-condensed grid grid-cols-2 text-left">
+                                        <span>{eq.name}</span>
+                                        <span>{eq.quantity}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      ) : (
+                        // Equipment mode content
+                        <div className="space-y-4">
+                          {(item as GroupedEquipment).locations.map((location, index) => (
+                            <div key={index} className="bg-teal-light/20 rounded-xl p-4">
+                              <div className="flex items-center space-x-2 mb-2">
+                                <LocationIcon />
+                                <p className="text-white font-ubuntu-condensed">{location.warehouse}</p>
+                              </div>
+                              <p className="text-white font-ubuntu-condensed text-left">Units available: {location.quantity} units</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Button>
+          </div>
         ))}
       </div>
-
-      {/* pop-up box for more information */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="bg-teal text-white font-ubuntu-condensed">
-          <DialogHeader>
-            <DialogTitle>
-              {searchMode === 'equipment'
-                ? `${(selectedEquipment as GroupedEquipment)?.name} Availability`
-                : `Equipment at ${(selectedEquipment as LocationEquipment)?.warehouse}`}
-            </DialogTitle>
-            <DialogClose />
-          </DialogHeader>
-          {selectedEquipment && (
-            <div className="p-4 bg-teal text-white font-ubuntu-condensed">
-              {searchMode === 'equipment' ? (
-                <>
-                  {'sport' in selectedEquipment && <p>Sport: {selectedEquipment.sport}</p>}
-                  <p>Total Quantity: {
-                    'totalQuantity' in selectedEquipment 
-                      ? selectedEquipment.totalQuantity 
-                      : ('quantity' in selectedEquipment ? selectedEquipment.quantity : 'N/A')
-                  }</p>
-                  <p>Locations:</p>
-                  <ul>
-                    {(selectedEquipment as GroupedEquipment).locations ? 
-                      (selectedEquipment as GroupedEquipment).locations.map((loc, index) => (
-                        <li key={index}>{loc.warehouse}: {loc.quantity}</li>
-                      )) :
-                      <li>{(selectedEquipment as Equipment).warehouse}: {(selectedEquipment as Equipment).quantity}</li>
-                    }
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <p>Total Equipment Types: {(selectedEquipment as LocationEquipment).equipment.length}</p>
-                  <p>Equipment List:</p>
-                  <ul>
-                    {(selectedEquipment as LocationEquipment).equipment.map((eq, index) => (
-                      <li key={index}>{eq.name} ({eq.sport}): {eq.quantity}</li>
-                    ))}
-                  </ul>
-                </>
-              )}
-              <Button onClick={() => setIsDialogOpen(false)} className="mt-4 rounded-2xl bg-orange hover:bg-orange focus:bg-orange">
-                Close
-              </Button>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
