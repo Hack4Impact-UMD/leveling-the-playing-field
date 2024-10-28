@@ -79,13 +79,10 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                     </div>
                     {equipmentList.map((equipment, index) => (
                         <div key={index} className="flex justify-between space-x-2 items-center w-full">
-                            <button
-                                className="flex-row flex-none items-center bg-teal text-white py-2 px-2 rounded-md font-semibold"
+                            <div
+                                className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold"
                             >
-                                <div className="flex items-center justify-center">
-                                    {sportsIconsMap.get(sport)}
-                                </div>
-                            </button>
+                            </div>
                             <select
                                 value={equipment.name}
                                 className="bg-teal flex-auto text-white text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
