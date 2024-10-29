@@ -21,8 +21,10 @@ import {
 import SearchIcon from '@/components/icons/SmallSearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
+import OrangeLocationIcon from '@/components/icons/OrangeLocationIcon';
 // import RightArrowIcon from '@/components/icons/RightArrowIcon';
 import DownArrowIcon from '@/components/icons/DownArrowIcon';
+import FootballIcon from '@/components/icons/sports/OrangeFootballIcon';
 import { Input } from "@/components/ui/input"
 
 interface Equipment {
@@ -223,7 +225,7 @@ const SearchPage = () => {
           onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
           value={searchMode}
         >
-          <SelectTrigger className="w-[200px] bg-teal-light text-white rounded-3xl">
+          <SelectTrigger className="w-[135px] bg-teal-light text-white rounded-3xl">
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
@@ -255,7 +257,7 @@ const SearchPage = () => {
               </Select>
             </div>
           )}
-
+          {/* Filter section */}
           <div>
             <div className="flex justify-between items-center mb-2 font-cabin-condensed">
               <span className="text-white">Sport Category</span>
@@ -296,8 +298,8 @@ const SearchPage = () => {
                       <span className="font-semibold text-lg text-white font-ubuntu-condensed flex items-center">
                         {'name' in item ? item.name : (item as LocationEquipment).warehouse}
                         {'sport' in item && (
-                          <div className="bg-teal-light rounded-xl inline-block ml-2">
-                            <span className="text-white font-ubuntu-condensed text-sm">
+                          <div className="bg-teal-light px-3 -py-5 rounded-xl inline-block ml-2">
+                            <span className="text-white font-semibold font-ubuntu-condensed text-sm">
                               {(item as GroupedEquipment).sport}
                             </span>
                           </div>
@@ -322,7 +324,7 @@ const SearchPage = () => {
                     <div className="flex space-x-2 items-center">
                       {searchMode === 'location' ? (
                         <>
-                          <span className="text-white font-ubuntu-condensed text-lg">
+                          <span className="text-white font-semibold font-ubuntu-condensed text-lg">
                             {(item as LocationEquipment).warehouse}
                           </span>
                           {appliedFilters.sport !== 'all' && (
@@ -333,11 +335,11 @@ const SearchPage = () => {
                         </>
                       ) : (
                         <>
-                          <span className="text-white font-ubuntu-condensed text-lg">
+                          <span className="text-white font-semibold font-ubuntu-condensed text-lg">
                             {(item as GroupedEquipment).name}
                           </span>
-                          <div className="bg-teal-light rounded-xl inline-block">
-                            <span className="text-white font-ubuntu-condensed text-sm">
+                          <div className="bg-teal-light px-3 rounded-xl inline-block">
+                            <span className="text-white font-semibold font-ubuntu-condensed text-sm">
                               {(item as GroupedEquipment).sport}
                             </span>
                           </div>
@@ -350,21 +352,25 @@ const SearchPage = () => {
                     <div className="space-y-4 w-full">
                       {searchMode === 'location' ? (
                         // Location mode content
-                        <div className="space-y-6 text-left">
+                        <div className="space-y-5 text-left">
                           <div className="bg-teal-light rounded-xl p-4">
-                            <p className="text-white font-ubuntu-condensed text-lg mb-4">Equipment available</p>
+                            <div className="flex items-center [&_svg]:w-5 [&_svg]:h-5 leading-none">
+                              <FootballIcon />
+                              <p className="text-white align-middle font-ubuntu-condensed text-lg mb-4 pl-2 pt-3">Equipment Available</p>
+                            </div>
                             {Object.entries(groupEquipmentBySport((item as LocationEquipment).equipment))
                               .filter(([sport]) => appliedFilters.sport === 'all' || sport === appliedFilters.sport)
                               .map(([sport, equipment]) => (
                                 <div key={sport} className="space-y-2 mb-4 last:mb-0">
-                                  <div className="bg-orange-light rounded-xl px-3 py-1 inline-block">
+                                  <div className="bg-orange-light rounded-xl px-5 inline-block">
+                                    
                                     <p className="text-white font-ubuntu-condensed text-left">{sport}</p>
                                   </div>
                                   <ul className="space-y-2">
                                     {equipment.map((eq, index) => (
                                       <li key={index} className="text-white font-ubuntu-condensed grid grid-cols-2 text-left">
                                         <span>{eq.name}</span>
-                                        <span>{eq.quantity}</span>
+                                        <span>{eq.quantity} Units Available</span>
                                       </li>
                                     ))}
                                   </ul>
@@ -376,12 +382,15 @@ const SearchPage = () => {
                         // Equipment mode content
                         <div className="space-y-4">
                           {(item as GroupedEquipment).locations.map((location, index) => (
-                            <div key={index} className="bg-teal-light/20 rounded-xl p-4">
-                              <div className="flex items-center space-x-2 mb-2">
-                                <LocationIcon />
-                                <p className="text-white font-ubuntu-condensed">{location.warehouse}</p>
+                            <div key={index} className="bg-teal-light/20 rounded-xl p-4 -mt-8">
+                              <div className="flex items-center space-x-2 mb-2 [&_svg]:w-5 [&_svg]:h-5 [&_svg]:fill-orange">
+                                <OrangeLocationIcon />
+                                <p className="text-white text-lg font-ubuntu-condensed -pl-2">{location.warehouse}</p>
                               </div>
-                              <p className="text-white font-ubuntu-condensed text-left">Units available: {location.quantity} units</p>
+                              <span className="inline-flex justify-between items-center w-full p-4">
+                                <p className="text-white font-ubuntu-condensed pl-5">Units Available:</p>
+                                <p className="text-white font-ubuntu-condensed pr-10">{location.quantity} units</p>
+                              </span>
                             </div>
                           ))}
                         </div>
