@@ -7,7 +7,6 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/Dialog"
 
-
 interface Item {
   name: string;
   quantity: number;
