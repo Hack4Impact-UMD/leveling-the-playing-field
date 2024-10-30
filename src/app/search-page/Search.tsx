@@ -355,7 +355,6 @@ const SearchPage = () => {
                         <div className="space-y-5 text-left">
                           <div className="bg-teal-light rounded-xl p-4">
                             <div className="flex items-center [&_svg]:w-5 [&_svg]:h-5 leading-none">
-                              <FootballIcon />
                               <p className="text-white align-middle font-ubuntu-condensed text-lg mb-4 pl-2 pt-3">Equipment Available</p>
                             </div>
                             {Object.entries(groupEquipmentBySport((item as LocationEquipment).equipment))
