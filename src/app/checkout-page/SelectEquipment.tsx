@@ -42,6 +42,15 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
         updateEquipment([...equipmentList, newEquipment])
     };
 
+    const handleUpdateEquipment = (oldEquipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (!value || !sport) return;
+
+        const newEquipment: Equipment = { ...oldEquipment, name: value };
+        const updatedList = [...equipmentList];
+        updatedList[index] = newEquipment;
+        updateEquipment(updatedList);
+    };
 
     return (
         <div className="flex flex-col space-y-2">
@@ -95,7 +104,7 @@ const SelectEquipment = ({ removeSport, removeEquipment, selectSport, updateEqui
                             <select
                                 value={equipment.name}
                                 className="bg-green-light flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
-                                onChange={handleAddEquipment}
+                                onChange={(e) => handleUpdateEquipment(equipment, index, e)}
                             >
                                 <option value="" disabled>Select Equipment</option>
                                 {sportsItemsMap.get(sport)?.map((item, i) => (
