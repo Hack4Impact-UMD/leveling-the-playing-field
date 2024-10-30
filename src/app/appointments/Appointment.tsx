@@ -8,7 +8,8 @@ type AppointmentsComponentProps = {
 const AppointmentsComponent = (props: AppointmentsComponentProps) => {
   const { title, location, timeStart, timeEnd } = props.appointment;
   return (
-    <div className=" text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396]" style={{border: '2px solid #14676B' }}>
+
+    <div className="text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396] border-2 border-[#14676B]">
       <div className="flex items-center mb-2">
         <span className="font-semibold text-lg">{title}</span>
         <span className="cursor-pointer ml-auto">
