@@ -22,7 +22,8 @@ import SearchIcon from '@/components/icons/SmallSearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
 import OrangeLocationIcon from '@/components/icons/OrangeLocationIcon';
-// import RightArrowIcon from '@/components/icons/RightArrowIcon';
+import FilterComponent from './FilterComponent';
+import ListComponent from './ListComponent';
 import DownArrowIcon from '@/components/icons/DownArrowIcon';
 import FootballIcon from '@/components/icons/sports/OrangeFootballIcon';
 import { Input } from "@/components/ui/input"
@@ -208,7 +209,7 @@ const SearchPage = () => {
             value={searchTerm}
             onChange={handleSearch}
             placeholder={`Search by ${searchMode === 'equipment' ? 'Equipment' : 'Location'}`}
-            className="pl-10 pr-4 w-full border-teal-light bg-teal-light rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
+            className="pl-14 pr-4 w-full border-teal-light2 bg-teal-light2 rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
         </div>
         <Button 
@@ -219,187 +220,47 @@ const SearchPage = () => {
         </Button>
       </div>
 
-      <div className="flex items-center space-x-3 mb-4">
+      <div className="flex items-center space-x-3 mb-4 font-ubuntu-condensed">
         <span className="text-black font-ubuntu-condensed">Sort by:</span>
         <Select 
           onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
           value={searchMode}
         >
-          <SelectTrigger className="w-[135px] bg-teal-light text-white rounded-3xl">
+          <SelectTrigger className="w-[135px] bg-teal-light2 text-white rounded-3xl">
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="equipment">Equipment</SelectItem>
-            <SelectItem value="location">Location</SelectItem>
+            <SelectItem value="equipment" className="">Equipment</SelectItem>
+            <SelectItem value="location" className="">Location</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
-      {showFilter && (
-        <div className="p-4 border rounded mb-4 space-y-4 bg-orange-light">
-          <h2 className="text-lg font-cabin-condensed text-white">Filter</h2>
-          {searchMode === 'equipment' && (
-            <div>
-              <div className="flex justify-between items-center mb-2 font-cabin-condensed text-white">
-                <span>Warehouse Location</span>
-                <Button onClick={resetWarehouse} variant="link" size="sm" className="underline text-white">Reset</Button>
-              </div>
-              <Select onValueChange={setSelectedWarehouse} value={selectedWarehouse}>
-                <SelectTrigger className="w-3/4 h-25 rounded-3xl shadow-lg shadow-black-500">
-                  <SelectValue placeholder="Select a warehouse" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Select region</SelectItem>
-                  {warehouses.map((warehouse) => (
-                    <SelectItem key={warehouse} value={warehouse}>{warehouse}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          {/* Filter section */}
-          <div>
-            <div className="flex justify-between items-center mb-2 font-cabin-condensed">
-              <span className="text-white">Sport Category</span>
-              <Button onClick={resetSport} variant="link" size="sm" className="underline text-white">Reset</Button>
-            </div>
-            <Select onValueChange={setSelectedSport} value={selectedSport}>
-              <SelectTrigger className="w-3/4 h-10 rounded-3xl shadow-lg shadow-black-500">
-                <SelectValue placeholder="Select sport" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Select sport</SelectItem>
-                {sports.map((sport) => (
-                  <SelectItem key={sport} value={sport}>{sport}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex justify-end mt-4">
-            <Button onClick={handleApplyFilters} className="bg-teal-light h-5 rounded-3xl font-cabin-condensed underline">Apply</Button>
-          </div>
-        </div>
-      )}
+      <FilterComponent 
+        showFilter = {showFilter}
+        searchMode = {searchMode}
+        sports = {sports}
+        warehouses = {warehouses}
+        selectedWarehouse = {selectedWarehouse}
+        selectedSport = {selectedSport}
+        setSelectedWarehouse = {setSelectedWarehouse}
+        setSelectedSport = {setSelectedSport}
+        resetWarehouse = {resetWarehouse}
+        resetSport = {resetSport}
+        handleApplyFilters = {handleApplyFilters}
+      />
 
       {/* Basic information of each warehouse/location */}
       <div className="flex flex-col space-y-8 mt-8"> 
         {applyFilters().map((item) => (
-          <div key={'warehouse' in item ? item.warehouse : item.name} className="w-full min-h-[80px]">
-            <Button
-              onClick={() => toggleEquipment(item)}
-              className="p-0 w-full border-0 block h-auto" 
-              variant="outline"
-            >
-              {!selectedEquipments.has('warehouse' in item ? item.warehouse : item.name) ? (
-                <div className="bg-teal w-full flex items-center justify-between p-4 rounded-2xl">
-                  <div className="flex flex-col justify-start w-full">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-semibold text-lg text-white font-ubuntu-condensed flex items-center">
-                        {'name' in item ? item.name : (item as LocationEquipment).warehouse}
-                        {'sport' in item && (
-                          <div className="bg-teal-light px-3 -py-5 rounded-xl inline-block ml-2">
-                            <span className="text-white font-semibold font-ubuntu-condensed text-sm">
-                              {(item as GroupedEquipment).sport}
-                            </span>
-                          </div>
-                        )}
-                      </span>
-                      <DownArrowIcon />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <LocationIcon />
-                      <span className="text-sm text-white font-ubuntu-condensed">
-                        {'locations' in item 
-                          ? `${item.locations.length} Locations Available`
-                          : `${(item as LocationEquipment).equipment.length} Equipment Available`
-                        }
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="w-full flex flex-col bg-teal rounded-2xl">
-                  <div className="w-full p-4">
-                    <div className="flex space-x-2 items-center">
-                      {searchMode === 'location' ? (
-                        <>
-                          <span className="text-white font-semibold font-ubuntu-condensed text-lg">
-                            {(item as LocationEquipment).warehouse}
-                          </span>
-                          {appliedFilters.sport !== 'all' && (
-                            <span className="bg-white-dark opacity-50 rounded-3xl px-3 py-1 text-sm text-black font-ubuntu-condensed">
-                              {appliedFilters.sport}
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <span className="text-white font-semibold font-ubuntu-condensed text-lg">
-                            {(item as GroupedEquipment).name}
-                          </span>
-                          <div className="bg-teal-light px-3 rounded-xl inline-block">
-                            <span className="text-white font-semibold font-ubuntu-condensed text-sm">
-                              {(item as GroupedEquipment).sport}
-                            </span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="p-6  w-full">
-                    <div className="space-y-4 w-full">
-                      {searchMode === 'location' ? (
-                        // Location mode content
-                        <div className="space-y-5 text-left">
-                          <div className="bg-teal-light rounded-xl p-4">
-                            <div className="flex items-center [&_svg]:w-5 [&_svg]:h-5 leading-none">
-                              <p className="text-white align-middle font-ubuntu-condensed text-lg mb-4 pl-2 pt-3">Equipment Available</p>
-                            </div>
-                            {Object.entries(groupEquipmentBySport((item as LocationEquipment).equipment))
-                              .filter(([sport]) => appliedFilters.sport === 'all' || sport === appliedFilters.sport)
-                              .map(([sport, equipment]) => (
-                                <div key={sport} className="space-y-2 mb-4 last:mb-0">
-                                  <div className="bg-orange-light rounded-xl px-5 inline-block">
-                                    
-                                    <p className="text-white font-ubuntu-condensed text-left">{sport}</p>
-                                  </div>
-                                  <ul className="space-y-2">
-                                    {equipment.map((eq, index) => (
-                                      <li key={index} className="text-white font-ubuntu-condensed grid grid-cols-2 text-left">
-                                        <span>{eq.name}</span>
-                                        <span>{eq.quantity} Units Available</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      ) : (
-                        // Equipment mode content
-                        <div className="space-y-4">
-                          {(item as GroupedEquipment).locations.map((location, index) => (
-                            <div key={index} className="bg-teal-light/20 rounded-xl p-4 -mt-8">
-                              <div className="flex items-center space-x-2 mb-2 [&_svg]:w-5 [&_svg]:h-5 [&_svg]:fill-orange">
-                                <OrangeLocationIcon />
-                                <p className="text-white text-lg font-ubuntu-condensed -pl-2">{location.warehouse}</p>
-                              </div>
-                              <span className="inline-flex justify-between items-center w-full p-4">
-                                <p className="text-white font-ubuntu-condensed pl-5">Units Available:</p>
-                                <p className="text-white font-ubuntu-condensed pr-10">{location.quantity} units</p>
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </Button>
-          </div>
+          <ListComponent
+            item={item}
+            selectedEquipments={selectedEquipments}
+            searchMode={searchMode}
+            appliedFilters={appliedFilters}
+            groupEquipmentBySport={groupEquipmentBySport}
+            toggleEquipment={toggleEquipment}
+          />
         ))}
       </div>
     </div>

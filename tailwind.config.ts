@@ -15,6 +15,7 @@ const config: Config = {
   			teal: {
   				DEFAULT: '#14676B',
   				light: '#70A8AB',
+					light2: '#639597',
   				dark: '#0E4F54'
   			},
   			orange: {
