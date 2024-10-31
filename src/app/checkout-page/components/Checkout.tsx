@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import SelectEquipment from "./SelectEquipment";
+import SportSection from "../SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
-import IconSoccer from "../svgs/soccer";
-import IconBaseballOutline from "../svgs/baseball";
-import IconTennisBall from "../svgs/tennis";
-import IconBasketballOutline from "../svgs/basketball";
+import IconSoccer from "../../svgs/soccer";
+import IconBaseballOutline from "../../svgs/baseball";
+import IconTennisBall from "../../svgs/tennis";
+import IconBasketballOutline from "../../svgs/basketball";
 
 export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
@@ -106,7 +106,7 @@ const Checkout = () => {
           Add Sport
         </button>
         {equipmentList.map(({ sport, equipment }, index) => (
-          <SelectEquipment
+          <SportSection
             key={index}
             sport={sport}
             equipmentList={equipment}

@@ -1,0 +1,124 @@
+import React, { useState } from 'react';
+import { Sport, Equipment, sportsItemsMap } from './components/Checkout';
+import XIcon from '@/components/icons/XIcon';
+import PlusIcon from '@/components/icons/PlusIcon';
+import EquipmentSelector from './components/EquipmentSelector';
+import EquipmentItem from './components/EquipmentItem';
+import { render } from 'react-dom';
+import MinusIcon from '../svgs/MinusIcon';
+
+interface Props {
+    removeSport: (sport: Sport | "") => void,
+    removeEquipment: (sport: Sport | "", equipment: Equipment) => void,
+    selectSport: (newSport: Sport) => void,
+    updateEquipment: (newEquipment: Equipment[]) => void,
+    availableSports: Sport[],
+    equipmentList: Equipment[],
+    sport: Sport | ""
+}
+
+const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipment, availableSports, sport, equipmentList }: Props) => {
+    const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
+
+    const handleQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+        let value = Number(event.target.value);
+        if (value < 1) {
+            value = 1;
+        }
+        const updatedEquipmentList = [...equipmentList];
+        updatedEquipmentList[index].quantity = value;
+        updateEquipment(updatedEquipmentList);
+    };
+
+    const handleSportSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        if (e.target.value === "") {
+            return;
+        }
+        const selectedSport = e.target.value as Sport;
+        selectSport(selectedSport);
+    };
+
+    const handleAddEquipment = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = event.target.value;
+        if (!value || !sport) return;
+
+        const newEquipment: Equipment = { name: value, quantity: 1, sport: sport };
+        if (equipmentList.some((equipment) => equipment.name === value && equipment.sport === sport)) {
+            return;
+        }
+        updateEquipment([...equipmentList, newEquipment])
+    };
+
+    const handleUpdateEquipment = (oldEquipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        if (!value || !sport) return;
+
+        const newEquipment: Equipment = { ...oldEquipment, name: value };
+        const updatedList = [...equipmentList];
+        updatedList[index] = newEquipment;
+        updateEquipment(updatedList);
+    };
+
+    return (
+        <div className="flex flex-col space-y-2">
+            {sport === "" ? (
+                <select
+                    value={sport}
+                    onChange={handleSportSelect}
+                    className="flex-1 bg-teal-light text-black text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
+                >
+                    <option value="" disabled>Select Sport</option>
+                    {availableSports.map((sportItem) => (
+                        <option value={sportItem} key={sportItem}>{sportItem.charAt(0).toUpperCase() + sportItem.slice(1)}</option>
+                    ))}
+                    {/* <option value="soccer">Soccer</option>
+                    <option value="basketball">Basketball</option>
+                    <option value="baseball">Baseball</option>
+                    <option value="tennis">Tennis</option> */}
+                </select>
+            ) : (
+                <>
+                    <div className="flex justify-between space-x-2 items-center w-full">
+                        <div className="flex flex-row flex-1 justify-between items-center text-left bg-green text-black py-2 pl-6 px-2 rounded-md font-semibold">
+                            <span>Selected: {sport.charAt(0).toUpperCase() + sport.slice(1)}</span>
+                            <button onClick={() => setRenderEquipment((prev) => !prev)}> {renderEquipment ? <MinusIcon /> : <PlusIcon />
+
+                            }</button>
+                        </div>
+                        <button
+                            className="text-red-600 flex-none font-bold py-2 rounded-md text-lg sm:w-auto"
+                            onClick={() => removeSport(sport)}
+                        >
+                            <XIcon />
+                        </button>
+                    </div>
+                    {renderEquipment && (
+                        <>
+                            {equipmentList.map((equipment, index) => (
+                                <EquipmentItem
+                                    key={index}
+                                    equipment={equipment}
+                                    index={index}
+                                    sport={sport}
+                                    sportsItemsMap={sportsItemsMap}
+                                    handleUpdateEquipment={handleUpdateEquipment}
+                                    handleQuantity={handleQuantity}
+                                    removeEquipment={removeEquipment}
+                                />
+                            ))}
+                            <EquipmentSelector
+                                sport={sport}
+                                sportsItemsMap={sportsItemsMap}
+                                handleAddEquipment={handleAddEquipment}
+                            />
+                        </>
+                    )}
+
+                </>
+            )
+            }
+        </div >
+    );
+};
+
+export default SportSection;
