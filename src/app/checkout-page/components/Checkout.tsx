@@ -107,7 +107,7 @@ const Checkout = () => {
         </button>
         {equipmentList.map(({ sport, equipment }, index) => (
           <SportSection
-            key={index}
+            key={sport + index}
             sport={sport}
             equipmentList={equipment}
             availableSports={getAvailableSports()}

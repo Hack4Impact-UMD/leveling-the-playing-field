@@ -4,10 +4,11 @@ import React from 'react';
 interface EquipmentSelectorProps {
     sport: string;
     sportsItemsMap: Map<string, string[]>;
+    availableEquipment: string[];
     handleAddEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const EquipmentSelector = ({ sport, sportsItemsMap, handleAddEquipment }: EquipmentSelectorProps) => {
+const EquipmentSelector = ({ sport, sportsItemsMap, availableEquipment, handleAddEquipment }: EquipmentSelectorProps) => {
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">
@@ -19,7 +20,7 @@ const EquipmentSelector = ({ sport, sportsItemsMap, handleAddEquipment }: Equipm
                 onChange={handleAddEquipment}
             >
                 <option value="" disabled>Select Equipment</option>
-                {sportsItemsMap.get(sport)?.map((item, i) => (
+                {availableEquipment.map((item, i) => (
                     <option value={item} key={i}>{item}</option>
                 ))}
             </select>

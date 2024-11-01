@@ -4,7 +4,6 @@ import XIcon from '@/components/icons/XIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
 import EquipmentSelector from './components/EquipmentSelector';
 import EquipmentItem from './components/EquipmentItem';
-import { render } from 'react-dom';
 import MinusIcon from '../svgs/MinusIcon';
 
 interface Props {
@@ -59,6 +58,17 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
         updateEquipment(updatedList);
     };
 
+    const getAvailableEquipment = () => {
+        const allEquipment = sportsItemsMap.get(sport);
+        if (!allEquipment) {
+            return [];
+        }
+
+        return allEquipment.filter((equipment) =>
+            !equipmentList.map((item) => item.name).includes(equipment)
+        );
+    };
+
     return (
         <div className="flex flex-col space-y-2">
             {sport === "" ? (
@@ -71,10 +81,6 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
                     {availableSports.map((sportItem) => (
                         <option value={sportItem} key={sportItem}>{sportItem.charAt(0).toUpperCase() + sportItem.slice(1)}</option>
                     ))}
-                    {/* <option value="soccer">Soccer</option>
-                    <option value="basketball">Basketball</option>
-                    <option value="baseball">Baseball</option>
-                    <option value="tennis">Tennis</option> */}
                 </select>
             ) : (
                 <>
@@ -108,6 +114,7 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
                             ))}
                             <EquipmentSelector
                                 sport={sport}
+                                availableEquipment={getAvailableEquipment()}
                                 sportsItemsMap={sportsItemsMap}
                                 handleAddEquipment={handleAddEquipment}
                             />

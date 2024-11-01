@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Sport, Equipment, sportsItemsMap } from "./Checkout";
+import { Sport, Equipment, sportsItemsMap } from "./components/Checkout";
 
 interface Props {
   removeSport: (sport: Sport | "") => void;
@@ -185,7 +185,7 @@ const SelectEquipment = ({
                   handleAddEquipment(e);
                 }
               }}
-              // onChange={handleAddEquipment}
+            // onChange={handleAddEquipment}
             >
               <option value="" disabled>
                 Select Equipment
