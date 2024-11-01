@@ -1,23 +1,20 @@
-// EquipmentSelector.tsx
 import React from 'react';
 
 interface EquipmentSelectorProps {
-    sport: string;
-    sportsItemsMap: Map<string, string[]>;
     availableEquipment: string[];
-    handleAddEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    handleSelectEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const EquipmentSelector = ({ sport, sportsItemsMap, availableEquipment, handleAddEquipment }: EquipmentSelectorProps) => {
+const EquipmentSelector = ({ availableEquipment, handleSelectEquipment }: EquipmentSelectorProps) => {
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">
-                {/* Optional content here */}
+                {/* padding */}
             </div>
             <select
                 value={""}
                 className="bg-white-dark flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
-                onChange={handleAddEquipment}
+                onChange={handleSelectEquipment}
             >
                 <option value="" disabled>Select Equipment</option>
                 {availableEquipment.map((item, i) => (

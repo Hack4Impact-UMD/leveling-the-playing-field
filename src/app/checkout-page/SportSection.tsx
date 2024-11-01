@@ -7,26 +7,26 @@ import EquipmentItem from './components/EquipmentItem';
 import MinusIcon from '../svgs/MinusIcon';
 
 interface Props {
-    removeSport: (sport: Sport | "") => void,
-    removeEquipment: (sport: Sport | "", equipment: Equipment) => void,
+    removeSelectedSport: (sport: Sport | "") => void,
+    removeSelectedEquipment: (sport: Sport | "", equipment: Equipment) => void,
     selectSport: (newSport: Sport) => void,
-    updateEquipment: (newEquipment: Equipment[]) => void,
-    availableSports: Sport[],
-    equipmentList: Equipment[],
+    updateSelectedEquipment: (newEquipment: Equipment[]) => void,
+    unselectedSports: Sport[],
+    selectedEquipment: Equipment[],
     sport: Sport | ""
 }
 
-const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipment, availableSports, sport, equipmentList }: Props) => {
+const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSport, updateSelectedEquipment, unselectedSports, sport, selectedEquipment }: Props) => {
     const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
 
-    const handleQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    const updateEquipmentQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         let value = Number(event.target.value);
         if (value < 1) {
             value = 1;
         }
-        const updatedEquipmentList = [...equipmentList];
+        const updatedEquipmentList = [...selectedEquipment];
         updatedEquipmentList[index].quantity = value;
-        updateEquipment(updatedEquipmentList);
+        updateSelectedEquipment(updatedEquipmentList);
     };
 
     const handleSportSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,15 +37,15 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
         selectSport(selectedSport);
     };
 
-    const handleAddEquipment = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectNewEquipment = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const value = event.target.value;
         if (!value || !sport) return;
 
         const newEquipment: Equipment = { name: value, quantity: 1, sport: sport };
-        if (equipmentList.some((equipment) => equipment.name === value && equipment.sport === sport)) {
+        if (selectedEquipment.some((equipment) => equipment.name === value && equipment.sport === sport)) {
             return;
         }
-        updateEquipment([...equipmentList, newEquipment])
+        updateSelectedEquipment([...selectedEquipment, newEquipment])
     };
 
     const handleUpdateEquipment = (oldEquipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,19 +53,19 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
         if (!value || !sport) return;
 
         const newEquipment: Equipment = { ...oldEquipment, name: value };
-        const updatedList = [...equipmentList];
+        const updatedList = [...selectedEquipment];
         updatedList[index] = newEquipment;
-        updateEquipment(updatedList);
+        updateSelectedEquipment(updatedList);
     };
 
-    const getAvailableEquipment = () => {
+    const getUnselectedEquipment = () => {
         const allEquipment = sportsItemsMap.get(sport);
         if (!allEquipment) {
             return [];
         }
 
         return allEquipment.filter((equipment) =>
-            !equipmentList.map((item) => item.name).includes(equipment)
+            !selectedEquipment.map((item) => item.name).includes(equipment)
         );
     };
 
@@ -78,7 +78,7 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
                     className="flex-1 bg-teal-light text-black text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
                 >
                     <option value="" disabled>Select Sport</option>
-                    {availableSports.map((sportItem) => (
+                    {unselectedSports.map((sportItem) => (
                         <option value={sportItem} key={sportItem}>{sportItem.charAt(0).toUpperCase() + sportItem.slice(1)}</option>
                     ))}
                 </select>
@@ -93,14 +93,14 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
                         </div>
                         <button
                             className="text-red-600 flex-none font-bold py-2 rounded-md text-lg sm:w-auto"
-                            onClick={() => removeSport(sport)}
+                            onClick={() => removeSelectedSport(sport)}
                         >
                             <XIcon />
                         </button>
                     </div>
                     {renderEquipment && (
                         <>
-                            {equipmentList.map((equipment, index) => (
+                            {selectedEquipment.map((equipment, index) => (
                                 <EquipmentItem
                                     key={index}
                                     equipment={equipment}
@@ -108,15 +108,13 @@ const SportSection = ({ removeSport, removeEquipment, selectSport, updateEquipme
                                     sport={sport}
                                     sportsItemsMap={sportsItemsMap}
                                     handleUpdateEquipment={handleUpdateEquipment}
-                                    handleQuantity={handleQuantity}
-                                    removeEquipment={removeEquipment}
+                                    updateEquipmentQuantity={updateEquipmentQuantity}
+                                    removeEquipment={removeSelectedEquipment}
                                 />
                             ))}
                             <EquipmentSelector
-                                sport={sport}
-                                availableEquipment={getAvailableEquipment()}
-                                sportsItemsMap={sportsItemsMap}
-                                handleAddEquipment={handleAddEquipment}
+                                availableEquipment={getUnselectedEquipment()}
+                                handleSelectEquipment={handleSelectNewEquipment}
                             />
                         </>
                     )}

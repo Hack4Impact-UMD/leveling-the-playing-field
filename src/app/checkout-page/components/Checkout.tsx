@@ -31,14 +31,11 @@ export const sportsItemsMap = new Map<string, string[]>([
 ]);
 
 const Checkout = () => {
-  // const [equipmentList, setEquipmentList] = useState([
-  //   { id: 1, name: "Select Equipment", quantity: 1 },
-  // ]);
 
-  const [equipmentList, setEquipmentList] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
 
-  const removeEquipment = (sport: Sport | "", equipment: Equipment) => {
-    setEquipmentList((prevList) =>
+  const removeSelectedEquipment = (sport: Sport | "", equipment: Equipment) => {
+    setSelectedEquipment((prevList) =>
       prevList.map((item) =>
         item.sport === sport
           ? { ...item, equipment: item.equipment.filter((e) => e.name !== equipment.name) }
@@ -47,12 +44,12 @@ const Checkout = () => {
     );
   };
 
-  const removeSport = (sport: Sport | "") => {
-    setEquipmentList((prevList) => prevList.filter((item) => item.sport !== sport));
+  const removeSelectedSport = (sport: Sport | "") => {
+    setSelectedEquipment((prevList) => prevList.filter((item) => item.sport !== sport));
   };
 
   const selectSport = (index: number, newSport: Sport) => {
-    setEquipmentList((prevList) => {
+    setSelectedEquipment((prevList) => {
       const sportExists = prevList.some((item, i) => item.sport === newSport && i !== index);
 
       if (sportExists) return prevList;
@@ -65,26 +62,26 @@ const Checkout = () => {
   };
 
 
-  const addSport = (sport: Sport | "") => {
-    setEquipmentList((prevList) => {
+  const addSportSection = (sport: Sport | "") => {
+    setSelectedEquipment((prevList) => {
       if (prevList.some((item) => item.sport !== "" && item.sport === sport)) return prevList;
 
       return [...prevList, { sport, equipment: [] }];
     });
   };
 
-  const updateEquipmentList = (index: number, newEquipmentList: Equipment[]) => {
-    setEquipmentList((prevList) => {
+  const updateSelectedEquipment = (index: number, newEquipmentList: Equipment[]) => {
+    setSelectedEquipment((prevList) => {
       const updatedList = [...prevList];
       updatedList[index] = { ...updatedList[index], equipment: newEquipmentList };
       return updatedList;
     });
   };
 
-  const getAvailableSports = (): Sport[] => {
+  const getUnselectedSports = (): Sport[] => {
     const allSports = Array.from(sportsItemsMap.keys()) as Sport[];
 
-    const selectedSports = new Set(equipmentList.map((item) => item.sport));
+    const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
     return allSports.filter((sport) => !selectedSports.has(sport));
   };
 
@@ -96,51 +93,27 @@ const Checkout = () => {
       </div>
       <div className="w-full max-w-md space-y-4">
         <button onClick={() => {
-          if (getAvailableSports().length == 0) {
+          if (getUnselectedSports().length == 0) {
             return;
           } else {
-            addSport("");
+            addSportSection("");
           }
         }
         } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
           Add Sport
         </button>
-        {equipmentList.map(({ sport, equipment }, index) => (
+        {selectedEquipment.map(({ sport, equipment }, index) => (
           <SportSection
             key={sport + index}
             sport={sport}
-            equipmentList={equipment}
-            availableSports={getAvailableSports()}
-            updateEquipment={(newEquipment: Equipment[]) => updateEquipmentList(index, newEquipment)}
-            removeEquipment={removeEquipment}
-            removeSport={removeSport}
+            selectedEquipment={equipment}
+            unselectedSports={getUnselectedSports()}
+            updateSelectedEquipment={(newEquipment: Equipment[]) => updateSelectedEquipment(index, newEquipment)}
+            removeSelectedEquipment={removeSelectedEquipment}
+            removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: Sport) => selectSport(index, newSport)}
           />
         ))}
-        {/* <select
-          value={sport}
-          onChange={handleSport}
-          className="w-full bg-teal text-white py-2 px-4 rounded-md font-semibold text-center"
-        >
-          <option value="" disabled>Add Sport</option>
-          <option value="soccer">Soccer</option>
-          <option value="basketball">Basketball</option>
-          <option value="baseball">Baseball</option>
-          <option value="tennis">Tennis</option>
-        </select> */}
-        {/* {equipmentList.map((item) => (
-          <SelectEquipment
-            key={item.id}
-            onRemove={() => handleRemove(item.id)}
-          />
-        ))} */}
-
-        {/* <button
-          onClick={addEquipment}
-          className="w-full bg-teal text-white py-2 px-4 rounded-md font-semibold"
-        >
-          + Add Equipment
-        </button> */}
       </div>
 
       <div className="w-full max-w-md mt-auto">

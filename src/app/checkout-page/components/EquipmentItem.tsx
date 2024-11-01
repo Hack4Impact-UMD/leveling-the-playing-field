@@ -1,4 +1,3 @@
-// EquipmentItem.tsx
 import XIcon from '@/components/icons/XIcon';
 import React from 'react';
 import { Equipment, Sport } from './Checkout';
@@ -9,7 +8,7 @@ interface EquipmentItemProps {
     sport: Sport;
     sportsItemsMap: Map<string, string[]>;
     handleUpdateEquipment: (equipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => void;
-    handleQuantity: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
+    updateEquipmentQuantity: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
     removeEquipment: (sport: Sport | "", equipment: Equipment) => void;
 }
 
@@ -19,7 +18,7 @@ const EquipmentItem = ({
     sport,
     sportsItemsMap,
     handleUpdateEquipment,
-    handleQuantity,
+    updateEquipmentQuantity,
     removeEquipment
 }: EquipmentItemProps) => {
     return (
@@ -42,7 +41,7 @@ const EquipmentItem = ({
                 min={1}
                 placeholder="Quantity"
                 value={equipment.quantity}
-                onChange={(e) => handleQuantity(index, e)}
+                onChange={(e) => updateEquipmentQuantity(index, e)}
                 className="bg-green-light flex-auto rounded-md text-black border w-16 py-2 px-4 sm:w-12"
             />
             <button
