@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import LocalizationButton from "@/components/Localization";
 
 const breeSerif = localFont({
   src: "../../public/fonts/BreeSerif-Regular.ttf",
@@ -53,7 +54,7 @@ export default function RootLayout({
         className={`${breeSerif.variable} ${cabin.variable} ${cabinCondensed.variable} ${ubuntuCondensed.variable} antialiased bg-white-dark`}
       >
         {children}
-        <Navbar />
+        <LocalizationButton />
       </body>
     </html>
    

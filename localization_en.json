@@ -1,0 +1,284 @@
+{ 
+    "login page": { 
+        "title": { 
+            "text": "Welcome!",
+            "note": " Header text for the page"
+        },
+        "login button": { 
+            "text": "Login with Google", 
+            "note": "login button"
+        }, 
+        "application": { 
+            "text": "Organization Application", 
+            "note": "lower button text"
+        }
+
+    },
+    "profile page": { 
+        "title": { 
+            "text": "Organization Profile", 
+            "note": "Header text"
+        }, 
+        "logo text": { 
+            "text": "XYZ Org.",
+            "note":"text next to profile icon"
+
+        }, 
+        "contact": { 
+            "text": "Points of contact",
+            "note": " text in top green box",
+            "name": { 
+                "text": "Name",
+                "note": "text above name fill in the blank"
+            }, 
+            "phone":   {
+                "text": "Phone Number",
+                "note": "text above phone number fill in the blank"
+            }, 
+            "email": {
+                "text": "Email",
+                "note": "text above email fill in the blank"
+            }, 
+            "button": { 
+                "text": "Add Contact", 
+                "note": "text for the add contact button"
+            }, 
+            "delete_popup": { 
+                "text":"Are you sure you want to delete this contact?",
+                "note":"delete confirmation text",
+                "yes": { 
+                    "text":"Yes", 
+                    "note": "yes button text"
+                }, 
+                "no": { 
+                    "text": "No",
+                    "note": "no button text"
+                }
+            }
+        }, 
+        "Location": { 
+            "text": "Organization Application",
+            "note": "text in second green box",
+            "address_one": { 
+                "text": "Address Line 1",
+                "note": "text above 1st address fill in the blank" 
+
+                
+            }, 
+            "address_two": {   
+                "text": "Address Line 2",
+                "note": "text above 2nd address fill in the blank" 
+            },
+            "city": { 
+
+                "text": "City",
+                "note": "text above city fill in the blank" 
+            }, 
+            "state": { 
+                "text": "State",
+                "note": "text above State fill in the blank"
+            }, 
+            "zipcode": { 
+                "text": "Zipcode",
+                "note": "text above zipcode fill in the blank"
+            },
+            "country": { 
+                "text": "Country",
+                "note": "text above Country fill in the blank"
+        }
+            
+    },
+    "number": { 
+        "text": "Contact Number", 
+        "note": "text in third green box",
+        "box": { 
+            "text": "Number", 
+            "note": "text above phone fill in the blank"
+        }
+    }     
+},
+    "Appointments page": {
+        "title": {  
+            "text": "Appointments", 
+            "note": "Header text"
+            }, 
+        "lower title": {  
+            "text": "Book New Appointment", 
+            "note": "Text above button"
+            }, 
+        "button": {  
+            "text": "Select Location", 
+            "note": "text inside the button"
+        }, 
+        "appointment details": {  
+            "text": "Upcoming Appointment", 
+            "note": "Text within upcoming appointment box"
+            },
+        "confirmation_popup": { 
+            "text": "Are you sure you want to select this location?",
+            "note": "popup prompt",
+            "yes": { 
+                "text": "Yes", 
+                "note": "label for yes button"
+            }, 
+            "no": { 
+                "text": "No", 
+                "note": "label for no button"
+            }
+
+
+        }
+
+    }, 
+    "loading page": { 
+        "text": "Loading page, please wait...",
+        "note": "loading text"
+
+    }, 
+    "page not found": { 
+        "center": {  
+            "text": "Page Not Found", 
+            "note": "Center text"
+            }, 
+        "button": {  
+            "text": "Go Back", 
+            "note": "Button Text"
+            }
+
+    }, 
+    "reciepts page": { 
+        "title": {  
+            "text": "Receipts", 
+            "note": "Header text"
+            },
+        "view button": { 
+            "text": "View Reciept", 
+            "note": "view reciept text button"
+        },
+        "order_details": { 
+            "warehouse": { 
+                "text": "Warehouse Location",
+                "note": "warehouse location text"
+            }, 
+            "Date": { 
+                "text": "Date of Purchase", 
+                "note": "date of purchase for reciept text"
+            }, 
+            "Time": { 
+                "text": "Time", 
+                "note": "time of reciept text"
+            }, 
+            "contact": { 
+                "text": "Point of Contact", 
+                "note": "point of contact text label"
+            }, 
+            "total": { 
+                "text": "Total Checked Out Items", 
+                "note": "total number of items text label"
+            },
+            "order_info": { 
+                "items": { 
+                    "text": "Items", 
+                    "note": "Items list label"
+                }, 
+                "quantity": { 
+                    "text": "Quantity", 
+                    "note": "note list label"
+                }
+
+            }
+
+        }
+
+    }, 
+    "checkout page": {
+        "title": {  
+            "text": "Add Equipment", 
+            "note": "Header text"
+            },
+        "add_sport": {  
+                "text": "Add Sport", 
+                "note": "Button text to select sport"
+            }, 
+        "selected_equipment": { 
+            "text":"Select Equipment", 
+            "note": "Button text to select equipment"
+        }
+
+         
+    }, 
+    "search page": { 
+        "search by equipment": { 
+            "search bar": {  
+                "text": "Search By Equipment", 
+                "note": "text within the search bar"
+                },
+            "filter": {  
+                "text": "Filter", 
+                "note": "Header text for orange filter box",
+                "region_filter": {  
+                    "text": "Select region", 
+                    "note": "text for region drop down"
+                    },
+                "sport_filter": {  
+                    "text": "Select sport", 
+                    "note": "text for sport drop down"
+                    },
+                "reset": {  
+                    "text": "reset", 
+                    "note": "reset for drop down text"
+                    },
+                "apply": {  
+                    "text": "Apply", 
+                    "note": "button text to apply filters"
+                    }
+            },
+    
+            "sort": { 
+                "text": "Sort By",
+                "note": "text by equipment/location toggle",
+                "apply": {  
+                    "text": "Apply", 
+                    "note": "button text to apply filters"
+                    }
+
+        }, 
+        "search by location": { 
+            "search bar": {  
+                "text": "Search By Location", 
+                "note": "text within the search bar in light teal box"
+                },
+            "filter": {  
+                "text": "Filter", 
+                "note": "Header text for orange filter box",
+
+                "sport_filter": {
+                    "text": "Sport Category", 
+                    "note": "header text for the drop down", 
+                    "box": { 
+                        "text": "Select sport", 
+                        "note": "text inside the sport drop down"
+                    } 
+                    },
+                "reset": {  
+                    "text": "reset", 
+                    "note": "reset for drop down text"
+                    },
+                "apply": {  
+                    "text": "Apply", 
+                    "note": "button text to apply filters"
+                    }
+            },
+            "locations": { 
+                "avaliable": {  
+                    "text": "Equipment Avaliable", 
+                    "note": "text showing equipment avaliable in potential locations, appears with/without toggling dropdown"
+                    }
+            }
+
+        }
+       
+        }
+
+    }
+}
