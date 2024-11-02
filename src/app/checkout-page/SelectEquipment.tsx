@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Sport, Equipment, sportsItemsMap } from "./components/Checkout";
 
 interface Props {
@@ -62,16 +62,17 @@ const SelectEquipment = ({
   };
 
   const getAvailableEquipment = () => {
-    console.log(sportsItemsMap);
-    console.log(sport);
     const allEquipment = sportsItemsMap.get(sport) as string[];
     console.log(allEquipment);
     if (allEquipment === undefined) {
       setAvailableEquipment([])
     } else {
-      console.log("equipmentList", equipmentList);
-      const selectedEquipment = new Set(equipmentList.map((item) => item.name));
-      setAvailableEquipment(allEquipment.filter((equipment) => !selectedEquipment.has(equipment)));
+      const selectedEquipment = equipmentList
+        .filter((item) => item.sport === sport)
+        .map((item) => item.name);      
+      // const selectedEquipment = new Set(equipmentList.map((item) => item.name));
+      
+      setAvailableEquipment(allEquipment.filter((equipment) => !selectedEquipment.includes(equipment)));
     }
     return availableEquipment;
   };
