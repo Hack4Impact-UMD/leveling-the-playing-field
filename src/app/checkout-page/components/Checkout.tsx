@@ -92,19 +92,21 @@ const Checkout = () => {
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
-        <button onClick={() => {
-          if (getUnselectedSports().length == 0) {
-            return;
-          } else {
-            addSportSection("");
+        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && Array.from(sportsItemsMap.keys()).length && (
+          <button onClick={() => {
+            if (getUnselectedSports().length == 0) {
+              return;
+            } else {
+              addSportSection("");
+            }
           }
+          } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
+            Add Category
+          </button>)
         }
-        } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
-          Add Sport
-        </button>
         {selectedEquipment.map(({ sport, equipment }, index) => (
           <SportSection
-            key={sport + index}
+            key={sport === "" ? sport + index : sport}
             sport={sport}
             selectedEquipment={equipment}
             unselectedSports={getUnselectedSports()}

@@ -112,10 +112,13 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
                                     removeEquipment={removeSelectedEquipment}
                                 />
                             ))}
-                            <EquipmentSelector
-                                availableEquipment={getUnselectedEquipment()}
-                                handleSelectEquipment={handleSelectNewEquipment}
-                            />
+                            {
+                                getUnselectedEquipment().length > 0 && (
+                                    <EquipmentSelector
+                                        availableEquipment={getUnselectedEquipment()}
+                                        handleSelectEquipment={handleSelectNewEquipment}
+                                    />)
+                            }
                         </>
                     )}
 
