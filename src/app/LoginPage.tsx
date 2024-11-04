@@ -1,5 +1,3 @@
-// src/app/LoginPage.tsx
-
 import Image from "next/image";
 import BasketballIcon from "@/components/icons/sports/BasketballIcon";
 import CricketIcon from "@/components/icons/sports/CricketIcon";
@@ -14,57 +12,64 @@ import "./styles.css";
 export default function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 text-center relative font-cabin-condensed">
-      {/* Decorative Circles */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-teal-600 rounded-full"></div>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-teal-600 rounded-full"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-600 rounded-full"></div>
-      <div className="absolute bottom-0 right-0 w-32 h-32 bg-teal-600 rounded-full"></div>
+      {/* Title at the Top */}
+      <h1 className="absolute top-8 text-4xl font-bree-serif text-black">Welcome!</h1>
 
-      {/* Title */}
-      <h1 className="text-4xl font-bree-serif mb-8 text-balance">Welcome!</h1>
+      {/* Decorative Smaller Semi-Circles */}
+      <div 
+        className="absolute top-0 right-0 w-32 h-32"
+        style={{ backgroundColor: '#70A8AB', opacity: 0.3, clipPath: "ellipse(70% 50% at 100% 0)" }}
+      ></div>
+      <div 
+        className="absolute bottom-0 left-0 w-32 h-32"
+        style={{ backgroundColor: '#70A8AB', opacity: 0.3, clipPath: "ellipse(70% 50% at 0 100%)" }}
+      ></div>
 
       {/* Centered Login Button */}
-      <div className="relative bg-teal-600 p-4 rounded-full w-80 h-80 flex flex-col items-center justify-center">
-        <div className="bg-white p-4 rounded-md shadow-md w-64 text-center">
-          <Image src="/_images/logo.png" alt="LPF Logo" width={32} height={32} className="mx-auto mb-2" />
-          <div>
-            <p className="text-xs font-semibold leading-none">LPF</p>
-            <p className="text-[10px] leading-none">LEVELING THE PLAYING FIELD</p>
-          </div>
-          <span className="block mt-4 font-semibold">Login with Salesforce</span>
-        </div>
+      <div className="relative" style={{ backgroundColor: '#70A8AB', padding: '1.5rem', borderRadius: '50%', width: '18rem', height: '18rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80" style={{ fontFamily: 'Cabin Condensed, sans-serif', fontSize: '1.75rem', border: '2px solid #2C7A7B' }}>
+          <Image src="/google-logo.png" alt="Google Logo" width={28} height={28} className="mr-2" />
+          <span className="font-semibold">Login with Google</span>
+        </button>
         
         {/* Surrounding Icons */}
-        <div className="absolute -top-8 -left-10">
+        <div className="absolute -top-10 left-16">
           <BasketballIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute -top-8 -right-10">
+        <div className="absolute -top-10 right-16">
           <FootballIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute -bottom-8 -left-10">
+        <div className="absolute bottom-10 left-16">
           <SoccerIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute -bottom-8 -right-10">
+        <div className="absolute bottom-10 right-16">
           <TennisIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute top-16 -left-24">
+        <div className="absolute top-20 left-0">
           <CricketIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute top-16 -right-24">
+        <div className="absolute top-20 right-0">
           <GolfIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute bottom-16 -left-24">
+        <div className="absolute bottom-20 left-0">
           <SwimmingIcon className="w-6 h-6 fill-white" />
         </div>
-        <div className="absolute bottom-16 -right-24">
+        <div className="absolute bottom-20 right-0">
           <VolleyballIcon className="w-6 h-6 fill-white" />
         </div>
       </div>
 
-      {/* Create Account Button */}
-      <button className="mt-8 px-6 py-2 rounded-full bg-teal-800 text-white text-lg">
-        Create Account
+      {/* Organization Application Button */}
+      <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg">
+        Organization Application
       </button>
+
+      {/* Language Selector */}
+      <div className="absolute bottom-4 right-4 flex items-center" style={{ backgroundColor: '#F49066', opacity: 0.9, color: 'white', padding: '0.2rem 0.75rem', borderRadius: '2rem', height: '32px' }}>
+        <Image src="/globe-icon.png" alt="Globe Icon" width={20} height={20} className="mr-2" />
+        <span>English</span>
+        <span className="ml-2">▼</span>
+      </div>
     </div>
   );
 }
