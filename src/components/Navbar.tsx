@@ -14,7 +14,7 @@ type IconButtonProps = {
 function IconButton({ icon, onClick }: IconButtonProps) {
   return (
     <div
-      className={`group flex flex-col items-center p-4 rounded-mini hover:bg-teal-light`}
+      className={`group flex flex-col items-center justify-center p-4 rounded-mini hover:bg-teal-light`}
       onClick={onClick}
     >
       <button className="${isSelected ? text-white : text-teal} group-hover:text-white-dark">
@@ -62,10 +62,11 @@ export default function Navbar() {
             size={55}
             viewBoxSize={50}
             showCircle={selectedIcon === "Appointments"}
+            transform={"translate(10,10)"}
           />
         }
         onClick={() => handleIconClick("Appointments")}
-      />
+        />
 
       <IconButton
         icon={
