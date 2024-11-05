@@ -1,17 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import DownArrowIcon from '@/components/icons/DownArrowIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
-import OrangeLocationIcon from '@/components/icons/OrangeLocationIcon';
-
-
 
 interface GroupedEquipment {
   name: string;
@@ -146,7 +136,7 @@ const ListComponent: React.FC<ListCompProps> = ({item, selectedEquipments, searc
                     {(item as GroupedEquipment).locations.map((location, index) => (
                       <div key={index} className="bg-teal-light2 rounded-xl p-2 -mt-8">
                         <div className="flex items-center space-x-2 mb-2 pt-1 [&_svg]:w-5 [&_svg]:h-5 [&_svg]:fill-orange">
-                          <OrangeLocationIcon />
+                          <LocationIcon color="#FF753B" />
                           <p className="text-white text-lg font-ubuntu-condensed -pl-2">{location.warehouse}</p>
                         </div>
                         <span className="inline-flex justify-between items-center w-full p-2">

@@ -1,5 +1,5 @@
-import Search from "./Search"
+import SearchPage from "./SearchPage"
 
-export default function SearchPage() {
-    return (<Search />)
+export default function SearchPageWrapper() {
+    return (<SearchPage />)
 }

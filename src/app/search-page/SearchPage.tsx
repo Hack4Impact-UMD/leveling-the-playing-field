@@ -1,15 +1,6 @@
 "use client";  
 
-import { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose, 
-} from "@/components/ui/dialog"
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -18,14 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import SearchIcon from '@/components/icons/SmallSearchIcon';
+import SearchIcon from '@/components/icons/SearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
-import LocationIcon from '@/components/icons/LocationIcon';
-import OrangeLocationIcon from '@/components/icons/OrangeLocationIcon';
 import FilterComponent from './FilterComponent';
 import ListComponent from './ListComponent';
-import DownArrowIcon from '@/components/icons/DownArrowIcon';
-import FootballIcon from '@/components/icons/sports/OrangeFootballIcon';
 import { Input } from "@/components/ui/input"
 
 interface Equipment {
@@ -73,10 +60,6 @@ const SearchPage = () => {
     { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'College Park, Maryland' },
     { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'McLean, Virginia' },
     { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'Baltimore, Maryland' }
-
-
-
-
   ];
   const warehouses = ['Baltimore, Maryland', 'College Park, Maryland', 'McLean, Virginia'];
   const sports = ['Soccer', 'Basketball', 'Tennis'];
@@ -203,7 +186,7 @@ const SearchPage = () => {
       <div className="flex items-center space-x-2 mb-4">
         <div className="relative flex-grow border-black bg-teal-light rounded-3xl text-white">
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
-            <SearchIcon />
+            <SearchIcon size={30} viewBoxSize={30} />
           </div>
           <Input
             value={searchTerm}
