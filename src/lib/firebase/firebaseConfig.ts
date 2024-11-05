@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCbHeqYNzE3mPyro1XB4WuQgDK1NJ85P-0",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: "lpf-checkout-system.firebaseapp.com",
   projectId: "lpf-checkout-system",
   storageBucket: "lpf-checkout-system.firebasestorage.app",
