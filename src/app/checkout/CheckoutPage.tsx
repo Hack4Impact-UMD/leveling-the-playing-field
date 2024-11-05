@@ -1,11 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import SportSection from "../SportSection";
+import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
-import IconSoccer from "../../../components/icons/sports/SoccerIcon";
-import IconBaseballOutline from "../../../components/icons/sports/BaseballIcon";
-import IconTennisBall from "../../../components/icons/sports/TennisIcon";
-import IconBasketballOutline from "../../../components/icons/sports/BasketballIcon";
+import IconSoccer from "@/components/icons/sports/SoccerIcon";
+import IconBaseballOutline from "@/components/icons/sports/BaseballIcon";
+import IconTennisBall from "@/components/icons/sports/TennisIcon";
+import IconBasketballOutline from "@/components/icons/sports/BasketballIcon";
 
 export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
@@ -14,7 +14,6 @@ export interface Equipment {
   quantity: number,
   sport: Sport
 }
-
 
 export const sportsIconsMap = new Map<string, JSX.Element>([
   ['soccer', <IconSoccer key="soccer"/>],
@@ -30,7 +29,7 @@ export const sportsItemsMap = new Map<string, string[]>([
   ['basketball', ['Basketball', 'Basketball Shoes']]
 ]);
 
-const Checkout = () => {
+const CheckoutPage = () => {
 
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
 
@@ -128,4 +127,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutPage;

@@ -1,6 +1,6 @@
 import XIcon from '@/components/icons/XIcon';
 import React from 'react';
-import { Equipment, Sport } from './Checkout';
+import { Equipment, Sport } from './CheckoutPage';
 
 interface EquipmentItemProps {
     equipment: Equipment;

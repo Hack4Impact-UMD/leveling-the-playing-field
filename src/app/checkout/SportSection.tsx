@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Sport, Equipment, sportsItemsMap } from './components/Checkout';
+import { Sport, Equipment, sportsItemsMap } from './CheckoutPage';
 import XIcon from '@/components/icons/XIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
-import EquipmentSelector from './components/EquipmentSelector';
-import EquipmentItem from './components/EquipmentItem';
-import MinusIcon from '../../components/icons/MinusIcon';
+import EquipmentSelector from './EquipmentSelector';
+import EquipmentItem from './EquipmentItem';
+import MinusIcon from '@/components/icons/MinusIcon';
 
 interface Props {
     removeSelectedSport: (sport: Sport | "") => void,

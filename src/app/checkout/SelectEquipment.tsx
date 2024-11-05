@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sport, Equipment, sportsItemsMap } from "./components/Checkout";
+import { Sport, Equipment, sportsItemsMap } from "./CheckoutPage";
 
 interface Props {
   removeSport: (sport: Sport | "") => void;
