@@ -40,8 +40,15 @@ const EquipmentItem = ({
                 type="number"
                 min={1}
                 placeholder="Quantity"
-                value={equipment.quantity}
+                value={equipment.quantity === 0 ? "" : equipment.quantity}
                 onChange={(e) => updateEquipmentQuantity(index, e)}
+                onBlur={(e) => {
+                    // Ensure minimum value on blur if the input is cleared
+                    if (e.target.value === "") {
+                        e.target.value = "1";
+                        updateEquipmentQuantity(index, e); // Set back to 1 if empty
+                    }
+                }}
                 className="bg-green-light flex-auto rounded-md text-black border w-16 py-2 px-4 sm:w-12"
             />
             <button

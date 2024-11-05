@@ -4,7 +4,7 @@ import XIcon from '@/components/icons/XIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
 import EquipmentSelector from './components/EquipmentSelector';
 import EquipmentItem from './components/EquipmentItem';
-import MinusIcon from '../svgs/MinusIcon';
+import MinusIcon from '../../components/icons/MinusIcon';
 
 interface Props {
     removeSelectedSport: (sport: Sport | "") => void,
@@ -20,8 +20,11 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
     const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
 
     const updateEquipmentQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.value === "") {
+            event.target.value = "0";
+        }
         let value = Number(event.target.value);
-        if (value < 1) {
+        if (value < 0) {
             value = 1;
         }
         const updatedEquipmentList = [...selectedEquipment];

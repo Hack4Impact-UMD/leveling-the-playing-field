@@ -2,10 +2,10 @@
 import React, { useState } from "react";
 import SportSection from "../SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
-import IconSoccer from "../../svgs/soccer";
-import IconBaseballOutline from "../../svgs/baseball";
-import IconTennisBall from "../../svgs/tennis";
-import IconBasketballOutline from "../../svgs/basketball";
+import IconSoccer from "../../../components/icons/sports/SoccerIcon";
+import IconBaseballOutline from "../../../components/icons/sports/BaseballIcon";
+import IconTennisBall from "../../../components/icons/sports/TennisIcon";
+import IconBasketballOutline from "../../../components/icons/sports/BasketballIcon";
 
 export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
@@ -17,10 +17,10 @@ export interface Equipment {
 
 
 export const sportsIconsMap = new Map<string, JSX.Element>([
-  ['soccer', <IconSoccer key="soccer" className="w-6 h-6" />],
+  ['soccer', <IconSoccer key="soccer"/>],
   ['baseball', <IconBaseballOutline key="baseball" className="w-6 h-6" />],
-  ['tennis', <IconTennisBall key="tennis" className="w-6 h-6" />],
-  ['basketball', <IconBasketballOutline key="basketball" className="w-6 h-6" />]
+  ['tennis', <IconTennisBall key="tennis"/>],
+  ['basketball', <IconBasketballOutline key="basketball"/>]
 ]);
 
 export const sportsItemsMap = new Map<string, string[]>([
