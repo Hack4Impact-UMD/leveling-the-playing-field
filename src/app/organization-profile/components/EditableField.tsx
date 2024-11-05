@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EditIcon from '@/components/icons/EditIcon';
+import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 
 interface EditableFieldProps {
     label: string;
@@ -7,11 +8,13 @@ interface EditableFieldProps {
     type: string;
     pattern?: RegExp; 
     onSave: (newValue: string) => void;
+    required?: boolean;
 }
 
-export default function EditableField({ label, type, value, pattern, onSave }: EditableFieldProps) {
+export default function EditableField({ label, type, value, pattern, onSave, required}: EditableFieldProps) {
     const [isEditable, setIsEditable] = useState(false);
     const [inputValue, setInputValue] = useState(value);
+    const [isInvalid, setIsInvalid] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -19,12 +22,11 @@ export default function EditableField({ label, type, value, pattern, onSave }: E
     }, [value]);
 
     const validateField = () => {
-        if (pattern && !pattern.test(inputValue)) {
+        if ((required && !inputValue) || (pattern && !pattern.test(inputValue))) {
+            setIsInvalid(true);
             return false;
         }
-        if (!inputValue) {
-            return false;
-        }
+        setIsInvalid(false);
         return true;
     };
 
@@ -63,7 +65,9 @@ export default function EditableField({ label, type, value, pattern, onSave }: E
         <div className="w-full pl-2">
             <div className="flex flex-row items-center py-2">
                 <div className="flex flex-col flex-grow">
-                    <h3 className="text-gray-500 text-lg font-cabin-condensed">{label}</h3>
+                    <h3 className="text-gray-500 text-lg font-cabin-condensed">
+                        {required && <span className="text-red-500">* </span>}
+                        {label}</h3>
                     {isEditable ? (
                         <>
                             <input
@@ -72,7 +76,7 @@ export default function EditableField({ label, type, value, pattern, onSave }: E
                                 ref={inputRef}
                                 onChange={handleInputChange}
                                 onKeyDown={handleKeyDown}
-                                className="text-black text-2xl font-cabin-condensed border-2 border-gray-400 rounded w-full bg-transparent"
+                                className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalid ? 'border-red-500' : 'border-gray-400'}`}
                             />
                         </>
                     ) : (
@@ -86,7 +90,14 @@ export default function EditableField({ label, type, value, pattern, onSave }: E
                     <EditIcon />
                 </button>
             </div>
-            <hr className="border-[#00000066] border-1" />
+            <hr className={`border-1 ${isInvalid ? 'border-red-500' : 'border-[#00000066]'}`} />
+            {isInvalid &&
+                <div className="flex flex-row items-center space-x-1">
+                    <AttentionCircleIcon />
+                    <p className="text-[#00000066] text-[10px]">Please enter a valid {label.toLowerCase()}</p>
+                </div>
+            }
         </div>
     );
 };
+

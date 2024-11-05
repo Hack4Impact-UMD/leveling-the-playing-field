@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import EditIcon from '@/components/icons/EditIcon';
 import XIcon from '@/components/icons/XIcon';
 import ConfirmationModal from './ConfirmationModal';
+import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 
 
 interface ContactItemProps {
@@ -13,18 +14,33 @@ interface ContactItemProps {
 }
 
 export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
-    const [isNamePhoneEditable, setIsNamePhoneEditable] = useState(false);
+    const [isNameEditable, setIsNameEditable] = useState(false);
+    const [isPhoneEditable, setIsPhoneEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editedName, setEditedName] = useState(name);
     const [editedPhoneNumber, setEditedPhoneNumber] = useState(phoneNumber);
     const [editedEmail, setEditedEmail] = useState(email);
+    const [isInvalidName, setIsInvalidName] = useState(false);
+    const [isInvalidPhone, setIsInvalidPhone] = useState(false);
+    const [isInvalidEmail, setIsInvalidEmail] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
+    const phoneInputRef = useRef<HTMLInputElement>(null);
     const emailInputRef = useRef<HTMLInputElement>(null);
 
-    const handleNamePhoneEditClick = () => {
-        setIsNamePhoneEditable(true);
+    const handleNameEditClick = () => {
+        setIsNameEditable(true);
         setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0);
+    };
+
+    const handlePhoneEditClick = () => {
+        setIsPhoneEditable(true);
+        setTimeout(() => phoneInputRef.current && phoneInputRef.current.focus(), 0);
+    };
+
+    const handleEmailEditClick = () => {
+        setIsEmailEditable(true);
+        setTimeout(() => emailInputRef.current && emailInputRef.current.focus(), 0);
     };
 
     const formatPhoneNumber = (phone: string): string => {
@@ -44,39 +60,52 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
     const handlePhoneInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEditedPhoneNumber(formatPhoneNumber(e.target.value));
     };
-
-    const handleEmailEditClick = () => {
-        setIsEmailEditable(true);
-        setTimeout(() => emailInputRef.current && emailInputRef.current.focus(), 0);
-    };
     
     const validatePhone = () => {
         const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
 
         if (phoneRegex && !phoneRegex.test(editedPhoneNumber)) {
+            setIsInvalidPhone(true)
             return false;
         }
         if (!editedPhoneNumber) {
+            setIsInvalidPhone(true)
             return false;
         }
+        setIsInvalidPhone(false)
         return true;
+    };
+
+    const validateName = () => {
+        setIsInvalidName(!editedName.trim());
+        return editedName.trim().length > 0;
     };
 
     const validateEmail = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (emailRegex && !emailRegex.test(editedEmail)) {
+            setIsInvalidEmail(true)
             return false;
         }
         if (!editedEmail) {
+            setIsInvalidEmail(true)
             return false;
         }
+        setIsInvalidEmail(false)
         return true;
     };
 
-    const handleNamePhoneKeyDown = (e: React.KeyboardEvent) => {
+    const handleNameKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && validateName()) {
+            setIsNameEditable(false);
+            onEdit({ name: editedName, phoneNumber: editedPhoneNumber, email: editedEmail });
+        }
+    };
+
+    const handlePhoneKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validatePhone()) {
-            setIsNamePhoneEditable(false);
+            setIsPhoneEditable(false);
             onEdit({ name: editedName, phoneNumber: editedPhoneNumber, email: editedEmail });
         }
     };
@@ -103,78 +132,87 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
 
     return (
         <div className="w-full mb-4">
-            <div className="flex flex-row justify-between items-center pt-2">
-                <div className="flex flex-row justify-between w-full space-x-4">
-                    {isNamePhoneEditable ? (
-                        <>
-                            <div className="flex flex-col">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Name</h3>
+            <div className="flex flex-row space-x-4 pt-2">
+                <div className="basis-2/5">
+                    <div className="flex items-center">
+                        <div className="flex-grow flex flex-col">
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Name</label>
+                            {isNameEditable ? (
                                 <input
                                     type="text"
                                     value={editedName}
                                     ref={nameInputRef}
                                     onChange={(e) => setEditedName(e.target.value)}
-                                    onKeyDown={handleNamePhoneKeyDown}
-                                    className="text-black text-2xl font-cabin-condensed border-2 border-gray-400 w-11/12 rounded bg-transparent"
+                                    onKeyDown={handleNameKeyDown}
+                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidName ? 'border-red-500' : 'border-gray-400'}`}
                                 />
-                            </div>
-                            <div className="flex flex-col">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Phone Number</h3>
+                            ) : (
+                                <p className="text-black text-2xl font-cabin-condensed">{name}</p>
+                            )}
+                        </div>
+                        <button className="self-start py-2 pr-2" onClick={handleNameEditClick}>
+                            <EditIcon />
+                        </button>
+                    </div>
+                    <hr className={`border-1 mt-2 ${isInvalidName ? 'border-red-500' : 'border-[#00000066]'}`} />
+                    {isInvalidName && (
+                        <div className="flex flex-row items-center space-x-1">
+                            <AttentionCircleIcon />
+                            <p className="text-[#00000066] text-[10px]">Please enter a valid name</p>
+                        </div>
+                    )}
+                </div>
+
+                <div className="basis-3/5">
+                    <div className="flex items-center">
+                        <div className="flex-grow flex flex-col">
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Phone Number</label>
+                            {isPhoneEditable ? (
                                 <input
                                     type="tel"
                                     value={editedPhoneNumber}
+                                    ref={phoneInputRef}
                                     onChange={handlePhoneInputChange}
-                                    onKeyDown={handleNamePhoneKeyDown}
-                                    className="text-black text-2xl font-cabin-condensed border-2 border-gray-400 w-full rounded bg-transparent"
+                                    onKeyDown={handlePhoneKeyDown}
+                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidPhone ? 'border-red-500' : 'border-gray-400'}`}
                                 />
-                            </div> 
-                        </>
-                    ) : (
-                        <>
-                            <div className="flex flex-col">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Name</h3>
-                                <p className="text-black text-2xl font-cabin-condensed">{name}</p>
-                            </div>
-                            <div className="flex flex-col">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Phone Number</h3>
+                            ) : (
                                 <p className="text-black text-2xl font-cabin-condensed">{phoneNumber}</p>
-                            </div> 
-                        </>
+                            )}
+                        </div>
+                        <button className="self-start py-2 pr-2" onClick={handlePhoneEditClick}>
+                            <EditIcon />
+                        </button>
+                    </div>
+                    <hr className={`border-1 mt-2 ${isInvalidPhone ? 'border-red-500' : 'border-[#00000066]'}`} />
+                    {isInvalidPhone && (
+                        <div className="flex flex-row items-center space-x-1">
+                            <AttentionCircleIcon />
+                            <p className="text-[#00000066] text-[10px]">Please enter a valid phone number</p>
+                        </div>
                     )}
-                </div>
-
-                <button className="self-start py-2 pr-2" onClick={handleNamePhoneEditClick}>
-                    <EditIcon />
-                </button>
+                </div>                
             </div>
 
-            <hr className="border-[#00000066] border-1 mt-2" />
 
-            <div className="flex flex-row justify-between items-center pt-2">
-                <div className="flex flex-row justify-between w-full space-x-4">
+
+
+            <div className="flex items-center mt-4">
+                <div className="flex-grow flex flex-col">
+                    <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Email</label>
                     {isEmailEditable ? (
-                        <>
-                            <div className="flex flex-col w-full">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Email</h3>
-                                    <input
-                                        type="email"
-                                        value={editedEmail}
-                                        onChange={(e) => setEditedEmail(e.target.value)}
-                                        onKeyDown={handleEmailKeyDown}
-                                        className="text-black text-2xl font-cabin-condensed border-2 border-gray-400 w-full rounded bg-transparent"
-                                    />
-                            </div>  
-                        </>
+                        <input
+                            type="email"
+                            value={editedEmail}
+                            ref={emailInputRef}
+                            onChange={(e) => setEditedEmail(e.target.value)}
+                            onKeyDown={handleEmailKeyDown}
+                            className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidEmail ? 'border-red-500' : 'border-gray-400'}`}
+                        />
                     ) : (
-                        <>
-                            <div className="flex flex-col">
-                                <h3 className="text-gray-500 text-lg font-cabin-condensed">Email</h3>
-                                <p className="text-black text-2xl font-cabin-condensed break-all whitespace-normal">{email}</p>
-                            </div> 
-                        </>
+                        <p className="text-black text-2xl font-cabin-condensed break-words whitespace-normal">{email}</p>
                     )}
                 </div>
-
                 <div className="self-start flex flex-col justify-end space-y-5">
                     <button className="ml-1" onClick={handleEmailEditClick}>
                         <EditIcon />
@@ -184,9 +222,14 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                     </button>
                 </div>
             </div>
+            <hr className={`border-1 mt-2 ${isInvalidEmail ? 'border-red-500' : 'border-[#00000066]'}`} />
+            {isInvalidEmail && (
+                <div className="flex flex-row items-center space-x-1">
+                    <AttentionCircleIcon />
+                    <p className="text-[#00000066] text-[10px]">Please enter a valid email address</p>
+                </div>
+            )}
 
-            <hr className="border-[#00000066] border-1 mt-2" />
-            
             <ConfirmationModal
                 isOpen={isModalOpen}
                 message='Are you sure you want to delete this contact?'
@@ -194,7 +237,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                 confirmText='Yes'
                 onCancel={closeModal}
                 cancelText='No'
-            />
+            />    
         </div>
     );
 }
