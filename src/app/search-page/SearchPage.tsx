@@ -186,7 +186,7 @@ const SearchPage = () => {
       <div className="flex items-center space-x-2 mb-4">
         <div className="relative flex-grow border-black bg-teal-light rounded-3xl text-white">
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
-            <SearchIcon size={30} viewBoxSize={30} />
+            <SearchIcon size={30} viewBoxSize={44} />
           </div>
           <Input
             value={searchTerm}
