@@ -37,7 +37,7 @@ async function querySalesforce(query: string) {
 export async function GET(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
     console.log(account_id);
-    const query = `SELECT Id FROM Account WHERE Id = \'${account_id}\'`;
+    const query = `SELECT FIELDS(ALL) FROM Account WHERE Id = \'${account_id}\'`;
     const data = await querySalesforce(query);
     return NextResponse.json(data);
 }
