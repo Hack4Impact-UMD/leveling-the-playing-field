@@ -34,10 +34,36 @@ async function querySalesforce(query: string) {
     return data
 }
 
+async function putSalesforce(accountId: string, request: NextRequest) {
+    const access_token = await getSalesforceToken();
+    
+    const requestBody = await request.body;
+    const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/account/${accountId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`
+        },
+        body: requestBody
+    })
+    console.log(response);
+    const data = await response.json();
+    console.log(data.records);
+    return data;
+}
+
 export async function GET(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
     console.log(account_id);
     const query = `SELECT FIELDS(ALL) FROM Account WHERE Id = \'${account_id}\'`;
     const data = await querySalesforce(query);
+    return NextResponse.json(data);
+}
+
+export async function PUT(request: NextRequest, { params }: { params: { accountId: string } }) {
+    const account_id = params.accountId;
+    
+    const data = await putSalesforce(account_id, request);
+    console.log(data);
     return NextResponse.json(data);
 }
