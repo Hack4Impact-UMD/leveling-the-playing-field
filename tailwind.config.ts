@@ -3,7 +3,8 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
-  content: [
+    darkMode: ["class"],
+    content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -29,6 +30,7 @@ const config: Config = {
         teal: {
           DEFAULT: "#14676B",
           light: "#70A8AB",
+          light2: "#639597",
           dark: "#0E4F54",
         },
         orange: {
