@@ -14,10 +14,10 @@ type IconButtonProps = {
 function IconButton({ icon, onClick }: IconButtonProps) {
   return (
     <div
-      className={`group flex flex-col items-center p-4 rounded-mini hover:bg-teal-light`}
+      className={`group flex flex-col items-center justify-center p-4 rounded-mini hover:bg-teal-light`}
       onClick={onClick}
     >
-      <button className="${isSelected ? text-white : text-teal} group-hover:text-white-dark">
+      <button className="group-hover:text-white-dark">
         {icon}
       </button>
     </div>
@@ -32,7 +32,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-custom">
+    <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-xl" >
       <IconButton
         icon={
           <ProfileIcon
@@ -62,10 +62,11 @@ export default function Navbar() {
             size={55}
             viewBoxSize={50}
             showCircle={selectedIcon === "Appointments"}
+            transform={"translate(10,10)"}
           />
         }
         onClick={() => handleIconClick("Appointments")}
-      />
+        />
 
       <IconButton
         icon={
