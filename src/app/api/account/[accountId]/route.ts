@@ -34,22 +34,20 @@ async function querySalesforce(query: string) {
     return data
 }
 
-async function putSalesforce(accountId: string, request: NextRequest) {
+async function updateAccount(accountId: string, request: NextRequest) {
     const access_token = await getSalesforceToken();
     
-    const requestBody = await request.body;
+    const requestBody = await request.json();
+    // 400 error handling
     const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/account/${accountId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${access_token}`
         },
-        body: requestBody
+        body: JSON.stringify(requestBody)
     })
-    console.log(response);
-    const data = await response.json();
-    console.log(data.records);
-    return data;
+    return response;
 }
 
 export async function GET(request: NextRequest, { params }: { params: { accountId: string } }) {
@@ -63,7 +61,9 @@ export async function GET(request: NextRequest, { params }: { params: { accountI
 export async function PUT(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
     
-    const data = await putSalesforce(account_id, request);
-    console.log(data);
-    return NextResponse.json(data);
+    const response = await updateAccount(account_id, request);
+    if (response.json() === null) {
+        // 500 error handling
+    }
+    return NextResponse.json({message: "Updated successfully"}, {status: 200});
 }
