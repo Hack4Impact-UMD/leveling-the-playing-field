@@ -18,7 +18,7 @@ interface Contact {
   };
   email: string;
   phoneNumber: string;
-  title: string;
+  title?: string;
   accountId: string;
 }
 
