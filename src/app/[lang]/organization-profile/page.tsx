@@ -54,7 +54,7 @@ export default function OrganizationProfile() {
         const newContact: Contact = {
           id: contacts.length + 1,
           name: `Name${contacts.length + 1}`,
-          phoneNumber: '000-000-000',
+          phoneNumber: '000-000-0000',
           email: `contactemail${contacts.length + 1}@gmail.com`,
         };
         setContacts([...contacts, newContact]);
@@ -129,6 +129,7 @@ export default function OrganizationProfile() {
             type="text"
             value={location.addressLine1}
             onSave={(newValue) => handleLocationFieldSave('addressLine1', newValue)}
+            required={true}
         />
 
         <EditableField
@@ -136,34 +137,49 @@ export default function OrganizationProfile() {
             type="text"
             value={location.addressLine2}
             onSave={(newValue) => handleLocationFieldSave('addressLine2', newValue)}
+            required={false}
         />
 
-        <div className="flex flex-row justify-between">
-            <EditableField
-                label="City"
-                type="text"
-                value={location.city}
-                onSave={(newValue) => handleLocationFieldSave('city', newValue)}
-            />
+        <div className="w-full flex flex-row space-x-4">
+            <div className="basis-2/3">
+                <EditableField
+                    label="City"
+                    type="text"
+                    value={location.city}
+                    pattern={/^[A-Za-z\s]+$/}
+                    onSave={(newValue) => handleLocationFieldSave('city', newValue)}
+                    required={true}
+                />
+            </div>
 
-            <StateDropdown
-                country={location.country}
-                state={location.state}
-                onStateChange={handleStateChange}
-            />
+            <div className="basis-1/3">
+                <StateDropdown
+                    country={location.country}
+                    state={location.state}
+                    onStateChange={handleStateChange}
+                />
+            </div>
+        </div>    
 
-            <EditableField
-                label="Zipcode"
-                type="text"
-                value={location.zipCode}
-                onSave={(newValue) => handleLocationFieldSave('zipCode', newValue)}
-            />
+        <div className="w-full flex flex-row space-x-4">
+            <div className="basis-1/2">
+                <CountryDropdownComponent
+                    country={location.country}
+                    onCountryChange={handleCountryChange}
+                />  
+            </div>
 
-            <CountryDropdownComponent
-                country={location.country}
-                onCountryChange={handleCountryChange}
-            />
-        </div>        
+            <div className="basis-1/2">
+                <EditableField
+                    label="Zipcode"
+                    type="text"
+                    value={location.zipCode}
+                    pattern={/^\d+$/}
+                    onSave={(newValue) => handleLocationFieldSave('zipCode', newValue)}
+                    required={true}
+                />
+            </div>
+        </div>
 
         <ProfileHeader title="Contact Number" />
         <EditableField
@@ -172,6 +188,7 @@ export default function OrganizationProfile() {
                 value={contactNumber}
                 pattern={/^\d{3}-\d{3}-\d{4}$/}
                 onSave={(newNumber: string) => setContactNumber(newNumber)}
+                required={true}
         />
       </div>
     );
