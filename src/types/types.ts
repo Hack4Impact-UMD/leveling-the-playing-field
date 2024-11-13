@@ -1,4 +1,4 @@
-interface Account {
+export interface Account {
   id: string;
   recordType: "Beneficiary";
   name: string;
@@ -8,7 +8,7 @@ interface Account {
   market: Market
 }
 
-interface Contact {
+export interface Contact {
   id: string;
   name: {
     title?: string;
@@ -22,7 +22,7 @@ interface Contact {
   accountId: string;
 }
 
-interface Opportunity {
+export interface Opportunity {
   id: string;
   name: string;
   closeDate: Date;
@@ -32,17 +32,17 @@ interface Opportunity {
   primaryContactId: string;
 }
 
-type Stage = "Site Visit/Call" | "Posted";
-type GiftType = "School" | "Youth Program" | "Youth League" | "Partnership" | "Other" | "None"; 
+export type Stage = "Site Visit/Call" | "Posted";
+export type GiftType = "School" | "Youth Program" | "Youth League" | "Partnership" | "Other" | "None"; 
 
-interface Product {
+export interface Product {
   id: string;
   name: string;
   category: string;
   quantity: number;
 }
 
-interface Address {
+export interface Address {
   street: string;
   city: string;
   state: string;
@@ -50,7 +50,7 @@ interface Address {
   zipCode: number;
 }
 
-enum Market {
+export enum Market {
   GREATER_WASHINGTON = "Greater Washington",
   BALTIMORE = "Baltimore",
   WESTERN_NEW_YORK = "Western New York",
