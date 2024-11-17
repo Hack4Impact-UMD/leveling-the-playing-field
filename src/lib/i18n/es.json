@@ -18,13 +18,11 @@
             "text": "Perfil de la Organización",
             "note": "Header text"
         },
-        "logoText": {
-            "text": "XYZ Org.",
-            "note": "text next to profile icon"
-        },
         "contact": {
-            "text": "Personas de Contacto",
-            "note": "text in top green box",
+            "header": {
+                "text": "Personas de Contacto",
+                "note": "text in top green box"
+            },
             "name": {
                 "text": "Nombre",
                 "note": "text above name fill in the blank"
@@ -42,8 +40,10 @@
                 "note": "text for the add contact button"
             },
             "deletePopup": {
-                "text": "¿Está seguro de que desea eliminar este contacto?",
-                "note": "delete confirmation text",
+                "confirmationText": {
+                    "text": "¿Está seguro de que desea eliminar este contacto?",
+                    "note": "delete confirmation text"
+                },
                 "yes": {
                     "text": "Sí",
                     "note": "yes button text"
@@ -55,8 +55,10 @@
             }
         },
         "location": {
-            "text": "Aplicación de la Organización",
-            "note": "text in second green box",
+            "header": {
+                "text": "Ubicación",
+                "note": "text in second green box"
+            },
             "addressOne": {
                 "text": "Dirección Línea 1",
                 "note": "text above 1st address fill in the blank"
@@ -84,8 +86,10 @@
         }
     },
     "number": {
-        "text": "Número de Contacto",
-        "note": "text in third green box",
+        "header": {
+            "text": "Número de Contacto",
+            "note": "text in third green box"
+        },
         "box": {
             "text": "Número",
             "note": "text above phone fill in the blank"
@@ -109,8 +113,10 @@
             "note": "Text within upcoming appointment box"
         },
         "confirmationPopup": {
-            "text": "¿Está seguro de que desea seleccionar esta ubicación?",
-            "note": "popup prompt",
+            "confirmationText": {
+                "text": "¿Está seguro de que desea seleccionar esta ubicación?",
+                "note": "popup prompt"
+            },
             "yes": {
                 "text": "Sí",
                 "note": "label for yes button"
@@ -198,8 +204,10 @@
                 "note": "text within the search bar"
             },
             "filter": {
-                "text": "Filtrar",
-                "note": "Header text for orange filter box",
+                "header": {
+                    "text": "Filtrar",
+                    "note": "Header text for orange filter box"
+                },
                 "regionFilter": {
                     "text": "Seleccionar región",
                     "note": "text for region drop down"
@@ -218,8 +226,10 @@
                 }
             },
             "sort": {
-                "text": "Ordenar por",
-                "note": "text by equipment/location toggle",
+                "header": {
+                    "text": "Ordenar por",
+                    "note": "text by equipment/location toggle"
+                },
                 "apply": {
                     "text": "Aplicar",
                     "note": "button text to apply filters"
@@ -232,11 +242,15 @@
                 "note": "text within the search bar in light teal box"
             },
             "filter": {
-                "text": "Filtrar",
-                "note": "Header text for orange filter box",
+                "header": {
+                    "text": "Filtrar",
+                    "note": "Header text for orange filter box"
+                },
                 "sportFilter": {
-                    "text": "Categoría de Deporte",
-                    "note": "header text for the drop down",
+                    "header": {
+                        "text": "Categoría de Deporte",
+                        "note": "header text for the drop down"
+                    },
                     "box": {
                         "text": "Seleccionar deporte",
                         "note": "text inside the sport drop down"
