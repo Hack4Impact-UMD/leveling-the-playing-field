@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const response = await fetch(
-      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity`,
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity`,
       {
         method: 'POST',
         headers: {

@@ -8,7 +8,7 @@ export async function GET(
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const response = await fetch(
-      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -38,7 +38,7 @@ export async function PUT(
     const body = await request.json();
 
     const response = await fetch(
-      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
         method: "PATCH",
         headers: {
@@ -69,7 +69,7 @@ export async function DELETE(
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     
     const response = await fetch(
-      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
         method: "DELETE",
         headers: {
