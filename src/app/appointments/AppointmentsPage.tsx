@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import AppointmentsComponent from './Appointment';
+import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 
 export type Appointment = {
   title: string; 
@@ -15,6 +16,7 @@ export type Appointment = {
 const AppointmentsPage = () => {
     const [isDropclicked, setIsisDropclicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+ 
 
     const appointments: Appointment[] = [
     { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
@@ -33,10 +35,12 @@ const AppointmentsPage = () => {
     return (
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
       <div className="flex flex-col mb-6 items-center">
-        <div className="bg-[#14676B] mb-2 rounded-full p-4">
-          {/* place for calendar icon */}
+        <div className="bg-teal mb-2 rounded-full p-6 relative">
+          <div className='relative -top-0.5'>
+          <AppointmentsIcon />
+          </div>
         </div>
-            <h2 className="text-3xl font-bold text-stone-950 font-[Bree_Serif]">Appointments</h2>
+            <h2 className="text-3xl font-bree-serif text-stone-950">Appointments</h2>
         </div>
 
       <div className="max-w-md w-full">
@@ -44,10 +48,11 @@ const AppointmentsPage = () => {
           <AppointmentsComponent key={x} appointment={appointment} />
         ))}
       </div>
+    
 
-      <div className="mt-8 text-center">
-        <h3 className="text-xl font-bold mb-2 text-stone-950 font-[Cabin_Condensed]">Book New Appointment</h3>
-        <button className="bg-[#14676B] text-white py-2 px-6 rounded-lg shadow-lg w-[380px]" onClick={dropDown}> 
+      <div className="mt-4 text-center">
+        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">Book New Appointment</h3>
+        <button className="bg-teal text-white py-2 px-6 rounded-lg shadow-lg w-[380px] font-cabin-condensed" onClick={dropDown}> 
           Select Location 
         </button>
 
