@@ -52,7 +52,9 @@ export default function LocalizationButton() {
             >
                 <Globe />
                 <span>{language}</span>
-                <Chevron />
+                <div  className="transform scale-y-[-1]">
+                    <Chevron />
+                </div>
             </button>
         </div>
     );
