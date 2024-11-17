@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
-import { getSalesforceAccessToken } from '../../../utils/salesforce';
+import { refreshAccessToken } from '@/lib/salesforce/authorization';
 
 export async function GET(
   request: Request,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
-    const { accessToken, instanceUrl } = await getSalesforceAccessToken();
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const response = await fetch(
-      `${instanceUrl}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -22,7 +22,7 @@ export async function GET(
     }
 
     const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.error('Salesforce API Error:', error);
     return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
@@ -34,16 +34,16 @@ export async function PUT(
   { params }: { params: { opportunityId: string } }
 ) {
   try {
-    const { accessToken, instanceUrl } = await getSalesforceAccessToken();
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const body = await request.json();
 
     const response = await fetch(
-      `${instanceUrl}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
           Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
       }
@@ -54,7 +54,7 @@ export async function PUT(
       return NextResponse.json(error, { status: response.status });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Salesforce API Error:', error);
     return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
@@ -66,12 +66,12 @@ export async function DELETE(
   { params }: { params: { opportunityId: string } }
 ) {
   try {
-    const { accessToken, instanceUrl } = await getSalesforceAccessToken();
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     
     const response = await fetch(
-      `${instanceUrl}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
+      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -83,7 +83,7 @@ export async function DELETE(
       return NextResponse.json(error, { status: response.status });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('Salesforce API Error:', error);
     return NextResponse.json({ error: 'Error processing request' }, { status: 500 });

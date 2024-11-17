@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getSalesforceAccessToken } from '../../utils/salesforce';
+import { refreshAccessToken } from '@/lib/salesforce/authorization';
 
 export async function POST(request: Request) {
   try {
-    const { accessToken, instanceUrl } = await getSalesforceAccessToken();
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const body = await request.json();
 
     const response = await fetch(
-      `${instanceUrl}/services/data/v56.0/sobjects/Opportunity`,
+      `${process.env.SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity`,
       {
         method: 'POST',
         headers: {
