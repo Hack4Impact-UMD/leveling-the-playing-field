@@ -2,8 +2,7 @@ import * as React from "react";
 
 export default function SearchIcon({
   size = 44,               
-  viewBoxSize = 44,         
-
+  viewBoxSize = 44,
   transform='' , 
   showCircle= false
 }) {
