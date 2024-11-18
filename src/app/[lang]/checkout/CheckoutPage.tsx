@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 import IconSoccer from "@/components/icons/sports/SoccerIcon";
 import IconBaseballOutline from "@/components/icons/sports/BaseballIcon";
 import IconTennisBall from "@/components/icons/sports/TennisIcon";
 import IconBasketballOutline from "@/components/icons/sports/BasketballIcon";
+import { getDict, Locale } from "@/lib/i18n/dictionaries";
+import { Product } from "@/types/types";
 
 export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
 
@@ -16,10 +18,10 @@ export interface Equipment {
 }
 
 export const sportsIconsMap = new Map<string, JSX.Element>([
-  ['soccer', <IconSoccer key="soccer"/>],
+  ['soccer', <IconSoccer key="soccer" />],
   ['baseball', <IconBaseballOutline key="baseball" className="w-6 h-6" />],
-  ['tennis', <IconTennisBall key="tennis"/>],
-  ['basketball', <IconBasketballOutline key="basketball"/>]
+  ['tennis', <IconTennisBall key="tennis" />],
+  ['basketball', <IconBasketballOutline key="basketball" />]
 ]);
 
 export const sportsItemsMap = new Map<string, string[]>([
@@ -29,9 +31,11 @@ export const sportsItemsMap = new Map<string, string[]>([
   ['basketball', ['Basketball', 'Basketball Shoes']]
 ]);
 
-const CheckoutPage = () => {
+const CheckoutPage = ({ lang }: { lang: Locale }) => {
 
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
+
+  const [products, setProducts] = useState<Product[]>([]);
 
   const removeSelectedEquipment = (sport: Sport | "", equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -84,9 +88,27 @@ const CheckoutPage = () => {
     return allSports.filter((sport) => !selectedSports.has(sport));
   };
 
+  useEffect(() => {
+    const loadProductData = async () => {
+      try {
+        const response = await fetch('/api/product'); // Hit the endpoint
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json(); // Parse JSON data
+
+        console.log('Products:', data); // Use the data (e.g., set state here)
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    loadProductData();
+  }, []);
+
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
-      <h1 className="text-3xl font-bold mb-4 text-black">Add Equipment</h1>
+      <h1 className="text-3xl font-bold mb-4 text-black">{getDict(lang).then((d) => d.checkoutPage.addSport.text)}</h1>
       <div className="mb-6 rounded-full w-24 h-24 bg-teal text-white flex items-center justify-center p-4">
         <ShoppingCartIcon />
       </div>
@@ -100,7 +122,7 @@ const CheckoutPage = () => {
             }
           }
           } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
-            Add Category
+            {getDict(lang).then((d) => d.checkoutPage.addSport.text)}
           </button>)
         }
         {selectedEquipment.map(({ sport, equipment }, index) => (

@@ -1,5 +1,10 @@
+import { Locale } from "@/lib/i18n/dictionaries";
 import CheckoutPage from "./CheckoutPage"
 
-export default function CheckoutPageWrapper() {
-    return <CheckoutPage />;
+interface Params {
+    lang: Locale
+}
+
+export default function CheckoutPageWrapper({ params }: { params: Params }) {
+    return <CheckoutPage lang={params.lang} />;
 }
