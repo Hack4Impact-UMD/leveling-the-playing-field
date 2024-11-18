@@ -5,6 +5,7 @@ import PlusIcon from '@/components/icons/PlusIcon';
 import EquipmentSelector from './EquipmentSelector';
 import EquipmentItem from './EquipmentItem';
 import MinusIcon from '@/components/icons/MinusIcon';
+import { getDict, Locale } from '@/lib/i18n/dictionaries';
 
 interface Props {
     removeSelectedSport: (sport: Sport | "") => void,
@@ -13,10 +14,11 @@ interface Props {
     updateSelectedEquipment: (newEquipment: Equipment[]) => void,
     unselectedSports: Sport[],
     selectedEquipment: Equipment[],
-    sport: Sport | ""
+    sport: Sport | "",
+    lang: Locale
 }
 
-const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSport, updateSelectedEquipment, unselectedSports, sport, selectedEquipment }: Props) => {
+const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSport, updateSelectedEquipment, unselectedSports, sport, selectedEquipment, lang }: Props) => {
     const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
 
     const updateEquipmentQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +82,7 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
                     onChange={handleSportSelect}
                     className="flex-1 bg-teal-light text-black text-center py-2.5 rounded-md font-semibold w-full sm:w-auto"
                 >
-                    <option value="" disabled>Select Sport</option>
+                    <option value="" disabled>{getDict(lang).then((d) => d.checkoutPage.selectSport.text)}</option>
                     {unselectedSports.map((sportItem) => (
                         <option value={sportItem} key={sportItem}>{sportItem.charAt(0).toUpperCase() + sportItem.slice(1)}</option>
                     ))}
@@ -89,7 +91,7 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
                 <>
                     <div className="flex justify-between space-x-2 items-center w-full">
                         <div className="flex flex-row flex-1 justify-between items-center text-left bg-green text-black py-2 pl-6 px-2 rounded-md font-semibold">
-                            <span>Selected: {sport.charAt(0).toUpperCase() + sport.slice(1)}</span>
+                            <span>{getDict(lang).then((d) => d.checkoutPage.selected.text)} {sport.charAt(0).toUpperCase() + sport.slice(1)}</span>
                             <button onClick={() => setRenderEquipment((prev) => !prev)}> {renderEquipment ? <MinusIcon /> : <PlusIcon />
 
                             }</button>
@@ -113,6 +115,7 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
                                     handleUpdateEquipment={handleUpdateEquipment}
                                     updateEquipmentQuantity={updateEquipmentQuantity}
                                     removeEquipment={removeSelectedEquipment}
+                                    lang={lang}
                                 />
                             ))}
                             {
@@ -120,6 +123,7 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
                                     <EquipmentSelector
                                         availableEquipment={getUnselectedEquipment()}
                                         handleSelectEquipment={handleSelectNewEquipment}
+                                        lang={lang}
                                     />)
                             }
                         </>

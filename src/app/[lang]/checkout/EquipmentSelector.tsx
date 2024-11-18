@@ -1,22 +1,23 @@
+import { getDict, Locale } from '@/lib/i18n/dictionaries';
 import React from 'react';
 
 interface EquipmentSelectorProps {
     availableEquipment: string[];
     handleSelectEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    lang: Locale;
 }
 
-const EquipmentSelector = ({ availableEquipment, handleSelectEquipment }: EquipmentSelectorProps) => {
+const EquipmentSelector = ({ availableEquipment, handleSelectEquipment, lang }: EquipmentSelectorProps) => {
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">
-                {/* padding */}
             </div>
             <select
                 value={""}
                 className="bg-white-dark flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                 onChange={handleSelectEquipment}
             >
-                <option value="" disabled>Select Equipment</option>
+                <option value="" disabled>{getDict(lang).then((d) => d.checkoutPage.selectedEquipment.text)}</option>
                 {availableEquipment.map((item, i) => (
                     <option value={item} key={i}>{item}</option>
                 ))}

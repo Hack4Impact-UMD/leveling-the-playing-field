@@ -34,7 +34,6 @@ export const sportsItemsMap = new Map<string, string[]>([
 const CheckoutPage = ({ lang }: { lang: Locale }) => {
 
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
-
   const [products, setProducts] = useState<Product[]>([]);
 
   const removeSelectedEquipment = (sport: Sport | "", equipment: Equipment) => {
@@ -98,6 +97,7 @@ const CheckoutPage = ({ lang }: { lang: Locale }) => {
         const data = await response.json(); // Parse JSON data
 
         console.log('Products:', data); // Use the data (e.g., set state here)
+        setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -135,13 +135,14 @@ const CheckoutPage = ({ lang }: { lang: Locale }) => {
             removeSelectedEquipment={removeSelectedEquipment}
             removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: Sport) => selectSport(index, newSport)}
+            lang={lang}
           />
         ))}
       </div>
 
       <div className="w-full max-w-md mt-auto">
         <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
-          CHECKOUT
+          {getDict(lang).then((d) => d.checkoutPage.checkout.text)}
         </button>
         <div className="w-full mt-20"></div>
       </div>

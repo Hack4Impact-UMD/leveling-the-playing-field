@@ -195,6 +195,18 @@
         "selectedEquipment": {
             "text": "Seleccionar Equipo",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VERIFICAR",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Seleccione Deporte",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Seleccionado:",
+            "note": "prefix for selected sport"
         }
     },
     "searchPage": {
