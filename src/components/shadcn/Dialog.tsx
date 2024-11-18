@@ -5,7 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { Cross2Icon } from "@radix-ui/react-icons"
 import XIcon from '@/components/icons/XIcon';
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/tailwindUtils"
 
 const Dialog = DialogPrimitive.Root
 
