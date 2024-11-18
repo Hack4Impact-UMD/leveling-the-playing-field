@@ -207,6 +207,10 @@
         "selected": {
             "text": "Selected:",
             "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantity",
+            "note": "placeholder text for empty equipment quantity"
         }
     },
     "searchPage": {
