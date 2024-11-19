@@ -31,7 +31,7 @@ export const sportsItemsMap = new Map<string, string[]>([
   ['basketball', ['Basketball', 'Basketball Shoes']]
 ]);
 
-const CheckoutPage = ({ lang }: { lang: Locale }) => {
+const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: number }) => {
 
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -87,6 +87,23 @@ const CheckoutPage = ({ lang }: { lang: Locale }) => {
     return allSports.filter((sport) => !selectedSports.has(sport));
   };
 
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch(`/api/opportunity/${opportunityId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", // Set content type to JSON
+        },
+        body: JSON.stringify({ StageName: "Posted" })
+      })
+      if (!response.ok) {
+        console.warn("Failed to checkout")
+      }
+    } catch (error) {
+      console.error("Error when checking out:", error);
+    }
+  }
+
   useEffect(() => {
     const loadProductData = async () => {
       try {
@@ -141,7 +158,8 @@ const CheckoutPage = ({ lang }: { lang: Locale }) => {
       </div>
 
       <div className="w-full max-w-md mt-auto">
-        <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
+        <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold"
+          onClick={handleCheckout}>
           {getDict(lang).then((d) => d.checkoutPage.checkout.text)}
         </button>
         <div className="w-full mt-20"></div>
