@@ -53,13 +53,9 @@ export default function RootLayout({
       <body
         className={`${breeSerif.variable} ${cabin.variable} ${cabinCondensed.variable} ${ubuntuCondensed.variable} antialiased bg-white-dark`}
       >
-        <div className="flex items-center justify-center h-screen w-full">
-         <LocalizationButton />
-         </div>
         {children}
-       
+        <Navbar />
       </body>
     </html>
-   
   );
 }
