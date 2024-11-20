@@ -107,13 +107,12 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
   useEffect(() => {
     const loadProductData = async () => {
       try {
-        const response = await fetch('/api/product'); // Hit the endpoint
+        const response = await fetch('/api/products');
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        const data = await response.json(); // Parse JSON data
+        const data: Product[] = await response.json();
 
-        console.log('Products:', data); // Use the data (e.g., set state here)
         setProducts(data);
       } catch (error) {
         console.error('Error fetching products:', error);
