@@ -4,15 +4,15 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
 interface QueryResponse<T> {
-    totalSize: number,
-    done: boolean,
-    records: Array<T>,
+    totalSize: number;
+    done: boolean;
+    records: Array<T>;
 }
 
 interface PricebookEntry {
-    Id: string,
-    Name: string,
-    Product2Id: string
+    Id: string;
+    Name: string;
+    Product2Id: string;
 }
 
 const executeSOQLQuery = async (query: string, access_token: string) => {
@@ -45,9 +45,9 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
         const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query.trim(), access_token);
         const records = data.records;
         const productCategories = await Promise.all(records.map(async (p) => {
-            const data = await executeSOQLQuery(`SELECT Family FROM PRODUCT2 WHERE Id='${p.Product2Id}'`, access_token);
+            const data: QueryResponse<{ Family: string }> = await executeSOQLQuery(`SELECT Family FROM PRODUCT2 WHERE Id='${p.Product2Id}'`, access_token);
             const family = data.records[0].Family;
-            const product: Product = { category: family, id: p.Id, name: p.Name, quantity: -1 }
+            const product: Product = { category: family, id: p.Id, name: p.Name }
             return product;
         }))
         return NextResponse.json(productCategories, { status: 200 });

@@ -33,13 +33,12 @@ export interface Opportunity {
 }
 
 export type Stage = "Site Visit/Call" | "Posted";
-export type GiftType = "School" | "Youth Program" | "Youth League" | "Partnership" | "Other" | "None"; 
+export type GiftType = "School" | "Youth Program" | "Youth League" | "Partnership" | "Other" | "None";
 
 export interface Product {
   id: string;
   name: string;
   category: string;
-  quantity: number;
 }
 
 export interface Address {
