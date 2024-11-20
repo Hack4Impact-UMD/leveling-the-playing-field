@@ -13,6 +13,11 @@ interface PricebookEntry {
     Id: string;
     Name: string;
     Product2Id: string;
+    Product2: Product2;
+}
+
+interface Product2 {
+    Family: string;
 }
 
 const executeSOQLQuery = async (query: string, access_token: string) => {
@@ -36,7 +41,7 @@ const executeSOQLQuery = async (query: string, access_token: string) => {
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
     const access_token = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const query = `
-        SELECT Id, Name, product2id
+        SELECT Id, Name, product2id, Product2.Family
         FROM PricebookEntry
         WHERE Pricebook2Id = '01si0000002Ip3WAAS'
     `;
@@ -44,12 +49,10 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     try {
         const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query.trim(), access_token);
         const records = data.records;
-        const productCategories = await Promise.all(records.map(async (p) => {
-            const data: QueryResponse<{ Family: string }> = await executeSOQLQuery(`SELECT Family FROM PRODUCT2 WHERE Id='${p.Product2Id}'`, access_token);
-            const family = data.records[0].Family;
-            const product: Product = { category: family, id: p.Id, name: p.Name }
+        const productCategories = records.map((p) => {
+            const product: Product = { category: p.Product2.Family, id: p.Id, name: p.Name }
             return product;
-        }))
+        })
         return NextResponse.json(productCategories, { status: 200 });
     } catch (error) {
         console.error((error as Error).message);
