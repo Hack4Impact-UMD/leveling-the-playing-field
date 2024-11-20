@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { refreshAccessToken } from '@/lib/salesforce/authorization';
 import { Contact } from '../../../../types';
 
 const NEXT_PUBLIC_SALESFORCE_CLIENT_ID = String(process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_ID);
@@ -36,12 +37,37 @@ async function querySalesforce(query: string) {
 }
 
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-    const contact_id = params.id;
-    console.log(contact_id);
-    const query = `SELECT FIELDS(ALL) FROM Contact WHERE Id = \'${contact_id}\'`;
-    const data = await querySalesforce(query);
-    return NextResponse.json(data);
+// export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+//     const contact_id = params.id;
+//     console.log(contact_id);
+//     const query = `SELECT FIELDS(ALL) FROM Contact WHERE Id = \'${contact_id}\'`;
+//     const data = await querySalesforce(query);
+//     return NextResponse.json(data);
+// }
+
+export async function GET(request: Request, { params }: { params: { contactId : string } }) {
+  try {
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Contact/${params.contactId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json(error, { status: response.status });
+    }
+
+    const data = await response.json();
+    return NextResponse.json(data, { status: 200 });
+  } catch (error) {
+    console.error('Salesforce API Error:', error);
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+  }
 }
 
 async function postSalesforce(request: NextRequest) {
