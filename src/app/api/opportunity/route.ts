@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
     const query = `SELECT FIELDS(ALL)
                    FROM Opportunity 
                    WHERE AccountId = '${accountId}' 
-                   ${status ? `AND StageName = '${status}'` : ''} LIMIT 200`;
+                   ${status ? `AND StageName = '${status}'` : ''} 
+                   LIMIT 200`;
 
     const url = `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/query?q=${encodeURIComponent(query)}`;
     
@@ -48,19 +49,20 @@ export async function GET(request: NextRequest) {
 
     console.log(data.records)
 
-    const transformedRecords = data.records.map((record: any) => ({
-      city: record.City || 'N/A',
-      state: record.State || 'N/A',
-      dateOfOrder: record.CloseDate,
-      startTime: '9:00 AM',
-      endTime: '5:00 PM',
-      pointOfContact: {
-        firstName: record.Name?.split(' ')[0] || 'N/A',
-        lastName: record.Name?.split(' ')[1] || '',
-      },
-      itemsCheckedOut: record.Amount || 0,
-      itemList: [],
-    }));
+    const transformedRecords = data.records.map((record: any) => {
+      const createdDate = new Date(record.CreatedDate);
+      const date = createdDate.toLocaleDateString();
+      const time = createdDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      return {
+        market: record.Market__c || 'N/A',
+        dateOfOrder: date,
+        time: time,
+        pointOfContact: record.Name || 'N/A',
+        itemsCheckedOut: record.Amount || 0,
+        itemList: [],
+      };
+    });
 
     return NextResponse.json({ records: transformedRecords });
   } catch (error) {
@@ -68,3 +70,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 } 
+
+//TODO: add POST request back after figuring out format

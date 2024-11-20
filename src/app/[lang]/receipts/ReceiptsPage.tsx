@@ -42,15 +42,10 @@ interface SportItems {
 }
 
 interface Receipt {
-  city: string;
-  state: string;
+  market: string;
   dateOfOrder: string;
-  startTime: string;
-  endTime: string;
-  pointOfContact: {
-    firstName: string;
-    lastName: string;
-  };
+  time: string;
+  pointOfContact: string;
   itemsCheckedOut: number;
   itemList: SportItems[];
 }
@@ -114,25 +109,46 @@ export default function ReceiptsPage() {
       <div className="mt-8 md:w-3/5 w-[90%]">
         {sortedReceipts.map((receipt, index) => (
           <Dialog key={index}>
-            <div className="bg-teal-light border-teal border-4 rounded-2xl shadow-lg mt-4">
+            <div className="bg-teal-light border-teal border-2 rounded-2xl shadow-lg mt-4">
               <div className="px-8 py-2 w-full text-left text-white">
-                <div className="text-sm md:text-base">{receipt.city}, {receipt.state}</div>
-                <div className="text-sm md:text-base">{receipt.dateOfOrder}</div>
-                <div className="text-sm md:text-base">{receipt.startTime} - {receipt.endTime}</div>
                 <div className="text-sm md:text-base">
-                  {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}: {receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm md:text-base">
-                    {dict?.receiptsPage?.orderDetails?.total?.text ?? "# Items Checked Out"}: {receipt.itemsCheckedOut}
+                  <span className="font-bold mr-1">
+                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
                   </span>
-                  <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-xs md:text-sm">
+                  <span>{receipt.market}</span>
+                </div>
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
+                  </span>
+                  <span>{receipt.dateOfOrder}</span>
+                </div>
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict?.receiptsPage?.orderDetails?.time?.text ?? "Time"}:
+                  </span>
+                  <span>{receipt.time}</span>
+                </div>
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
+                  </span>
+                  <span>{receipt.pointOfContact}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm md:text-base">
+                  <div>
+                    <span className="font-bold mr-1">
+                      {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
+                    </span>
+                    <span>{receipt.itemsCheckedOut}</span>
+                  </div>
+                  <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-sm md:text-base">
                     {dict?.receiptsPage?.viewButton?.text ?? "View Receipt"}
                   </DialogTrigger>
                 </div>
               </div>
             </div>
-            <DialogContent className="bg-teal-light text-white border-4 border-teal w-[85%] max-w-[500px] rounded-3xl">
+            <DialogContent className="bg-teal-light text-white border-2 border-teal w-[85%] max-w-[500px] rounded-3xl">
               <DialogHeader>
                 <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">
                   {dict?.receiptsPage?.orderDetails?.title?.text ?? "ORDER DETAILS"}
@@ -141,9 +157,9 @@ export default function ReceiptsPage() {
               <div className="space-y-2 mb-4 font-cabin-condensed text-sm md:text-base">
                 <div className="flex justify-between">
                   <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse Location"}:
+                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
                   </span>
-                  <span>{receipt.city}, {receipt.state}</span>
+                  <span>{receipt.market}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
@@ -155,13 +171,13 @@ export default function ReceiptsPage() {
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.time?.text ?? "Time"}:
                   </span>
-                  <span>{receipt.startTime} - {receipt.endTime}</span>
+                  <span>{receipt.time}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
                   </span>
-                  <span>{receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}</span>
+                  <span>{receipt.pointOfContact}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
