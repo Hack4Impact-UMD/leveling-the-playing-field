@@ -6,6 +6,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/Dialog"
+import { getDict } from "@/lib/i18n/dictionaries";
+import { useEffect, useState } from "react";
+
+interface ReceiptsPageDict {
+  receiptsPage: {
+    title: { text: string };
+    viewButton: { text: string };
+    orderDetails: {
+      title: { text: string };
+      warehouse: { text: string };
+      date: { text: string };
+      time: { text: string };
+      contact: { text: string };
+      total: { text: string };
+      orderInfo: {
+        items: { text: string };
+        quantity: { text: string };
+      };
+    };
+  };
+}
 
 interface Item {
   name: string;
@@ -91,9 +112,22 @@ const receipts: Receipt[] = [
 const sortedReceipts = receipts.sort((a, b) => new Date(b.dateOfOrder).getTime() - new Date(a.dateOfOrder).getTime());
 
 export default function ReceiptsPage() {
+  const [dict, setDict] = useState<ReceiptsPageDict | null>(null);
+
+  useEffect(() => {
+    const fetchDict = async () => {
+      const locale = "en"; // Replace with dynamic locale if needed
+      const dictionary = await getDict(locale);
+      setDict(dictionary);
+    };
+    fetchDict();
+  }, []);
+
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
-      <h2 className="text-black text-3xl md:text-3xl font-bree-serif">Receipts</h2>
+      <h2 className="text-black text-3xl md:text-3xl font-bree-serif">
+        {dict?.receiptsPage?.title?.text ?? "Receipts"}
+      </h2>
       <div className="mt-8 md:w-3/5 w-[90%]">
         {sortedReceipts.map((receipt, index) => (
           <Dialog key={index}>
@@ -102,38 +136,54 @@ export default function ReceiptsPage() {
                 <div className="text-sm md:text-base">{receipt.city}, {receipt.state}</div>
                 <div className="text-sm md:text-base">{receipt.dateOfOrder}</div>
                 <div className="text-sm md:text-base">{receipt.startTime} - {receipt.endTime}</div>
-                <div className="text-sm md:text-base">Point of Contact: {receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}</div>
+                <div className="text-sm md:text-base">
+                  {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}: {receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}
+                </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm md:text-base"># Items Checked Out: {receipt.itemsCheckedOut}</span>
+                  <span className="text-sm md:text-base">
+                    {dict?.receiptsPage?.orderDetails?.total?.text ?? "# Items Checked Out"}: {receipt.itemsCheckedOut}
+                  </span>
                   <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-xs md:text-sm">
-                    View Receipt
+                    {dict?.receiptsPage?.viewButton?.text ?? "View Receipt"}
                   </DialogTrigger>
                 </div>
               </div>
             </div>
             <DialogContent className="bg-teal-light text-white border-4 border-teal w-[85%] max-w-[500px] rounded-3xl">
               <DialogHeader>
-                <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">ORDER DETAILS</DialogTitle>
+                <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">
+                  {dict?.receiptsPage?.orderDetails?.title?.text ?? "ORDER DETAILS"}
+                </DialogTitle>
               </DialogHeader>
               <div className="space-y-2 mb-4 font-cabin-condensed text-sm md:text-base">
                 <div className="flex justify-between">
-                  <span className="font-bold">Warehouse Location:</span>
+                  <span className="font-bold">
+                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse Location"}:
+                  </span>
                   <span>{receipt.city}, {receipt.state}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-bold">Date of Purchase:</span>
+                  <span className="font-bold">
+                    {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
+                  </span>
                   <span>{receipt.dateOfOrder}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-bold">Time:</span>
+                  <span className="font-bold">
+                    {dict?.receiptsPage?.orderDetails?.time?.text ?? "Time"}:
+                  </span>
                   <span>{receipt.startTime} - {receipt.endTime}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-bold">Point of Contact:</span>
+                  <span className="font-bold">
+                    {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
+                  </span>
                   <span>{receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-bold">Total Checked Out Items:</span>
+                  <span className="font-bold">
+                    {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
+                  </span>
                   <span>{receipt.itemsCheckedOut}</span>
                 </div>
               </div>
@@ -147,8 +197,12 @@ export default function ReceiptsPage() {
                       <table className="table-auto w-full text-left text-sm md:text-base">
                         <thead>
                           <tr>
-                            <th className="py-1 text-center">Item</th>
-                            <th className="py-1 text-center">Quantity</th>
+                            <th className="py-1 text-center">
+                              {dict?.receiptsPage?.orderDetails?.orderInfo?.items?.text ?? "Item"}
+                            </th>
+                            <th className="py-1 text-center">
+                              {dict?.receiptsPage?.orderDetails?.orderInfo?.quantity?.text ?? "Quantity"}
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
