@@ -1,4 +1,5 @@
 "use client"
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,9 @@ import {
   DialogTrigger,
 } from "@/components/shadcn/Dialog"
 import { getDict } from "@/lib/i18n/dictionaries";
-import { useEffect, useState } from "react";
+import Loading from "@/components/Loading";
+
+const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
 interface ReceiptsPageDict {
   receiptsPage: {
@@ -52,76 +55,56 @@ interface Receipt {
   itemList: SportItems[];
 }
 
-const receipts: Receipt[] = [
-  {
-    city: "New York",
-    state: "NY",
-    dateOfOrder: "2024-10-15",
-    startTime: "12:00 pm",
-    endTime: "01:00 pm",
-    pointOfContact: {
-      firstName: "John",
-      lastName: "Doe",
-    },
-    itemsCheckedOut: 5,
-    itemList: [
-      {
-        sport: "Soccer",
-        items: [
-          { name: "Balls", quantity: 5 },
-          { name: "Cleats", quantity: 2 },
-        ],
-      },
-      {
-        sport: "Tennis",
-        items: [
-          { name: "Rackets", quantity: 3 },
-        ],
-      },
-    ],
-  },
-  {
-    city: "Los Angeles",
-    state: "CA",
-    dateOfOrder: "2024-10-20",
-    startTime: "02:00 pm",
-    endTime: "03:00 pm",
-    pointOfContact: {
-      firstName: "Jane",
-      lastName: "Smith",
-    },
-    itemsCheckedOut: 7,
-    itemList: [
-      {
-        sport: "Basketball",
-        items: [
-          { name: "Balls", quantity: 5 },
-        ],
-      },
-      {
-        sport: "Lacrosse",
-        items: [
-          { name: "Sticks", quantity: 2 },
-          { name: "Goals", quantity: 3 },
-        ],
-      },
-    ],
-  },
-];
-
-const sortedReceipts = receipts.sort((a, b) => new Date(b.dateOfOrder).getTime() - new Date(a.dateOfOrder).getTime());
-
 export default function ReceiptsPage() {
   const [dict, setDict] = useState<ReceiptsPageDict | null>(null);
+  const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchDict = async () => {
-      const locale = "en"; // Replace with dynamic locale if needed
+      const locale = "en";
       const dictionary = await getDict(locale);
       setDict(dictionary);
     };
     fetchDict();
   }, []);
+
+  useEffect(() => {
+    const fetchReceipts = async () => {
+      try {
+        const response = await fetch(`/api/opportunity?accountId=${ACCOUNT_ID}&status=Posted`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch opportunities');
+        }
+        const data = await response.json();
+        
+        // Validate that records exist
+        if (!data.records || !Array.isArray(data.records)) {
+          throw new Error('Invalid response format');
+        }
+        
+        setReceipts(data.records);
+      } catch (err) {
+        setError((err as Error).message);
+        console.error('Error fetching receipts:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReceipts();
+  }, []);
+
+  if (loading) return <Loading />;
+  if (error) return (
+    <div className="flex justify-center items-center h-screen text-2xl font-bree-serif text-red-700">
+      Error: {error}
+    </div>
+  );
+
+  const sortedReceipts = receipts.sort((a, b) => new Date(b.dateOfOrder).getTime() - new Date(a.dateOfOrder).getTime());
 
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
