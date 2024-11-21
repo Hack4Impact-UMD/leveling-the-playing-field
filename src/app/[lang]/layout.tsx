@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import LocalizationButton from "@/components/LocalizationButton";
 
 const breeSerif = localFont({
   src: "../../../public/fonts/BreeSerif-Regular.ttf",
@@ -56,6 +57,5 @@ export default function RootLayout({
         <Navbar />
       </body>
     </html>
-   
   );
 }
