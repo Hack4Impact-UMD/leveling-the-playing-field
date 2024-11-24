@@ -34,13 +34,10 @@ async function querySalesforce(query: string, access_token: string) {
 }
 
 async function updateAccount(accountId: string, request: NextRequest) {
-    const access_token = await getSalesforceToken();
+    const access_token = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
 
     const requestBody = await request.json();
-    if (requestBody === null) {
-        return undefined;
-    }
-    const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/account/${accountId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v62.0/sobjects/account/${accountId}`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -63,10 +60,8 @@ export async function PUT(request: NextRequest, { params }: { params: { accountI
     const account_id = params.accountId;
 
     const response = await updateAccount(account_id, request);
-    if (response === undefined) {
-        return NextResponse.json({ message: "Bad Request Error" }, { status: 400 });
-    } else if (response.json() === null) {
-        return NextResponse.json({ message: "Salesforce Update Error" }, { status: 500 });
+    if (response.status / 100 === 2) {
+      return NextResponse.json({ message: "Updated successfully" }, { status: 200 });
     }
-    return NextResponse.json({ message: "Updated successfully" }, { status: 200 });
+    return NextResponse.json({ message: response.statusText }, { status: 500 });
 }
