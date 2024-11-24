@@ -1,3 +1,4 @@
+import { refreshAccessToken } from '@/lib/salesforce/authorization';
 import { NextRequest, NextResponse } from 'next/server';
 
 const NEXT_PUBLIC_SALESFORCE_CLIENT_ID = String(process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_ID);
@@ -20,23 +21,21 @@ async function getSalesforceToken() {
     return data.access_token;
 }
 
-async function querySalesforce(query: string) {
-    const access_token = await getSalesforceToken();
-
-    const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/query?q=${encodeURIComponent(query)}`, {
+async function querySalesforce(query: string, access_token: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v62.0/query?q=${encodeURIComponent(query)}`, {
         headers: {
             Authorization: `Bearer ${access_token}`
         }
     });
 
     const data = await response.json();
-    console.log(data.records); // Logs retrieved records
+    console.log(data.records);
     return data
 }
 
 async function updateAccount(accountId: string, request: NextRequest) {
     const access_token = await getSalesforceToken();
-    
+
     const requestBody = await request.json();
     if (requestBody === null) {
         return undefined;
@@ -54,20 +53,20 @@ async function updateAccount(accountId: string, request: NextRequest) {
 
 export async function GET(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
-    console.log(account_id);
+    const access_token = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const query = `SELECT FIELDS(ALL) FROM Account WHERE Id = \'${account_id}\'`;
-    const data = await querySalesforce(query);
+    const data = await querySalesforce(query, access_token);
     return NextResponse.json(data);
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
-    
+
     const response = await updateAccount(account_id, request);
     if (response === undefined) {
         return NextResponse.json({ message: "Bad Request Error" }, { status: 400 });
     } else if (response.json() === null) {
         return NextResponse.json({ message: "Salesforce Update Error" }, { status: 500 });
     }
-    return NextResponse.json({message: "Updated successfully"}, {status: 200});
+    return NextResponse.json({ message: "Updated successfully" }, { status: 200 });
 }
