@@ -4,6 +4,7 @@ import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
+import LoadingPage from "../../loading";
 
 export interface Equipment {
   name: string;
@@ -11,14 +12,14 @@ export interface Equipment {
   sport: string;
 }
 
-// Define the interface for sportsItemsMap
 export interface SportsItems {
-  [key: string]: Product[];  // key is sport (string), value is an array of Product[]
+  [key: string]: Product[];
 }
 
 const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: number }) => {
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | ""; equipment: Equipment[] }[]>([]);
-  const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>({});  // Using the interface
+  const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
+  const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
 
   const removeSelectedEquipment = (sport: string | "", equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -63,25 +64,12 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: nu
     });
   };
 
-  const getUnselectedSports = (): string[] => {
-    const allSports = Object.keys(sportsItemsMap);  // Use Object.keys to get sports from the object
-    if (allSports.length === 0) return [];
-
-    try {
-      const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
-      return allSports.filter((sport) => !selectedSports.has(sport));
-    } catch (error) {
-      console.error("Error getting unselected sports: ", error);
-    }
-    return [];
-  };
-
   const handleCheckout = async () => {
     try {
       const response = await fetch(`/api/opportunity/${opportunityId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json", // Set content type to JSON
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ StageName: "Posted" }),
       });
@@ -96,30 +84,55 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: nu
   useEffect(() => {
     const loadProductData = async () => {
       try {
-        const response = await fetch('/api/products');
+        const response = await fetch("/api/products");
         if (!response.ok) {
-          throw new Error('Failed to fetch products');
+          throw new Error("Failed to fetch products");
         }
-        const data: SportsItems = await response.json();  // Parse the response to match the interface
-        setSportsItemsMap(data);  // Set the sportsItemsMap with the parsed data
+        const data: SportsItems = await response.json();
+        setSportsItemsMap(data);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    const loadDict = async () => {
+      try {
+        const loadedDict = await getDict(lang);
+        setDict(loadedDict);
+      } catch (error) {
+        console.error("Error loading dictionary:", error);
       }
     };
 
     loadProductData();
-  }, []);
+    loadDict();
+  }, [lang]);
+
+  if (!dict || !sportsItemsMap) return <LoadingPage />;
+
+  const getUnselectedSports = (): string[] => {
+    const allSports = Object.keys(sportsItemsMap);
+    if (allSports.length === 0) return [];
+
+    try {
+      const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
+      return allSports.filter((sport) => !selectedSports.has(sport));
+    } catch (error) {
+      console.error("Error getting unselected sports: ", error);
+    }
+    return [];
+  };
 
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
-      <h1 className="text-3xl font-bold mb-4 text-black">{getDict(lang).then((d) => d.checkoutPage.addSport.text)}</h1>
+      <h1 className="text-3xl font-bold mb-4 text-black">{dict.checkoutPage.addSport.text}</h1>
       <div className="mb-6 rounded-full w-24 h-24 bg-teal text-white flex items-center justify-center p-4">
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
-        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && sportsItemsMap && Object.keys(sportsItemsMap).length > 0 && (
+        {getUnselectedSports().length > 0 && selectedEquipment.length < Object.keys(sportsItemsMap).length && Object.keys(sportsItemsMap).length > 0 && (
           <button onClick={() => addSportSection("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
-            {getDict(lang).then((d) => d.checkoutPage.addSport.text)}
+            {dict.checkoutPage.addSport.text}
           </button>
         )}
         {selectedEquipment.map(({ sport, equipment }, index) => (
@@ -132,7 +145,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: nu
             removeSelectedEquipment={removeSelectedEquipment}
             removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: string) => selectSport(index, newSport)}
-            lang={lang}
+            dict={dict}
             sportsItemsMap={sportsItemsMap}
           />
         ))}
@@ -140,7 +153,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: nu
 
       <div className="w-full max-w-md mt-auto">
         <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold" onClick={handleCheckout}>
-          {getDict(lang).then((d) => d.checkoutPage.checkout.text)}
+          {dict.checkoutPage.checkout.text}
         </button>
         <div className="w-full mt-20"></div>
       </div>
