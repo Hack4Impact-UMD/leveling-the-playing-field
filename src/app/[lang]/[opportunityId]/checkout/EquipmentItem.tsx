@@ -1,14 +1,13 @@
 import XIcon from '@/components/icons/XIcon';
 import React, { useEffect, useState } from 'react';
-import { Equipment } from './CheckoutPage';
+import { Equipment, SportsItems } from './CheckoutPage';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
-import { Product } from '@/types/types';
 
 interface EquipmentItemProps {
     equipment: Equipment;
     index: number;
     sport: string;
-    sportsItemsMap: Map<string, Product[]>;
+    sportsItemsMap: SportsItems;
     handleUpdateEquipment: (equipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => void;
     updateEquipmentQuantity: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
     removeEquipment: (sport: string, equipment: Equipment) => void;

@@ -2,23 +2,23 @@
 import React, { useEffect, useState } from "react";
 import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
-import IconSoccer from "@/components/icons/sports/SoccerIcon";
-import IconBaseballOutline from "@/components/icons/sports/BaseballIcon";
-import IconTennisBall from "@/components/icons/sports/TennisIcon";
-import IconBasketballOutline from "@/components/icons/sports/BasketballIcon";
 import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
 
 export interface Equipment {
-  name: string,
-  quantity: number,
-  sport: string
+  name: string;
+  quantity: number;
+  sport: string;
 }
 
-const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: number }) => {
+// Define the interface for sportsItemsMap
+export interface SportsItems {
+  [key: string]: Product[];  // key is sport (string), value is an array of Product[]
+}
 
-  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | "", equipment: Equipment[] }[]>([]);
-  const [sportsItemsMap, setSportsItemsMap] = useState<Map<string, Product[]>>(new Map<string, Product[]>());
+const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: number }) => {
+  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | ""; equipment: Equipment[] }[]>([]);
+  const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>({});  // Using the interface
 
   const removeSelectedEquipment = (sport: string | "", equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -47,7 +47,6 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
     });
   };
 
-
   const addSportSection = (sport: string | "") => {
     setSelectedEquipment((prevList) => {
       if (prevList.some((item) => item.sport !== "" && item.sport === sport)) return prevList;
@@ -65,22 +64,16 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
   };
 
   const getUnselectedSports = (): string[] => {
-    if (!sportsItemsMap || sportsItemsMap.size === 0) {
-      return [];
-    }
+    const allSports = Object.keys(sportsItemsMap);  // Use Object.keys to get sports from the object
+    if (allSports.length === 0) return [];
 
-    console.log(sportsItemsMap);
     try {
-      const allSports = Array.from(Object.keys(sportsItemsMap)) as string[];
-      console.log("allSports:", allSports);
-
       const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
       return allSports.filter((sport) => !selectedSports.has(sport));
     } catch (error) {
-      console.error("error getting unselected sports: ", error);
-      console.log(typeof (sportsItemsMap));
+      console.error("Error getting unselected sports: ", error);
     }
-    return []
+    return [];
   };
 
   const handleCheckout = async () => {
@@ -90,15 +83,15 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
         },
-        body: JSON.stringify({ StageName: "Posted" })
-      })
+        body: JSON.stringify({ StageName: "Posted" }),
+      });
       if (!response.ok) {
-        console.warn("Failed to checkout")
+        console.warn("Failed to checkout");
       }
     } catch (error) {
       console.error("Error when checking out:", error);
     }
-  }
+  };
 
   useEffect(() => {
     const loadProductData = async () => {
@@ -107,12 +100,8 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        const data: Map<string, Product[]> = await response.json();
-        if (data) {
-          setSportsItemsMap(data);
-        } else {
-          console.error("Failed to get products data")
-        }
+        const data: SportsItems = await response.json();  // Parse the response to match the interface
+        setSportsItemsMap(data);  // Set the sportsItemsMap with the parsed data
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -128,18 +117,11 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
-        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && sportsItemsMap && Array.from(Object.keys(sportsItemsMap)).length && (
-          <button onClick={() => {
-            if (getUnselectedSports().length == 0) {
-              return;
-            } else {
-              addSportSection("");
-            }
-          }
-          } className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
+        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && sportsItemsMap && Object.keys(sportsItemsMap).length > 0 && (
+          <button onClick={() => addSportSection("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
             {getDict(lang).then((d) => d.checkoutPage.addSport.text)}
-          </button>)
-        }
+          </button>
+        )}
         {selectedEquipment.map(({ sport, equipment }, index) => (
           <SportSection
             key={sport === "" ? sport + index : sport}
@@ -151,13 +133,13 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
             removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: string) => selectSport(index, newSport)}
             lang={lang}
-            sportsItemsMap={sportsItemsMap} />
+            sportsItemsMap={sportsItemsMap}
+          />
         ))}
       </div>
 
       <div className="w-full max-w-md mt-auto">
-        <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold"
-          onClick={handleCheckout}>
+        <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold" onClick={handleCheckout}>
           {getDict(lang).then((d) => d.checkoutPage.checkout.text)}
         </button>
         <div className="w-full mt-20"></div>

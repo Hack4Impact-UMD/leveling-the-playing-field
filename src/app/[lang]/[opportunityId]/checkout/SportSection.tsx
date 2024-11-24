@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Equipment } from './CheckoutPage';
+import { Equipment, SportsItems } from './CheckoutPage';
 import XIcon from '@/components/icons/XIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
 import EquipmentSelector from './EquipmentSelector';
 import EquipmentItem from './EquipmentItem';
 import MinusIcon from '@/components/icons/MinusIcon';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
-import { Product } from '@/types/types';
 
 interface Props {
     removeSelectedSport: (sport: string | "") => void,
@@ -16,7 +15,7 @@ interface Props {
     unselectedSports: string[],
     selectedEquipment: Equipment[],
     sport: string | "",
-    sportsItemsMap: Map<string, Product[]>,
+    sportsItemsMap: SportsItems,
     lang: Locale
 }
 
