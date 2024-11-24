@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
-import { Sport, Equipment, sportsItemsMap } from './CheckoutPage';
+import { Equipment } from './CheckoutPage';
 import XIcon from '@/components/icons/XIcon';
 import PlusIcon from '@/components/icons/PlusIcon';
 import EquipmentSelector from './EquipmentSelector';
 import EquipmentItem from './EquipmentItem';
 import MinusIcon from '@/components/icons/MinusIcon';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
+import { Product } from '@/types/types';
 
 interface Props {
-    removeSelectedSport: (sport: Sport | "") => void,
-    removeSelectedEquipment: (sport: Sport | "", equipment: Equipment) => void,
-    selectSport: (newSport: Sport) => void,
+    removeSelectedSport: (sport: string | "") => void,
+    removeSelectedEquipment: (sport: string | "", equipment: Equipment) => void,
+    selectSport: (newSport: string) => void,
     updateSelectedEquipment: (newEquipment: Equipment[]) => void,
-    unselectedSports: Sport[],
+    unselectedSports: string[],
     selectedEquipment: Equipment[],
-    sport: Sport | "",
+    sport: string | "",
+    sportsItemsMap: Map<string, Product[]>,
     lang: Locale
 }
 
-const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSport, updateSelectedEquipment, unselectedSports, sport, selectedEquipment, lang }: Props) => {
+const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSport, updateSelectedEquipment, unselectedSports, sport, selectedEquipment, sportsItemsMap, lang }: Props) => {
     const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
 
     const updateEquipmentQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,7 +40,7 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
         if (e.target.value === "") {
             return;
         }
-        const selectedSport = e.target.value as Sport;
+        const selectedSport = e.target.value as string;
         selectSport(selectedSport);
     };
 
@@ -64,13 +66,13 @@ const SportSection = ({ removeSelectedSport, removeSelectedEquipment, selectSpor
     };
 
     const getUnselectedEquipment = () => {
-        const allEquipment = sportsItemsMap.get(sport);
+        const allEquipment = sportsItemsMap[sport];
         if (!allEquipment) {
             return [];
         }
 
         return allEquipment.filter((equipment) =>
-            !selectedEquipment.map((item) => item.name).includes(equipment)
+            !selectedEquipment.map((item) => item.name).includes(equipment.name)
         );
     };
 

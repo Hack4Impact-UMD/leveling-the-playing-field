@@ -1,16 +1,17 @@
 import XIcon from '@/components/icons/XIcon';
 import React, { useEffect, useState } from 'react';
-import { Equipment, Sport } from './CheckoutPage';
+import { Equipment } from './CheckoutPage';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
+import { Product } from '@/types/types';
 
 interface EquipmentItemProps {
     equipment: Equipment;
     index: number;
-    sport: Sport;
-    sportsItemsMap: Map<string, string[]>;
+    sport: string;
+    sportsItemsMap: Map<string, Product[]>;
     handleUpdateEquipment: (equipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => void;
     updateEquipmentQuantity: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
-    removeEquipment: (sport: Sport | "", equipment: Equipment) => void;
+    removeEquipment: (sport: string, equipment: Equipment) => void;
     lang: Locale;
 }
 
@@ -46,8 +47,8 @@ const EquipmentItem = ({
                 onChange={(e) => handleUpdateEquipment(equipment, index, e)}
             >
                 <option value="" disabled>{getDict(lang).then((d) => d.checkoutPage.selectedEquipment.text)}</option>
-                {sportsItemsMap.get(sport)?.map((item, i) => (
-                    <option value={item} key={i}>{item}</option>
+                {sportsItemsMap[sport].map((item, i) => (
+                    <option value={item.name} key={i}>{item.name}</option>
                 ))}
             </select>
             <input

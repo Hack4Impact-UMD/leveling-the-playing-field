@@ -1,8 +1,9 @@
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
+import { Product } from '@/types/types';
 import React from 'react';
 
 interface EquipmentSelectorProps {
-    availableEquipment: string[];
+    availableEquipment: Product[];
     handleSelectEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
     lang: Locale;
 }
@@ -19,7 +20,7 @@ const EquipmentSelector = ({ availableEquipment, handleSelectEquipment, lang }: 
             >
                 <option value="" disabled>{getDict(lang).then((d) => d.checkoutPage.selectedEquipment.text)}</option>
                 {availableEquipment.map((item, i) => (
-                    <option value={item} key={i}>{item}</option>
+                    <option value={item.name} key={i}>{item.name}</option>
                 ))}
             </select>
             <div className="flex-none font-bold py-2 rounded-md text-lg sm:w-auto">

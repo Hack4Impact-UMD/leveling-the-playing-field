@@ -49,11 +49,19 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     try {
         const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query.trim(), access_token);
         const records = data.records;
-        const productCategories = records.map((p) => {
-            const product: Product = { category: p.Product2.Family, id: p.Id, name: p.Name }
-            return product;
-        })
-        return NextResponse.json(productCategories, { status: 200 });
+        const groupedByFamily = records.reduce((acc, product) => {
+            const family = product.Product2.Family || 'Uncategorized';
+            if (!acc[family]) {
+                acc[family] = [];
+            }
+            acc[family].push({
+                id: product.Id,
+                name: product.Name,
+                category: family,
+            });
+            return acc;
+        }, {} as Record<string, Product[]>);
+        return NextResponse.json(groupedByFamily, { status: 200 });
     } catch (error) {
         console.error((error as Error).message);
         return NextResponse.json({ status: 500 });

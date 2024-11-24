@@ -9,34 +9,18 @@ import IconBasketballOutline from "@/components/icons/sports/BasketballIcon";
 import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
 
-export type Sport = "soccer" | "tennis" | "baseball" | "basketball"
-
 export interface Equipment {
   name: string,
   quantity: number,
-  sport: Sport
+  sport: string
 }
-
-export const sportsIconsMap = new Map<string, JSX.Element>([
-  ['soccer', <IconSoccer key="soccer" />],
-  ['baseball', <IconBaseballOutline key="baseball" className="w-6 h-6" />],
-  ['tennis', <IconTennisBall key="tennis" />],
-  ['basketball', <IconBasketballOutline key="basketball" />]
-]);
-
-export const sportsItemsMap = new Map<string, string[]>([
-  ['soccer', ['Soccer Cleats', 'Soccer Ball']],
-  ['baseball', ['Baseball Mitts', 'Baseball Bat']],
-  ['tennis', ['Tennis Rackets', 'Tennis Ball']],
-  ['basketball', ['Basketball', 'Basketball Shoes']]
-]);
 
 const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: number }) => {
 
-  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: Sport | "", equipment: Equipment[] }[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | "", equipment: Equipment[] }[]>([]);
+  const [sportsItemsMap, setSportsItemsMap] = useState<Map<string, Product[]>>(new Map<string, Product[]>());
 
-  const removeSelectedEquipment = (sport: Sport | "", equipment: Equipment) => {
+  const removeSelectedEquipment = (sport: string | "", equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
       prevList.map((item) =>
         item.sport === sport
@@ -46,11 +30,11 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
     );
   };
 
-  const removeSelectedSport = (sport: Sport | "") => {
+  const removeSelectedSport = (sport: string | "") => {
     setSelectedEquipment((prevList) => prevList.filter((item) => item.sport !== sport));
   };
 
-  const selectSport = (index: number, newSport: Sport) => {
+  const selectSport = (index: number, newSport: string) => {
     setSelectedEquipment((prevList) => {
       const sportExists = prevList.some((item, i) => item.sport === newSport && i !== index);
 
@@ -64,7 +48,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
   };
 
 
-  const addSportSection = (sport: Sport | "") => {
+  const addSportSection = (sport: string | "") => {
     setSelectedEquipment((prevList) => {
       if (prevList.some((item) => item.sport !== "" && item.sport === sport)) return prevList;
 
@@ -80,11 +64,23 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
     });
   };
 
-  const getUnselectedSports = (): Sport[] => {
-    const allSports = Array.from(sportsItemsMap.keys()) as Sport[];
+  const getUnselectedSports = (): string[] => {
+    if (!sportsItemsMap || sportsItemsMap.size === 0) {
+      return [];
+    }
 
-    const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
-    return allSports.filter((sport) => !selectedSports.has(sport));
+    console.log(sportsItemsMap);
+    try {
+      const allSports = Array.from(Object.keys(sportsItemsMap)) as string[];
+      console.log("allSports:", allSports);
+
+      const selectedSports = new Set(selectedEquipment.map((item) => item.sport));
+      return allSports.filter((sport) => !selectedSports.has(sport));
+    } catch (error) {
+      console.error("error getting unselected sports: ", error);
+      console.log(typeof (sportsItemsMap));
+    }
+    return []
   };
 
   const handleCheckout = async () => {
@@ -111,9 +107,12 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        const data: Product[] = await response.json();
-
-        setProducts(data);
+        const data: Map<string, Product[]> = await response.json();
+        if (data) {
+          setSportsItemsMap(data);
+        } else {
+          console.error("Failed to get products data")
+        }
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -129,7 +128,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
-        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && Array.from(sportsItemsMap.keys()).length && (
+        {getUnselectedSports().length > 0 && selectedEquipment.length < 4 && sportsItemsMap && Array.from(Object.keys(sportsItemsMap)).length && (
           <button onClick={() => {
             if (getUnselectedSports().length == 0) {
               return;
@@ -150,9 +149,9 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale, opportunityId: nu
             updateSelectedEquipment={(newEquipment: Equipment[]) => updateSelectedEquipment(index, newEquipment)}
             removeSelectedEquipment={removeSelectedEquipment}
             removeSelectedSport={removeSelectedSport}
-            selectSport={(newSport: Sport) => selectSport(index, newSport)}
+            selectSport={(newSport: string) => selectSport(index, newSport)}
             lang={lang}
-          />
+            sportsItemsMap={sportsItemsMap} />
         ))}
       </div>
 
