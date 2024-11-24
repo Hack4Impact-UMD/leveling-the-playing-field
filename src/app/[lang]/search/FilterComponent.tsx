@@ -10,22 +10,15 @@ import {
 
 interface FilterProps {
   showFilter: boolean;
-  searchMode: String;
   sports: string[];
-  warehouses: string[];
-  selectedWarehouse: string | undefined;
   selectedSport: string | undefined;
-  setSelectedWarehouse: Dispatch<SetStateAction<string | undefined>>;
   setSelectedSport: Dispatch<SetStateAction<string | undefined>>;
-  resetWarehouse: () => void;
   resetSport: () => void;
   handleApplyFilters: () => void;
 }
 
-
 const FilterComponent: React.FC<FilterProps> = ({
-  showFilter, searchMode, sports, warehouses, selectedWarehouse, selectedSport,
-  setSelectedWarehouse, setSelectedSport, resetWarehouse, resetSport, handleApplyFilters }) => {
+  showFilter, sports, selectedSport, setSelectedSport, resetSport, handleApplyFilters }) => {
 
 
   return (
@@ -33,25 +26,6 @@ const FilterComponent: React.FC<FilterProps> = ({
       {showFilter && (
         <div className="p-4 border rounded mb-4 space-y-4 bg-orange-light">
           <h2 className="text-lg font-cabin-condensed text-white">Filter</h2>
-          {searchMode === 'equipment' && (
-            <div>
-              <div className="flex justify-between items-center mb-2 font-cabin-condensed text-white">
-                <span>Warehouse Location</span>
-                <Button onClick={resetWarehouse} variant="link" size="sm" className="underline text-white">Reset</Button>
-              </div>
-              <Select onValueChange={setSelectedWarehouse} value={selectedWarehouse}>
-                <SelectTrigger className="w-3/4 h-25 rounded-3xl shadow-lg shadow-black-500">
-                  <SelectValue placeholder="Select a warehouse" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Select region</SelectItem>
-                  {warehouses.map((warehouse) => (
-                    <SelectItem key={warehouse} value={warehouse}>{warehouse}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
           {/* Filter section */}
           <div>
             <div className="flex justify-between items-center mb-2 font-cabin-condensed">

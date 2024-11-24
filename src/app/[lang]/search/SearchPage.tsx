@@ -14,54 +14,38 @@ import FilterIcon from '@/components/icons/FilterIcon';
 import FilterComponent from './FilterComponent';
 import ListComponent from './ListComponent';
 import { Input } from "@/components/ui/input"
-
-interface Equipment {
-  name: string;
-  quantity: number;
-  sport: string;
-  warehouse: string;
-  totalQuantity?: number; 
-  locations?: { warehouse: string; quantity: number }[]; 
-}
+import { Product, Market } from "@/types/types";
 
 interface GroupedEquipment {
-  name: string;
-  sport: string;
-  totalQuantity: number;
-  locations: { warehouse: string; quantity: number }[];
+  category: string;
+  products: Product[];
 }
 
-interface LocationEquipment {
-  warehouse: string;
-  equipment: { name: string; sport: string; quantity: number }[];
-}
+const warehouses = [Market.GREATER_WASHINGTON, Market.BALTIMORE, Market.WESTERN_NEW_YORK, Market.PHILADELPHIA, Market.OHIO];
 
 const SearchPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>(undefined);
   const [selectedSport, setSelectedSport] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedEquipment, setSelectedEquipment] = useState<GroupedEquipment | LocationEquipment | null>(null);
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
+  const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
   const [appliedFilters, setAppliedFilters] = useState({
     warehouse: 'all',
     sport: 'all'
   });
-  const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
-  const [locationEquipmentList, setLocationEquipmentList] = useState<LocationEquipment[]>([]);
   const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
 
   // Sample data with quantities
-  const equipmentList = [
-    { name: 'Soccer Ball', quantity: 10, sport: 'Soccer', warehouse: 'Baltimore, Maryland' },
-    { name: 'Basketball', quantity: 5, sport: 'Basketball', warehouse: 'College Park, Maryland' },
-    { name: 'Tennis Racket', quantity: 15, sport: 'Tennis', warehouse: 'McLean, Virginia' },
-    { name: 'Tennis Balls', quantity: 30, sport: 'Tennis', warehouse: 'McLean, Virginia' },
-    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'College Park, Maryland' },
-    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'McLean, Virginia' },
-    { name: 'Tennis Shoes', quantity: 5, sport: 'Tennis', warehouse: 'Baltimore, Maryland' }
+  const equipmentList: Product[] = [
+    { name: 'Soccer Ball', category: 'Soccer', id: "0" },
+    { name: 'Basketball', category: 'Basketball', id: "1" },
+    { name: 'Tennis Racket', category: 'Tennis', id: "2" },
+    { name: 'Tennis Balls', category: 'Tennis', id: "3" },
+    { name: 'Tennis Shoes', category: 'Tennis', id: "4" },
+    { name: 'Tennis Shoes', category: 'Tennis', id: "5" },
+    { name: 'Tennis Shoes', category: 'Tennis', id: "6" }
   ];
-  const warehouses = ['Baltimore, Maryland', 'College Park, Maryland', 'McLean, Virginia'];
   const sports = ['Soccer', 'Basketball', 'Tennis'];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,22 +56,11 @@ const SearchPage = () => {
     setShowFilter(!showFilter);
   };
 
-  const toggleSearchMode = () => {
-    setSearchMode(prevMode => prevMode === 'equipment' ? 'location' : 'equipment');
-    setSearchTerm('');
-    setSelectedWarehouse('all'); 
-  };
-
   const handleApplyFilters = () => {
     setAppliedFilters({
       warehouse: selectedWarehouse || 'all',
       sport: selectedSport || 'all'
     });
-  };
-
-  const resetWarehouse = () => {
-    setSelectedWarehouse('all');
-    handleApplyFilters();
   };
 
   const resetSport = () => {
@@ -97,68 +70,42 @@ const SearchPage = () => {
 
   useEffect(() => {
     const groupedEquipment = equipmentList.reduce((acc: GroupedEquipment[], item) => {
-      const existingItem = acc.find(g => g.name === item.name);
+      const existingItem = acc.find(g => g.category === item.category);
       if (existingItem) {
-        existingItem.totalQuantity += item.quantity;
-        existingItem.locations.push({ warehouse: item.warehouse, quantity: item.quantity });
+        existingItem.products.push(item);
       } else {
         acc.push({
-          name: item.name,
-          sport: item.sport,
-          totalQuantity: item.quantity,
-          locations: [{ warehouse: item.warehouse, quantity: item.quantity }]
+          category: item.category,
+          products: [item]
         });
       }
       return acc;
     }, []);
     setGroupedEquipmentList(groupedEquipment);
-
-    const locationEquipment = equipmentList.reduce((acc: LocationEquipment[], item) => {
-      const existingLocation = acc.find(l => l.warehouse === item.warehouse);
-      if (existingLocation) {
-        existingLocation.equipment.push({ name: item.name, sport: item.sport, quantity: item.quantity });
-      } else {
-        acc.push({
-          warehouse: item.warehouse,
-          equipment: [{ name: item.name, sport: item.sport, quantity: item.quantity }]
-        });
-      }
-      return acc;
-    }, []);
-    setLocationEquipmentList(locationEquipment);
   }, []);
 
-  useEffect(() => {
-    if ((selectedSport === 'all' || !selectedSport) && (selectedWarehouse === 'all' || !selectedWarehouse)) {
-      setFilteredEquipmentList(searchMode === 'equipment' ? groupedEquipmentList : locationEquipmentList);
-    } else {
-      setFilteredEquipmentList(applyFilters());
-    }
-  }, [appliedFilters, groupedEquipmentList, locationEquipmentList, selectedSport, selectedWarehouse, searchMode]);
-
-  // Update the state type to include both possibilities
-  const [filteredEquipmentList, setFilteredEquipmentList] = useState<GroupedEquipment[] | LocationEquipment[]>([]);
-
-  const applyFilters = () => {
+  const applyFilters = (): Market[] | GroupedEquipment[] => {
     if (searchMode === 'equipment') {
-      return groupedEquipmentList.filter((item) => {
-        const warehouseMatch = !appliedFilters.warehouse || appliedFilters.warehouse === 'all' || item.locations.some(loc => loc.warehouse === appliedFilters.warehouse);
-        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || item.sport === appliedFilters.sport;
-        const searchMatch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return groupedEquipmentList.filter((group) => {
+        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || group.category === appliedFilters.sport;
+        const searchMatch = group.category.toLowerCase().includes(searchTerm.toLowerCase()) || group.products.some((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
         
-        return warehouseMatch && sportMatch && searchMatch;
+        return sportMatch && searchMatch;
       });
     } else {
-      return locationEquipmentList.filter((item) => {
-        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || item.equipment.some(e => e.sport === appliedFilters.sport);
-        const searchMatch = item.warehouse.toLowerCase().includes(searchTerm.toLowerCase());
-        return sportMatch && searchMatch;
+      return warehouses.filter((item: Market) => {
+        const searchMatch = item.toLowerCase().includes(searchTerm.toLowerCase());
+        return searchMatch;
       });
     }
   };
 
-  const toggleEquipment = (item: GroupedEquipment | LocationEquipment) => {
-    const id = 'warehouse' in item ? item.warehouse : item.name;
+  const toggleEquipment = (item: GroupedEquipment | Market) => {
+    const isGroupedEquipment = (item: any): item is GroupedEquipment => {
+      return typeof item === 'object' && item !== null && 'category' in item && 'products' in item;
+    };
+
+    const id = isGroupedEquipment(item) ? item.category : item;
     setSelectedEquipments(prev => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
@@ -168,17 +115,6 @@ const SearchPage = () => {
       }
       return newSet;
     });
-  };
-
-  // Add this helper function inside your component
-  const groupEquipmentBySport = (equipment: { name: string; sport: string; quantity: number }[]) => {
-    return equipment.reduce((acc, item) => {
-      if (!acc[item.sport]) {
-        acc[item.sport] = [];
-      }
-      acc[item.sport].push(item);
-      return acc;
-    }, {} as Record<string, typeof equipment>);
   };
 
   return (
@@ -221,27 +157,20 @@ const SearchPage = () => {
 
       <FilterComponent 
         showFilter = {showFilter}
-        searchMode = {searchMode}
         sports = {sports}
-        warehouses = {warehouses}
-        selectedWarehouse = {selectedWarehouse}
         selectedSport = {selectedSport}
-        setSelectedWarehouse = {setSelectedWarehouse}
         setSelectedSport = {setSelectedSport}
-        resetWarehouse = {resetWarehouse}
         resetSport = {resetSport}
         handleApplyFilters = {handleApplyFilters}
       />
 
       {/* Basic information of each warehouse/location */}
-      <div className="flex flex-col space-y-8 mt-8"> 
+      <div className="flex flex-col space-y-2 mt-8"> 
         {applyFilters().map((item) => (
           <ListComponent
             item={item}
             selectedEquipments={selectedEquipments}
             searchMode={searchMode}
-            appliedFilters={appliedFilters}
-            groupEquipmentBySport={groupEquipmentBySport}
             toggleEquipment={toggleEquipment}
           />
         ))}
