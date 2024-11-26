@@ -37,13 +37,6 @@ async function querySalesforce(query: string) {
 }
 
 
-// export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-//     const contact_id = params.id;
-//     console.log(contact_id);
-//     const query = `SELECT FIELDS(ALL) FROM Contact WHERE Id = \'${contact_id}\'`;
-//     const data = await querySalesforce(query);
-//     return NextResponse.json(data);
-// }
 
 export async function GET(request: Request, { params }: { params: { contactId : string } }) {
   try {
@@ -70,87 +63,59 @@ export async function GET(request: Request, { params }: { params: { contactId : 
   }
 }
 
-async function postSalesforce(request: NextRequest) {
-  const access_token = await getSalesforceToken();
-  
-  const requestBody = await request.body;
-  const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/contact`, {
-      method: 'PATCH',
-      headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`
-      },
-      body: requestBody
-  })
-  console.log(response);
-  const data = await response.json();
-  console.log(data.records);
-  return data;
+// PUT
+export async function PUT(request: Request, { params }: { params: { contactId: string } }) {
+  try {
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const body = await request.json();
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Contact/${params.contactId}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json(error, { status: response.status });
+    }
+
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error('Salesforce API Error:', error);
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+  }
 }
 
-export async function POST(request: NextRequest) {
-  // creating a new Contact in Salesforce
-  // const body: Contact = request.body;
-  const data = await postSalesforce(request);
-  console.log(data);
-  return NextResponse.json(data);
+// DELETE
+export async function DELETE(request: Request, { params }: { params: { contactId: string } }) {
+  try {
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Contact/${params.contactId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
+    if (!response.ok) {
+      const error = await response.json();
+      return NextResponse.json(error, { status: response.status });
+    }
 
-  const contact_data = await request.json();
-  const query = `
-    INSERT INTO Contact (FirstName, LastName, Email, Phone)
-    VALUES ('${contact_data.firstName}', '${contact_data.lastName}', '${contact_data.email}', '${contact_data.phone}')
-  `;
-}
-
-
-
-async function putSalesforce(contactId: string, request: NextRequest) {
-  const access_token = await getSalesforceToken();
-  
-  const requestBody = await request.body;
-  const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/contact/${contactId}`, {
-      method: 'PATCH',
-      headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`
-      },
-      body: requestBody
-  })
-  console.log(response);
-  const data = await response.json();
-  console.log(data.records);
-  return data;
-}
-
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  const contact_id = params.id;
-  const data = await putSalesforce(contact_id, request);
-  console.log(data);
-  return NextResponse.json(data);
-}
-
-async function deleteSalesforce(contactId: string, request: NextRequest) {
-  const access_token = await getSalesforceToken();
-  
-  const requestBody = await request.body;
-  const response = await fetch(`https://connect-customization-2394.my.salesforce.com/services/data/v62.0/sobjects/contact/${contactId}`, {
-      method: 'DELETE',
-      headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${access_token}`
-      },
-      body: requestBody
-  })
-  console.log(response);
-  const data = await response.json();
-  console.log(data.records);
-  return data;
-}
-
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-  // deleting a given contact id from salesforce
-  const contact_id = params.id;
-  const data = await deleteSalesforce(contact_id, request);
-  return NextResponse.json(data);
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (error) {
+    console.error('Salesforce API Error:', error);
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+  }
 }
