@@ -16,7 +16,7 @@ export interface SportsItems {
   [key: string]: Product[];
 }
 
-const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: number }) => {
+const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: string }) => {
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | ""; equipment: Equipment[] }[]>([]);
   const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);

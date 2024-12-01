@@ -3,7 +3,7 @@ import CheckoutPage from "./CheckoutPage"
 
 interface Params {
     lang: Locale;
-    opportunityId: number;
+    opportunityId: string;
 }
 
 export default function CheckoutPageWrapper({ params }: { params: Params }) {
