@@ -17,11 +17,11 @@ export interface SportsItems {
 }
 
 const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: string }) => {
-  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string | ""; equipment: Equipment[] }[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string; equipment: Equipment[] }[]>([]);
   const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
 
-  const removeSelectedEquipment = (sport: string | "", equipment: Equipment) => {
+  const removeSelectedEquipment = (sport: string, equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
       prevList.map((item) =>
         item.sport === sport
@@ -31,7 +31,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
     );
   };
 
-  const removeSelectedSport = (sport: string | "") => {
+  const removeSelectedSport = (sport: string) => {
     setSelectedEquipment((prevList) => prevList.filter((item) => item.sport !== sport));
   };
 
@@ -48,7 +48,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
     });
   };
 
-  const addSportSection = (sport: string | "") => {
+  const addSportSection = (sport: string) => {
     setSelectedEquipment((prevList) => {
       if (prevList.some((item) => item.sport !== "" && item.sport === sport)) return prevList;
 

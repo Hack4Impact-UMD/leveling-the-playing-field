@@ -7,13 +7,13 @@ import EquipmentSelector from "./EquipmentSelector";
 import EquipmentItem from "./EquipmentItem";
 
 interface Props {
-    removeSelectedSport: (sport: string | "") => void;
-    removeSelectedEquipment: (sport: string | "", equipment: Equipment) => void;
+    removeSelectedSport: (sport: string) => void;
+    removeSelectedEquipment: (sport: string, equipment: Equipment) => void;
     selectSport: (newSport: string) => void;
     updateSelectedEquipment: (newEquipment: Equipment[]) => void;
     unselectedSports: string[];
     selectedEquipment: Equipment[];
-    sport: string | "";
+    sport: string;
     sportsItemsMap: SportsItems;
     dict: { [key: string]: any };
 }
