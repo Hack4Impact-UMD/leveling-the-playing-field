@@ -1,9 +1,10 @@
-//  this relies on the appointments component
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
+import { getDict, Locale } from '@/lib/i18n/dictionaries';
+import LoadingPage from '../[lang]/loading';
 
 export type Appointment = {
   title: string; 
@@ -13,10 +14,14 @@ export type Appointment = {
 }
 
 
-const AppointmentsPage = () => {
+
+
+const AppointmentsPage = ({lang}: {lang: Locale}) => {
     const [isDropclicked, setIsisDropclicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
- 
+    const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
+
+   
 
     const appointments: Appointment[] = [
     { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
@@ -24,13 +29,24 @@ const AppointmentsPage = () => {
     { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
   ];
 
-
-
   const dropDown = () => setIsisDropclicked(!isDropclicked);
 
   const handleLocationSelect = () => {
     setIsModalOpen(true); 
   };
+   useEffect(() => { 
+    const loadDict = async () => {
+      try {
+        const loadedDict = await getDict(lang);
+        setDict(loadedDict);
+      } catch (error) {
+        console.error("Error loading dictionary:", error);
+      }
+    };
+    loadDict();
+ }, [lang]);
+
+if (!dict) return <LoadingPage />;
 
     return (
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
@@ -40,20 +56,20 @@ const AppointmentsPage = () => {
           <AppointmentsIcon />
           </div>
         </div>
-            <h2 className="text-3xl font-bree-serif text-stone-950">Appointments</h2>
+            <h2 className="text-3xl font-bree-serif text-stone-950">{dict.appointmentsPage.title.text}</h2>
         </div>
 
       <div className="max-w-md w-full">
         {appointments.map((appointment, x) => (
-          <AppointmentsComponent key={x} appointment={appointment} />
+          <AppointmentsComponent key={x} appointment={appointment} lang={lang} />
         ))}
       </div>
     
 
       <div className="mt-4 text-center">
-        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">Book New Appointment</h3>
+        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">{dict.appointmentsPage.lowerTitle.text}</h3>
         <button className="bg-teal text-white py-2 px-6 rounded-lg shadow-lg w-[380px] font-cabin-condensed" onClick={dropDown}> 
-          Select Location 
+        {dict.appointmentsPage.button.text}
         </button>
 
         {isDropclicked && (
@@ -76,17 +92,17 @@ const AppointmentsPage = () => {
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-gray-200 p-6 rounded-lg w-80 text-center">
-            <h3 className="text-lg font-bold text-stone-950 mb-4">Are you sure you want to select this location?</h3>
+            <h3 className="text-lg font-bold text-stone-950 mb-4">{dict.appointmentsPage.confirmationPopup.confirmationText.text}</h3>
             <div className="flex justify-around">
               <button
                 className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
               >
-                Yes
+                {dict.appointmentsPage.confirmationPopup.confirmationText.yes.text}
               </button>
               <button
                 className="bg-gray-400 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500"
               >
-                No
+                {dict.appointmentsPage.confirmationPopup.confirmationText.no.text}
               </button>
             </div>
           </div>
