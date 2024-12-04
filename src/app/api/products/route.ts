@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const query = `
         SELECT Id, Name, product2id, Product2.Family
         FROM PricebookEntry
-        WHERE Pricebook2Id = '01si0000002Ip3WAAS' ORDER BY Product2.Family, Name
+        WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = true ORDER BY Product2.Family, Name
     `;
     try {
         const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query);
