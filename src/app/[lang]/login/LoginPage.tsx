@@ -1,4 +1,3 @@
-import Image from "next/image";
 import BasketballIcon from "@/components/icons/sports/BasketballIcon";
 import CricketIcon from "@/components/icons/sports/CricketIcon";
 import FootballIcon from "@/components/icons/sports/FootballIcon";
@@ -8,7 +7,7 @@ import SwimmingIcon from "@/components/icons/sports/SwimmingIcon";
 import TennisIcon from "@/components/icons/sports/TennisIcon";
 import VolleyballIcon from "@/components/icons/sports/VolleyballIcon";
 import GoogleIcon from "@/components/icons/GoogleIcon";
-import "./styles.css";
+import LocalizationButton from "@/components/LocalizationButton";
 
 export default function LoginPage() {
   return (
@@ -18,26 +17,27 @@ export default function LoginPage() {
 
       {/* Decorative Smaller Semi-Circles */}
       <div 
-        className="absolute top-0 right-0 w-32 h-32"
-        style={{ backgroundColor: '#70A8AB', opacity: 0.3, clipPath: "ellipse(70% 50% at 100% 0)" }}
+        className="absolute top-0 right-0 w-32 h-32 bg-teal-light2 opacity-30"
+        style={{ clipPath: "ellipse(70% 50% at 100% 0)" }}
       ></div>
+
       <div 
-        className="absolute bottom-0 left-0 w-32 h-32"
-        style={{ backgroundColor: '#70A8AB', opacity: 0.3, clipPath: "ellipse(70% 50% at 0 100%)" }}
+        className="absolute bottom-0 left-0 w-32 h-32 bg-teal-light2 opacity-30"
+        style={{ clipPath: "ellipse(70% 50% at 0 100%)" }}
       ></div>
 
       {/* Centered Login Button */}
-      <div className="relative" style={{ backgroundColor: '#70A8AB', padding: '1.5rem', borderRadius: '50%', width: '18rem', height: '18rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80" style={{ fontFamily: 'Cabin Condensed, sans-serif', fontSize: '1.75rem', border: '2px solid #2C7A7B' }}>
+      <div className="relative bg-teal-light2 p-6 rounded-full w-72 h-72 flex flex-col items-center justify-center">
+      <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl">
           <GoogleIcon />
-          <span className="font-semibold">Login with Google</span>
+          <span>Login with Google</span>
         </button>
         
         {/* Surrounding Icons */}
-        <div className="absolute top-12 left-20">
+        <div className="absolute top-4 left-24">
           <BasketballIcon />
         </div>
-        <div className="absolute top-12 right-20">
+        <div className="absolute top-4 right-24">
           <FootballIcon />
         </div>
         <div className="absolute bottom-12 left-9">
@@ -52,10 +52,10 @@ export default function LoginPage() {
         <div className="absolute top-12 right-9">
           <GolfIcon/>
         </div>
-        <div className="absolute bottom-12 left-20">
+        <div className="absolute bottom-4 left-24">
           <SwimmingIcon/>
         </div>
-        <div className="absolute bottom-12 right-20">
+        <div className="absolute bottom-4 right-24">
           <VolleyballIcon />
         </div>
       </div>
@@ -66,10 +66,8 @@ export default function LoginPage() {
       </button>
 
       {/* Language Selector */}
-      <div className="absolute bottom-4 right-4 flex items-center" style={{ backgroundColor: '#F49066', opacity: 0.9, color: 'white', padding: '0.2rem 0.75rem', borderRadius: '2rem', height: '32px' }}>
-        
-        <span>English</span>
-        <span className="ml-2">▼</span>
+      <div className="absolute bottom-32 right-4 flex items-center px-3 py-1 rounded-full h-8">
+        <LocalizationButton />
       </div>
     </div>
   );
