@@ -1,4 +1,4 @@
-import { getTokensFromAuthCode } from "@/lib/salesforce/authentication"
+import { getTokensFromAuthCode } from "@/lib/salesforce/authorization"
 import { NextRequest, NextResponse } from "next/server";
 
 // TODO: integrate with Firebase to store refresh & access tokens & add route protection
