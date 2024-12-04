@@ -1,5 +1,3 @@
-import 'server-only';
-
 type Locale = "en" | "es" | "fr";
 
 const dictionaries = {

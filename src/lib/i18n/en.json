@@ -151,6 +151,10 @@
             "note": "view receipt text button"
         },
         "orderDetails": {
+            "title": {
+                "text": "Order Details",
+                "note": "Order details title"
+            },
             "warehouse": {
                 "text": "Warehouse Location",
                 "note": "warehouse location text"
