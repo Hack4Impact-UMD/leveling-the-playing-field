@@ -2,7 +2,7 @@ import { refreshAccessToken } from '@/lib/salesforce/authorization';
 import { NextRequest, NextResponse } from 'next/server';
 
 const NEXT_PUBLIC_SALESFORCE_CLIENT_ID = String(process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_ID);
-const NEXT_PUBLIC_SALESFORCE_CLIENT_SECRET = String(process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_SECRET);
+const NEXT_PUBLIC_SALESFORCE_CLIENT_SECRET = String(process.env.SALESFORCE_CLIENT_SECRET);
 const SALESFORCE_REFRESH_TOKEN = String(process.env.SALESFORCE_REFRESH_TOKEN)
 
 async function getSalesforceToken() {
@@ -29,13 +29,13 @@ async function querySalesforce(query: string, access_token: string) {
     });
 
     const data = await response.json();
-    console.log(data.records);
+    console.log(data.records); // Logs retrieved records
     return data
 }
 
 async function updateAccount(accountId: string, request: NextRequest) {
     const access_token = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-
+    
     const requestBody = await request.json();
     const response = await fetch(`${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v62.0/sobjects/account/${accountId}`, {
         method: 'PATCH',
@@ -45,6 +45,7 @@ async function updateAccount(accountId: string, request: NextRequest) {
         },
         body: JSON.stringify(requestBody)
     })
+    
     return response;
 }
 
@@ -58,10 +59,10 @@ export async function GET(request: NextRequest, { params }: { params: { accountI
 
 export async function PUT(request: NextRequest, { params }: { params: { accountId: string } }) {
     const account_id = params.accountId;
-
     const response = await updateAccount(account_id, request);
-    if (response.status / 100 === 2) {
-      return NextResponse.json({ message: "Updated successfully" }, { status: 200 });
+    console.log(response.status);
+    if (Math.floor(response.status / 100) === 2) {
+        return NextResponse.json({ message: "Updated successfully" }, { status: 200 });
     }
     return NextResponse.json({ message: response.statusText }, { status: 500 });
 }
