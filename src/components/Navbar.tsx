@@ -3,6 +3,7 @@
 import SearchIcon from "./icons/SearchIcon";
 import ProfileIcon from "./icons/ProfileIcon";
 import ShoppingCartIcon from "./icons/ShoppingCartIcon";
+import AppointmentsIcon from "./icons/AppointmentsIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -61,11 +62,11 @@ export default function Navbar() {
 
       <IconButton
         icon={
-          <ShoppingCartIcon
-            size={55}
-            viewBoxSize={50}
+          <AppointmentsIcon
+            size={60}
+            viewBoxSize={75}
             showCircle={selectedIcon === "Appointments"}
-            transform={"translate(10,10)"}
+            transform={"translate(12,12)"}
           />
         }
         onClick={() => {handleIconClick("Appointments"); router.push("/en/appointments");}}
