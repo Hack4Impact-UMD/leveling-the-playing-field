@@ -10,14 +10,11 @@ export interface Account {
 
 export interface Contact {
   id: string;
-  name: {
-    title?: string;
-    firstName: string;
-    middleName?: string;
-    lastName: string;
-  };
+  salutation?: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  phoneNumber: string;
+  phone: string;
   title?: string;
   accountId: string;
 }
