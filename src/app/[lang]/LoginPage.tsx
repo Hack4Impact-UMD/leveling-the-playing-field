@@ -1,3 +1,5 @@
+'use client';
+
 import BasketballIcon from "@/components/icons/sports/BasketballIcon";
 import CricketIcon from "@/components/icons/sports/CricketIcon";
 import FootballIcon from "@/components/icons/sports/FootballIcon";
@@ -8,12 +10,68 @@ import TennisIcon from "@/components/icons/sports/TennisIcon";
 import VolleyballIcon from "@/components/icons/sports/VolleyballIcon";
 import GoogleIcon from "@/components/icons/GoogleIcon";
 import LocalizationButton from "@/components/LocalizationButton";
+import { useState, useEffect } from "react";
+import { User, onAuthStateChanged } from "firebase/auth";
+import { getGoogleRedirectResult, signInWithGoogleRedirect } from "@/lib/firebase/googleAuthentication";
+import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase/firebaseConfig";
+import { Locale, getDict } from "@/lib/i18n/dictionaries";
+import Loading from "@/components/Loading";
 
-export default function LoginPage() {
+export default function LoginPage({ lang }: { lang: Locale }) {
+    const [user, setUser] = useState<User | null>(null);
+    const [dict, setDict] = useState<any>({});
+    const [loading, setLoading] = useState<boolean>(true);
+
+    const router = useRouter();
+
+    const handleGoogleSignIn = async () => {
+      await signInWithGoogleRedirect();
+      router.push(`/${lang}/organization-profile`)
+    };
+
+    useEffect(() => {
+      loadData()
+    }, []);
+
+    const loadData = async () => {
+      setLoading(true)
+      const dict = await getDict(lang);
+      setDict(dict);
+
+
+      
+      const checkRedirectResult = async () => {
+        console.log("Checking for Google Redirect Result...");
+        try {
+          const result = await getGoogleRedirectResult();
+          console.log("Redirect Result:", result);
+          if (result) {
+            setUser(result.user);
+          }
+        } catch (error) {
+          console.error("Error with redirect result:", error);
+        }
+      };
+
+      checkRedirectResult();
+
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        console.log("Auth State Changed. Current User:", currentUser);
+        setUser(currentUser);
+      });
+      setLoading(false)
+      return () => unsubscribe();
+    }
+
+    if (loading) {
+      return <Loading />
+    }
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 text-center relative font-cabin-condensed">
       {/* Title at the Top */}
-      <h1 className="absolute top-1 text-6xl font-bree-serif text-black">Welcome!</h1>
+      <h1 className="absolute top-1 text-6xl font-bree-serif text-black">{dict.loginPage.title.text}</h1>
 
       {/* Decorative Smaller Semi-Circles */}
       <div 
@@ -28,9 +86,9 @@ export default function LoginPage() {
 
       {/* Centered Login Button */}
       <div className="relative bg-teal-light2 p-6 rounded-full w-72 h-72 flex flex-col items-center justify-center">
-      <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl">
+      <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl" onClick={handleGoogleSignIn}>
           <GoogleIcon />
-          <span>Login with Google</span>
+          <span>{dict.loginPage.loginButton.text}</span>
         </button>
         
         {/* Surrounding Icons */}
@@ -62,7 +120,7 @@ export default function LoginPage() {
 
       {/* Organization Application Button */}
       <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg">
-        Organization Application
+        {dict.loginPage.application.text}
       </button>
 
       {/* Language Selector */}

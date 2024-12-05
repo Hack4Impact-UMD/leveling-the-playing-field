@@ -5,10 +5,14 @@ import Chevron from "./icons/Chevron";
 import USFlagIcon from "./icons/flags/USFlagIcon";
 import FrenchFlagIcon from "./icons/flags/FrenchFlagIcon";
 import SpanishFlagIcon from "./icons/flags/SpanishFlagIcon";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LocalizationButton() {
     const [isOpen, setIsOpen] = useState(false);
     const [language, setLanguage] = useState("English");
+
+    const router = useRouter();
 
     const toggleDropDown = () => { 
         setIsOpen(!isOpen);
@@ -24,21 +28,21 @@ export default function LocalizationButton() {
             {isOpen && (
                 <div className="absolute right-0 bottom-full mb-2 w-40 bg-white shadow-lg rounded-md z-10">
                     <div
-                        onClick={() => selectLanguage("English")}
+                        onClick={() => {selectLanguage("English"); router.push('/en')}}
                         className="flex items-center px-2 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer space-x-2"
                     >
                         <USFlagIcon width={35} height={25} />
                         <span>English</span>
                     </div>
                     <div
-                        onClick={() => selectLanguage("Español")}
+                        onClick={() => {selectLanguage("Español"); router.push('/es')}}
                         className="flex items-center px-2 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer"
                     >
                         <SpanishFlagIcon width={45} height={35} />
                         <span>Español</span>
                     </div>
                     <div
-                        onClick={() => selectLanguage("Français")}
+                        onClick={() => {selectLanguage("Français"); router.push('/fr')}}
                         className="flex items-center px-2 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer space-x-2"
                     >
                         <FrenchFlagIcon width={35} height={22} />

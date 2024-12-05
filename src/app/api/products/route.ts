@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Product } from "@/types/types";
-import { executeSOQLQuery } from "@/lib/salesforce/soqlQuery";
+import { executeSOQLQuery } from "@/lib/salesforce/database/soqlQuery";
+import { APIResponse, isError } from "@/types/apiTypes";
 
 interface QueryResponse<T> {
     totalSize: number;
@@ -23,11 +24,16 @@ export async function GET(req: NextRequest) {
     const query = `
         SELECT Id, Name, product2id, Product2.Family
         FROM PricebookEntry
-        WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = true ORDER BY Product2.Family, Name
+        WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = false
+        ORDER BY Product2.Family, Name
     `;
     try {
-        const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query);
-        const records = data.records;
+        const response = await executeSOQLQuery(query);
+        if (isError(response)) {
+            return NextResponse.json(response.error, { status: response.status });
+        }
+        console.log(response.data)
+        const records = response.data.records;
         const groupedByFamily = records.reduce((acc, product) => {
             const family = product.Product2.Family || 'Uncategorized';
             if (!acc[family]) {

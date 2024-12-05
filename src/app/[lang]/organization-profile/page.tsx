@@ -26,7 +26,7 @@ interface Location {
 
 // temp data for testing
 const initContacts: Contact[] = [
-    { id: 1, name: 'Name1', phoneNumber : '000-000-0000', email: 'contactemail1@gmail.com' },
+    { id: 1, name: 'John Doe', phoneNumber : '999-999-9999', email: 'john.doe@gmail.com' },
 ];
 
 
@@ -36,18 +36,18 @@ export default function OrganizationProfile() {
     //const [location, setLocation] = useState<string>('');
     const [location, setLocation] = useState<Location>({
         addressLine1: '100 Sunshine Lane',
-        addressLine2: '100 Sunshine Lane',
-        city: 'City',
+        addressLine2: '',
+        city: 'Baltimore',
         state: 'Maryland',
-        zipCode: '123456',
-        country: 'United States',
+        zipCode: '12345',
+        country: 'United States of America',
       });
     const [contactNumber, setContactNumber] = useState<string>('');
 
     useEffect(() => {
         //placeholder values
-        setOrgName('XYZ Org.');
-        setContactNumber('000-000-0000');
+        setOrgName('Fairfax Elementary School');
+        setContactNumber('555-555-5555');
     }, []);
 
     const handleAddContact = () => {

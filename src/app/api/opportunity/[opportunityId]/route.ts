@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { refreshAccessToken } from '@/lib/salesforce/authorization';
-import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
+import { executeSOQLQuery } from '@/lib/salesforce/database/soqlQuery';
 
 interface QueryResponse<T> {
   totalSize: number;

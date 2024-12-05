@@ -5,6 +5,7 @@ import ProfileIcon from "./icons/ProfileIcon";
 import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type IconButtonProps = {
   icon: React.ReactNode;
@@ -27,6 +28,8 @@ function IconButton({ icon, onClick }: IconButtonProps) {
 export default function Navbar() {
   const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const handleIconClick = (label: string) => {
     setSelectedIcon((prevSelected) => (prevSelected === label ? null : label));
   };
@@ -41,7 +44,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Profile"}
           />
         }
-        onClick={() => handleIconClick("Profile")}
+        onClick={() => {handleIconClick("Profile"); router.push('/en/organization-profile')}}
       />
 
       <IconButton
@@ -53,7 +56,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Search"}
           />
         }
-        onClick={() => handleIconClick("Search")}
+        onClick={() => {handleIconClick("Search"); router.push("/en/search");}}
       />
 
       <IconButton
@@ -65,7 +68,7 @@ export default function Navbar() {
             transform={"translate(10,10)"}
           />
         }
-        onClick={() => handleIconClick("Appointments")}
+        onClick={() => {handleIconClick("Appointments"); router.push("/en/appointments");}}
         />
 
       <IconButton
@@ -77,7 +80,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Receipts"}
           />
         }
-        onClick={() => handleIconClick("Receipts")}
+        onClick={() => {handleIconClick("Receipts"); router.push("/en/receipts");}}
       />
     </div>
   );
