@@ -20,6 +20,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string; equipment: Equipment[] }[]>([]);
   const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const loadedPosted = useRef<boolean>(false);
 
   const router = useRouter();
@@ -102,6 +103,11 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   };
 
   useEffect(() => {
+    loadData();
+  }, [lang]);
+
+  const loadData = async () => {
+    setLoading(true);
     const loadProductData = async () => {
       try {
         const response = await fetch("/api/products");
@@ -109,7 +115,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
           throw new Error("Failed to fetch products");
         }
         const data: SportsItems = await response.json();
-        console.log(data)
+        console.log(data);
         setSportsItemsMap(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -141,18 +147,19 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
           router.replace(`/${lang}/receipts`);
         }
       } catch (error) {
-        console.error("Error loading opportunity data:", error)
+        console.error("Error loading opportunity data:", error);
       } finally {
         loadedPosted.current = true;
       }
-    }
+    };
 
-    loadOpportunityStage();
-    loadProductData();
-    loadDict();
-  }, [lang]);
+    await loadOpportunityStage();
+    await loadProductData();
+    await loadDict();
+    setLoading(false);
+  }
 
-  if (!dict || !sportsItemsMap || !loadedPosted.current) return <LoadingPage />;
+  if (loading || !dict || !sportsItemsMap || !loadedPosted.current) return <LoadingPage />;
 
   const getUnselectedSports = (): string[] => {
     const allSports = Object.keys(sportsItemsMap);
