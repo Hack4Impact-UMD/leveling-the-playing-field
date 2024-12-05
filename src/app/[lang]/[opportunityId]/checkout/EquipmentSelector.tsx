@@ -22,7 +22,7 @@ const EquipmentSelector = ({ availableEquipment, handleSelectEquipment, dict }: 
                     {dict.checkoutPage.selectedEquipment.text}
                 </option>
                 {availableEquipment.map((item, i) => (
-                    <option value={item.name} key={i}>
+                    <option value={item.id} key={i}>
                         {item.name}
                     </option>
                 ))}

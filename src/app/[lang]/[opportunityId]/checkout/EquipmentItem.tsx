@@ -29,7 +29,7 @@ const EquipmentItem = ({
                 {/* Optional content */}
             </div>
             <select
-                value={equipment.name}
+                value={equipment.product.id}
                 className="bg-green-light flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                 onChange={(e) => handleUpdateEquipment(equipment, index, e)}
             >
@@ -37,7 +37,7 @@ const EquipmentItem = ({
                     {dict.checkoutPage.selectedEquipment.text}
                 </option>
                 {sportsItemsMap[sport].map((item, i) => (
-                    <option value={item.name} key={i}>
+                    <option value={item.id} key={i}>
                         {item.name}
                     </option>
                 ))}

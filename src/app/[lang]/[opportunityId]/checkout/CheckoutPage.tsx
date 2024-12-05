@@ -7,9 +7,8 @@ import { Product } from "@/types/types";
 import LoadingPage from "../../loading";
 
 export interface Equipment {
-  name: string;
+  product: Product;  // Contains Product object with id, name, and category
   quantity: number;
-  sport: string;
 }
 
 export interface SportsItems {
@@ -25,7 +24,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
     setSelectedEquipment((prevList) =>
       prevList.map((item) =>
         item.sport === sport
-          ? { ...item, equipment: item.equipment.filter((e) => e.name !== equipment.name) }
+          ? { ...item, equipment: item.equipment.filter((e) => e.product.id !== equipment.product.id) }
           : item
       )
     );
@@ -65,13 +64,28 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   };
 
   const handleCheckout = async () => {
+    const productList = selectedEquipment.flatMap(({ sport, equipment }) =>
+      equipment.map(({ product, quantity }) => ({
+        pricebookEntryId: product.id,
+        quantity: quantity,
+      }))
+    );
+    console.log(productList);
+    console.log(JSON.stringify({
+      StageName: "Posted",
+      products: productList
+    }))
+
     try {
       const response = await fetch(`/api/opportunity/${opportunityId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ StageName: "Posted" }),
+        body: JSON.stringify({
+          StageName: "Posted",
+          products: productList
+        }),
       });
       if (!response.ok) {
         console.warn("Failed to checkout");

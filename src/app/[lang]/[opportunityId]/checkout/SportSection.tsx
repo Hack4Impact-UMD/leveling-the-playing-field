@@ -53,21 +53,37 @@ const SportSection = ({
     };
 
     const handleSelectNewEquipment = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = event.target.value;
-        if (!value || !sport) return;
+        const productId = event.target.value;
+        if (!productId || !sport) return;
+        const selectedProduct = sportsItemsMap[sport]?.find((product) => product.id === productId);
 
-        const newEquipment: Equipment = { name: value, quantity: 1, sport: sport };
-        if (selectedEquipment.some((equipment) => equipment.name === value && equipment.sport === sport)) {
+        if (!selectedProduct) {
+            console.warn("Selected product not found");
             return;
         }
+
+        if (selectedEquipment.some((equipment) => equipment.product.id === selectedProduct.id)) {
+            return;
+        }
+
+        const newEquipment: Equipment = {
+            product: selectedProduct,
+            quantity: 1,
+        };
+
         updateSelectedEquipment([...selectedEquipment, newEquipment]);
     };
 
     const handleUpdateEquipment = (oldEquipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        if (!value || !sport) return;
+        const productId = e.target.value;
+        if (!productId || !sport) return;
+        const selectedProduct = sportsItemsMap[sport]?.find((product) => product.id === productId);
+        if (!selectedProduct) {
+            console.warn("Selected product not found");
+            return;
+        }
 
-        const newEquipment: Equipment = { ...oldEquipment, name: value };
+        const newEquipment: Equipment = { ...oldEquipment, product: selectedProduct };
         const updatedList = [...selectedEquipment];
         updatedList[index] = newEquipment;
         updateSelectedEquipment(updatedList);
@@ -80,7 +96,7 @@ const SportSection = ({
         }
 
         return allEquipment.filter(
-            (equipment) => !selectedEquipment.map((item) => item.name).includes(equipment.name)
+            (equipment) => !selectedEquipment.map((item) => item.product.id).includes(equipment.id)
         );
     };
 
