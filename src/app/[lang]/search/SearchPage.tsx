@@ -1,7 +1,6 @@
 "use client";  
 
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
@@ -10,8 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import SearchIcon from '@/components/icons/SearchIcon';
-import FilterIcon from '@/components/icons/FilterIcon';
-import FilterComponent from './FilterComponent';
 import ListComponent from './ListComponent';
 import { Input } from "@/components/ui/input"
 import { Product, Market } from "@/types/types";
@@ -24,16 +21,9 @@ interface GroupedEquipment {
 const warehouses = [Market.GREATER_WASHINGTON, Market.BALTIMORE, Market.WESTERN_NEW_YORK, Market.PHILADELPHIA, Market.OHIO];
 
 const SearchPage = () => {
-  const [showFilter, setShowFilter] = useState(false);
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | undefined>(undefined);
-  const [selectedSport, setSelectedSport] = useState<string | undefined>(undefined);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
-  const [appliedFilters, setAppliedFilters] = useState({
-    warehouse: 'all',
-    sport: 'all'
-  });
   const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
 
   // Sample data with quantities
@@ -46,26 +36,9 @@ const SearchPage = () => {
     { name: 'Tennis Shoes', category: 'Tennis', id: "5" },
     { name: 'Tennis Shoes', category: 'Tennis', id: "6" }
   ];
-  const sports = ['Soccer', 'Basketball', 'Tennis'];
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-  };
-
-  const handleFilterToggle = () => {
-    setShowFilter(!showFilter);
-  };
-
-  const handleApplyFilters = () => {
-    setAppliedFilters({
-      warehouse: selectedWarehouse || 'all',
-      sport: selectedSport || 'all'
-    });
-  };
-
-  const resetSport = () => {
-    setSelectedSport('all');
-    handleApplyFilters();
   };
 
   useEffect(() => {
@@ -87,10 +60,9 @@ const SearchPage = () => {
   const applyFilters = (): Market[] | GroupedEquipment[] => {
     if (searchMode === 'equipment') {
       return groupedEquipmentList.filter((group) => {
-        const sportMatch = !appliedFilters.sport || appliedFilters.sport === 'all' || group.category === appliedFilters.sport;
         const searchMatch = group.category.toLowerCase().includes(searchTerm.toLowerCase()) || group.products.some((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase()));
         
-        return sportMatch && searchMatch;
+        return searchMatch;
       });
     } else {
       return warehouses.filter((item: Market) => {
@@ -127,16 +99,10 @@ const SearchPage = () => {
           <Input
             value={searchTerm}
             onChange={handleSearch}
-            placeholder={`Search by ${searchMode === 'equipment' ? 'Equipment' : 'Location'}`}
+            placeholder={`Search by ${searchMode === 'equipment' ? 'Category' : 'Location'}`}
             className="pl-14 pr-4 w-full border-teal-light2 bg-teal-light2 rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
         </div>
-        <Button 
-          onClick={handleFilterToggle} 
-          className="bg-orange-light hover:bg-orange-light focus:bg-orange-light w-[45px] h-[50px] rounded-2xl [&_svg]:w-11 [&_svg]:h-11 [&_svg]:-ml-1 [&_svg]:-mt-1"
-        >
-          <FilterIcon />
-        </Button>
       </div>
 
       <div className="flex items-center space-x-3 mb-4 font-ubuntu-condensed">
@@ -149,20 +115,11 @@ const SearchPage = () => {
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="equipment" className="">Equipment</SelectItem>
+            <SelectItem value="equipment" className="">Category</SelectItem>
             <SelectItem value="location" className="">Location</SelectItem>
           </SelectContent>
         </Select>
       </div>
-
-      <FilterComponent 
-        showFilter = {showFilter}
-        sports = {sports}
-        selectedSport = {selectedSport}
-        setSelectedSport = {setSelectedSport}
-        resetSport = {resetSport}
-        handleApplyFilters = {handleApplyFilters}
-      />
 
       {/* Basic information of each warehouse/location */}
       <div className="flex flex-col space-y-2 mt-8"> 

@@ -37,7 +37,7 @@ const ListComponent: React.FC<ListCompProps> = ({item, selectedEquipments, searc
       : 
       <Button
         onClick={() => toggleEquipment(item)}
-        className="p-0 w-full border-0 block h-auto" 
+        className={`p-0 w-full border-0 block h-auto ${selectedEquipments.has((item as GroupedEquipment).category) ? 'mb-4' : ''}`} 
         variant="outline"
       >
         {!selectedEquipments.has((item as GroupedEquipment).category) ? (
