@@ -49,6 +49,11 @@ async function updateOpportunityProducts(opportunityId: string, products: Opport
     for (const product of products) {
       const { pricebookEntryId, quantity } = product;
 
+      const unitPrice: QueryResponse<{ UnitPrice: number }> = await executeSOQLQuery(`SELECT UnitPrice FROM PricebookEntry WHERE Id='${pricebookEntryId}'`);
+      if (unitPrice.totalSize == 0) {
+        throw new Error(`Error: No UnitPrice found for pricebookEntryId ${pricebookEntryId}`)
+      }
+
       const existingLineItemData: QueryResponse<{ Id: string }> = await executeSOQLQuery(`SELECT Id FROM OpportunityLineItem WHERE OpportunityId='${opportunityId}' AND PricebookEntryId='${pricebookEntryId}'`);
 
       if (existingLineItemData.records.length > 0) {
@@ -70,8 +75,7 @@ async function updateOpportunityProducts(opportunityId: string, products: Opport
 
         if (!updateResponse.ok) {
           const error = await updateResponse.json();
-          console.error('Error updating OpportunityLineItem:', error);
-          throw new Error('Error updating OpportunityLineItem');
+          throw new Error('Error updating OpportunityLineItem: ', error);
         }
       } else {
         const createResponse = await fetch(
@@ -86,14 +90,14 @@ async function updateOpportunityProducts(opportunityId: string, products: Opport
               OpportunityId: opportunityId,
               PricebookEntryId: pricebookEntryId,
               Quantity: quantity,
+              UnitPrice: unitPrice.records[0].UnitPrice
             }),
           }
         );
 
         if (!createResponse.ok) {
           const error = await createResponse.json();
-          console.error('Error creating OpportunityLineItem:', error);
-          throw new Error('Error creating OpportunityLineItem');
+          throw new Error('Error creating OpportunityLineItem:', error);
         }
       }
     }
@@ -118,7 +122,6 @@ export async function PUT(
       Object.entries(body).filter(([key]) => key !== 'products')
     );
 
-    console.log("filtered:", filteredBody);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
