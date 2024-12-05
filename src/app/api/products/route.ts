@@ -29,13 +29,13 @@ export async function GET(req: NextRequest) {
     `;
     try {
         const response = await executeSOQLQuery(query);
-        console.log('response', response);
+        console.log('response', response)
         if (isError(response)) {
             return NextResponse.json(response.error, { status: response.status });
         }
         console.log(response.data)
         const records = response.data.records;
-        const groupedByFamily = records.reduce((acc, product) => {
+        const groupedByFamily = records.reduce((acc: any, product: any) => {
             const family = product.Product2.Family || 'Uncategorized';
             if (!acc[family]) {
                 acc[family] = [];
