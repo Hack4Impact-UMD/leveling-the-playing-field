@@ -1,24 +1,30 @@
-import React from 'react';
+import { Product } from "@/types/types";
+import React from "react";
 
 interface EquipmentSelectorProps {
-    availableEquipment: string[];
+    availableEquipment: Product[];
     handleSelectEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    dict: { [key: string]: any };
 }
 
-const EquipmentSelector = ({ availableEquipment, handleSelectEquipment }: EquipmentSelectorProps) => {
+const EquipmentSelector = ({ availableEquipment, handleSelectEquipment, dict }: EquipmentSelectorProps) => {
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">
-                {/* padding */}
+                {/* Optional content */}
             </div>
             <select
                 value={""}
                 className="bg-white-dark flex-auto text-black text-center py-2.5 px-4 rounded-md font-semibold w-40 sm:w-auto"
                 onChange={handleSelectEquipment}
             >
-                <option value="" disabled>Select Equipment</option>
+                <option value="" disabled>
+                    {dict.checkoutPage.selectedEquipment.text}
+                </option>
                 {availableEquipment.map((item, i) => (
-                    <option value={item} key={i}>{item}</option>
+                    <option value={item.id} key={i}>
+                        {item.name}
+                    </option>
                 ))}
             </select>
             <div className="flex-none font-bold py-2 rounded-md text-lg sm:w-auto">

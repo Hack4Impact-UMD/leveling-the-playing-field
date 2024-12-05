@@ -195,6 +195,22 @@
         "selectedEquipment": {
             "text": "Sélectionner l'Équipement",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VÉRIFIER",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Sélectionnez le sport",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Sélectionner:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantité",
+            "note": "placeholder text for empty equipment quantity"
         }
     },
     "searchPage": {

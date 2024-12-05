@@ -57,7 +57,7 @@
         "location": {
             "header": {
                 "text": "Location",
-                "note": "text in second green box"   
+                "note": "text in second green box"
             },
             "addressOne": {
                 "text": "Address Line 1",
@@ -190,11 +190,27 @@
         },
         "addSport": {
             "text": "Add Sport",
-            "note": "Button text to select sport"
+            "note": "Button text to add sport"
         },
         "selectedEquipment": {
             "text": "Select Equipment",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "CHECKOUT",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Select Sport",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Selected:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantity",
+            "note": "placeholder text for empty equipment quantity"
         }
     },
     "searchPage": {
