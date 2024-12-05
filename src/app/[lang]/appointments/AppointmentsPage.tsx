@@ -55,7 +55,12 @@ if (!dict) return <LoadingPage />;
       <div className="flex flex-col mb-6 items-center">
         <div className="bg-teal mb-2 rounded-full p-6 relative">
           <div className='relative -top-0.5'>
-          <AppointmentsIcon />
+          <AppointmentsIcon
+            size={60}
+            viewBoxSize={75}
+            showCircle={false}
+            transform={"translate(12,12)"}
+          />
           </div>
         </div>
             <h2 className="text-3xl font-bree-serif text-stone-950">{dict.appointmentsPage.title.text}</h2>
