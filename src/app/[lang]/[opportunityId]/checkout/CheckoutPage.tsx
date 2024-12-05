@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
 import LoadingPage from "../../loading";
+import { useRouter } from "next/navigation";
 
 export interface Equipment {
   product: Product;  // Contains Product object with id, name, and category
@@ -19,6 +20,9 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string; equipment: Equipment[] }[]>([]);
   const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
+  const loadedPosted = useRef<boolean>(false);
+
+  const router = useRouter();
 
   const removeSelectedEquipment = (sport: string, equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -89,7 +93,9 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       });
       if (!response.ok) {
         console.warn("Failed to checkout");
+        return;
       }
+      router.replace(`/${lang}/receipts`)
     } catch (error) {
       console.error("Error when checking out:", error);
     }
@@ -118,11 +124,34 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }
     };
 
+    const loadOpportunityStage = async () => {
+      try {
+        const response = await fetch(`/api/opportunity/${opportunityId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Error loading opportunity stage");
+        }
+        const body = await response.json();
+        if (body.StageName == "Posted") {
+          router.replace(`/${lang}/receipts`);
+        }
+      } catch (error) {
+        console.error("Error loading opportunity data:", error)
+      } finally {
+        loadedPosted.current = true;
+      }
+    }
+
+    loadOpportunityStage();
     loadProductData();
     loadDict();
   }, [lang]);
 
-  if (!dict || !sportsItemsMap) return <LoadingPage />;
+  if (!dict || !sportsItemsMap || !loadedPosted.current) return <LoadingPage />;
 
   const getUnselectedSports = (): string[] => {
     const allSports = Object.keys(sportsItemsMap);
