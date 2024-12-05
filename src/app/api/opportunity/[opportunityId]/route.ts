@@ -1,5 +1,17 @@
 import { NextResponse } from 'next/server';
 import { refreshAccessToken } from '@/lib/salesforce/authorization';
+import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
+
+interface QueryResponse<T> {
+  totalSize: number;
+  done: boolean;
+  records: Array<T>;
+}
+
+interface OpportunityProduct {
+  pricebookEntryId: string;
+  quantity: number;
+}
 
 export async function GET(
   request: Request,
@@ -29,6 +41,72 @@ export async function GET(
   }
 }
 
+async function updateOpportunityProducts(opportunityId: string, products: OpportunityProduct[]) {
+  const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+  const salesforceDomain = process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN;
+
+  try {
+    for (const product of products) {
+      const { pricebookEntryId, quantity } = product;
+
+      const unitPrice: QueryResponse<{ UnitPrice: number }> = await executeSOQLQuery(`SELECT UnitPrice FROM PricebookEntry WHERE Id='${pricebookEntryId}'`);
+      if (unitPrice.totalSize == 0) {
+        throw new Error(`Error: No UnitPrice found for pricebookEntryId ${pricebookEntryId}`)
+      }
+
+      const existingLineItemData: QueryResponse<{ Id: string }> = await executeSOQLQuery(`SELECT Id FROM OpportunityLineItem WHERE OpportunityId='${opportunityId}' AND PricebookEntryId='${pricebookEntryId}'`);
+
+      if (existingLineItemData.records.length > 0) {
+        const existingLineItemId = existingLineItemData.records[0].Id;
+
+        const updateResponse = await fetch(
+          `${salesforceDomain}/services/data/v56.0/sobjects/OpportunityLineItem/${existingLineItemId}`,
+          {
+            method: 'PATCH',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              Quantity: quantity,
+            }),
+          }
+        );
+
+        if (!updateResponse.ok) {
+          const error = await updateResponse.json();
+          throw new Error('Error updating OpportunityLineItem: ', error);
+        }
+      } else {
+        const createResponse = await fetch(
+          `${salesforceDomain}/services/data/v56.0/sobjects/OpportunityLineItem`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              OpportunityId: opportunityId,
+              PricebookEntryId: pricebookEntryId,
+              Quantity: quantity,
+              UnitPrice: unitPrice.records[0].UnitPrice
+            }),
+          }
+        );
+
+        if (!createResponse.ok) {
+          const error = await createResponse.json();
+          throw new Error('Error creating OpportunityLineItem:', error);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error updating Opportunity products:', error);
+    throw error;
+  }
+}
+
 export async function PUT(
   request: Request,
   { params }: { params: { opportunityId: string } }
@@ -36,6 +114,13 @@ export async function PUT(
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const body = await request.json();
+    if (body.products) {
+      await updateOpportunityProducts(params.opportunityId, body.products);
+    }
+
+    const filteredBody = Object.fromEntries(
+      Object.entries(body).filter(([key]) => key !== 'products')
+    );
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
@@ -45,7 +130,7 @@ export async function PUT(
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify(filteredBody),
       }
     );
 
@@ -67,7 +152,7 @@ export async function DELETE(
 ) {
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-    
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
       {
