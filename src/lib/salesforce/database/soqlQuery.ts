@@ -8,6 +8,7 @@ export async function executeSOQLQuery(
     const accessToken = await refreshAccessToken(
       process.env.SALESFORCE_REFRESH_TOKEN || ""
     );
+    console.log(accessToken)
     const url = new URL(
       "/services/data/v62.0/query",
       process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN
@@ -22,6 +23,7 @@ export async function executeSOQLQuery(
     });
 
     if (!response.ok) {
+      console.log('brih')
       const error = await response.json();
       return {
         error,

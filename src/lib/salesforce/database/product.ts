@@ -2,9 +2,9 @@ import { APIResponse, isError } from "@/types/apiTypes";
 import { Product } from "@/types/types";
 import { executeSOQLQuery } from "./soqlQuery";
 
-export async function getAllProducts(): Promise<APIResponse<Product[]>> {
+export async function getAllProducts(): Promise<APIResponse<any>> {
   try {
-    const response: APIResponse<Product[]> = await executeSOQLQuery(`
+    const response: APIResponse<any> = await executeSOQLQuery(`
         SELECT Id, Name, product2id, Product2.Family
         FROM PricebookEntry
         WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = false
@@ -12,7 +12,7 @@ export async function getAllProducts(): Promise<APIResponse<Product[]>> {
     `);
     if (isError(response)) { return response; }
     const records = response.data.records;
-    const groupedByFamily = records.reduce((acc, product) => {
+    const groupedByFamily = records.reduce((acc: any, product: any) => {
       const family = product.Product2.Family || "Uncategorized";
       if (!acc[family]) {
         acc[family] = [];
@@ -24,6 +24,10 @@ export async function getAllProducts(): Promise<APIResponse<Product[]>> {
       });
       return acc;
     }, {} as Record<string, Product[]>);
+    return {
+      data: groupedByFamily,
+      status: 200
+    }
 
   } catch (error) {
     return {

@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
     `;
     try {
         const response = await executeSOQLQuery(query);
+        console.log('response', response);
         if (isError(response)) {
             return NextResponse.json(response.error, { status: response.status });
         }

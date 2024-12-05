@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import EditIcon from '@/components/icons/EditIcon';
 import XIcon from '@/components/icons/XIcon';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
-import LoadingPage from '../[lang]/loading';
+import LoadingPage from '../loading';
 
 interface ContactPopupProps {
     onButtonClick: () => void; 

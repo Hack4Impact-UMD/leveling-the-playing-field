@@ -109,6 +109,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
           throw new Error("Failed to fetch products");
         }
         const data: SportsItems = await response.json();
+        console.log(data)
         setSportsItemsMap(data);
       } catch (error) {
         console.error("Error fetching products:", error);
