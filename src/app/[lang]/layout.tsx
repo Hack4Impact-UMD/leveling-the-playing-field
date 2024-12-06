@@ -54,7 +54,6 @@ export default function RootLayout({
         className={`${breeSerif.variable} ${cabin.variable} ${cabinCondensed.variable} ${ubuntuCondensed.variable} antialiased bg-white-dark`}
       >
         {children}
-        <Navbar />
       </body>
     </html>
   );

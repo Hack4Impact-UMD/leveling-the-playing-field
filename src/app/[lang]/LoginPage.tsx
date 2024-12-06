@@ -27,7 +27,7 @@ export default function LoginPage({ lang }: { lang: Locale }) {
 
     const handleGoogleSignIn = async () => {
       await signInWithGoogleRedirect();
-      router.push(`/${lang}/organization-profile`)
+      router.push(`/${lang}/d/organization-profile`)
     };
 
     useEffect(() => {
@@ -119,7 +119,7 @@ export default function LoginPage({ lang }: { lang: Locale }) {
       </div>
 
       {/* Organization Application Button */}
-      <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg">
+      <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg" onClick={() => router.push("https://form.jotform.com/232446768208059")}>
         {dict.loginPage.application.text}
       </button>
 

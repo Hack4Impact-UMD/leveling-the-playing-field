@@ -96,7 +96,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         console.warn("Failed to checkout");
         return;
       }
-      router.replace(`/${lang}/receipts`)
+      router.replace(`/${lang}/d/receipts`)
     } catch (error) {
       console.error("Error when checking out:", error);
     }

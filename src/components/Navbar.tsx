@@ -2,7 +2,6 @@
 
 import SearchIcon from "./icons/SearchIcon";
 import ProfileIcon from "./icons/ProfileIcon";
-import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import AppointmentsIcon from "./icons/AppointmentsIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import React, { useState } from "react";
@@ -45,7 +44,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Profile"}
           />
         }
-        onClick={() => {handleIconClick("Profile"); router.push('/en/organization-profile')}}
+        onClick={() => {handleIconClick("Profile"); router.push('/en/d/organization-profile')}}
       />
 
       <IconButton
@@ -57,7 +56,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Search"}
           />
         }
-        onClick={() => {handleIconClick("Search"); router.push("/en/search");}}
+        onClick={() => {handleIconClick("Search"); router.push("/en/d/search");}}
       />
 
       <IconButton
@@ -69,7 +68,7 @@ export default function Navbar() {
             transform={"translate(12,12)"}
           />
         }
-        onClick={() => {handleIconClick("Appointments"); router.push("/en/appointments");}}
+        onClick={() => {handleIconClick("Appointments"); router.push("/en/d/appointments");}}
         />
 
       <IconButton
@@ -81,7 +80,7 @@ export default function Navbar() {
             showCircle={selectedIcon === "Receipts"}
           />
         }
-        onClick={() => {handleIconClick("Receipts"); router.push("/en/receipts");}}
+        onClick={() => {handleIconClick("Receipts"); router.push("/en/d/receipts");}}
       />
     </div>
   );
