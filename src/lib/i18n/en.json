@@ -93,6 +93,40 @@
                 "text": "Number",
                 "note": "text above phone fill in the blank"
             }
+        },
+        "errors": {
+            "contactName": {
+                "text": "Please enter a valid name",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Please enter a valid phone number",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "Please enter a valid email address",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Please enter a valid address line 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Please enter a valid city",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Please enter a valid zipcode",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "This field is required",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Please enter a valid",
+                "note": "Error text for non-contact fields"
+            }
         }
     },
     "appointmentsPage": {

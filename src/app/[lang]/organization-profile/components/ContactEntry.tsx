@@ -6,6 +6,8 @@ import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 
 
 interface ContactItemProps {
+    dictLabels : any;
+    dictErrors : any;
     name: string;
     phoneNumber: string;
     email: string;
@@ -13,7 +15,7 @@ interface ContactItemProps {
     onDelete: () => void;
 }
 
-export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
+export default function ContactEntry({ dictLabels, dictErrors, name, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
     const [isNameEditable, setIsNameEditable] = useState(false);
     const [isPhoneEditable, setIsPhoneEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
@@ -136,7 +138,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                 <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Name</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.name.text}</label>
                             {isNameEditable ? (
                                 <input
                                     type="text"
@@ -158,7 +160,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                     {isInvalidName && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
-                            <p className="text-[#00000066] text-[10px]">Please enter a valid name</p>
+                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactName.text}</p>
                         </div>
                     )}
                 </div>
@@ -166,7 +168,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                 <div className="basis-3/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Phone Number</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.phone.text}</label>
                             {isPhoneEditable ? (
                                 <input
                                     type="tel"
@@ -188,7 +190,7 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
                     {isInvalidPhone && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
-                            <p className="text-[#00000066] text-[10px]">Please enter a valid phone number</p>
+                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactPhoneNumber.text}r</p>
                         </div>
                     )}
                 </div>                
@@ -196,10 +198,9 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
 
 
 
-
             <div className="flex items-center mt-4">
                 <div className="flex-grow flex flex-col">
-                    <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span> Email</label>
+                    <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.email.text}</label>
                     {isEmailEditable ? (
                         <input
                             type="email"
@@ -226,17 +227,17 @@ export default function ContactEntry({ name, phoneNumber, email, onEdit, onDelet
             {isInvalidEmail && (
                 <div className="flex flex-row items-center space-x-1">
                     <AttentionCircleIcon />
-                    <p className="text-[#00000066] text-[10px]">Please enter a valid email address</p>
+                    <p className="text-[#00000066] text-[10px]">{dictErrors.contactEmail.text}</p>
                 </div>
             )}
 
             <ConfirmationModal
                 isOpen={isModalOpen}
-                message='Are you sure you want to delete this contact?'
+                message={dictLabels.deletePopup.confirmationText.text}
                 onConfirm={handleConfirmDelete}
-                confirmText='Yes'
+                confirmText={dictLabels.deletePopup.yes.text}
                 onCancel={closeModal}
-                cancelText='No'
+                cancelText={dictLabels.deletePopup.no.text}
             />    
         </div>
     );

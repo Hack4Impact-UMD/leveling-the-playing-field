@@ -3,6 +3,7 @@ import EditIcon from '@/components/icons/EditIcon';
 import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 
 interface EditableFieldProps {
+    error: any;
     label: string;
     value: string;
     type: string;
@@ -11,7 +12,7 @@ interface EditableFieldProps {
     required?: boolean;
 }
 
-export default function EditableField({ label, type, value, pattern, onSave, required}: EditableFieldProps) {
+export default function EditableField({ error, label, type, value, pattern, onSave, required}: EditableFieldProps) {
     const [isEditable, setIsEditable] = useState(false);
     const [inputValue, setInputValue] = useState(value);
     const [isInvalid, setIsInvalid] = useState(false);
@@ -94,7 +95,7 @@ export default function EditableField({ label, type, value, pattern, onSave, req
             {isInvalid &&
                 <div className="flex flex-row items-center space-x-1">
                     <AttentionCircleIcon />
-                    <p className="text-[#00000066] text-[10px]">Please enter a valid {label.toLowerCase()}</p>
+                    <p className="text-[#00000066] text-[10px]">{error}</p>
                 </div>
             }
         </div>

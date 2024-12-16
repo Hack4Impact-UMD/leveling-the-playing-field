@@ -83,16 +83,50 @@
                 "text": "Pays",
                 "note": "text above Country fill in the blank"
             }
-        }
-    },
-    "number": {
-        "header": {
-            "text": "Numéro de Contact",
-            "note": "text in third green box"
         },
-        "box": {
-            "text": "Numéro",
-            "note": "text above phone fill in the blank"
+        "number": {
+            "header": {
+                "text": "Numéro de Contact",
+                "note": "text in third green box"
+            },
+            "box": {
+                "text": "Numéro",
+                "note": "text above phone fill in the blank"
+            }
+        },
+        "errors": {
+            "contactName": {
+                "text": "Veuillez entrer un nom valide",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Veuillez entrer un numéro de téléphone valide",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "S'il vous plaît, mettez une adresse email valide",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Veuillez saisir une adresse valide ligne 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Veuillez entrer une ville valide",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Veuillez entrer un code postal valide",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "Ce champ est obligatoire",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Veuillez entrer un valide",
+                "note": "Error text for non-contact fields"
+            }
         }
     },
     "appointmentsPage": {
