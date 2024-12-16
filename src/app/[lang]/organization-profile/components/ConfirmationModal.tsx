@@ -9,7 +9,7 @@ interface ConfirmationModalProps {
   cancelText : string;
 }
 
-export default function ConfirmationModal({ isOpen, message, onConfirm, confirmText, onCancel, cancelText }: ConfirmationModalProps) {
+export default function ConfirmationModal({isOpen, message, onConfirm, confirmText, onCancel, cancelText }: ConfirmationModalProps) {
     useEffect(() => {
         if (isOpen) {
           document.body.style.overflow = 'hidden';
