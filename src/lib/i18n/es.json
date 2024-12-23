@@ -128,16 +128,12 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Contacto de recogida actual",
+                "text": "Current Pickup Contact",
                 "note": "title text for pickup contact"
             },
-            "yes": {
-                "text": "Sí",
-                "note": "label for yes button"
-            },
-            "no": {
-                "text": "No",
-                "note": "label for no button"
+            "save": {
+                "text": "Guardar",
+                "note": "text for green save button"
             }
         }
     },

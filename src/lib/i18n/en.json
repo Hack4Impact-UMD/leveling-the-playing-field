@@ -131,13 +131,9 @@
                 "text": "Current Pickup Contact",
                 "note": "title text for pickup contact"
             },
-            "yes": {
-                "text": "Yes",
-                "note": "label for yes button"
-            },
-            "no": {
-                "text": "No",
-                "note": "label for no button"
+            "save": {
+                "text": "Save",
+                "note": "text for green save button"
             }
         }
     },

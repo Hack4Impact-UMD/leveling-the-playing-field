@@ -128,16 +128,12 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Contact de prise de courant",
+                "text": "Current Pickup Contact",
                 "note": "title text for pickup contact"
             },
-            "yes": {
-                "text": "Oui",
-                "note": "label for yes button"
-            },
-            "no": {
-                "text": "Non",
-                "note": "label for no button"
+            "save": {
+                "text": "Sauvegarder",
+                "note": "text for green save button"
             }
         }
     },
