@@ -128,7 +128,7 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Current Pickup Contact",
+                "text": "Contact de prise de courant",
                 "note": "title text for pickup contact"
             },
             "save": {

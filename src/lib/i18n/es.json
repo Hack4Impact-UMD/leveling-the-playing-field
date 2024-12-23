@@ -128,7 +128,7 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Current Pickup Contact",
+                "text": "Contacto de recogida actual",
                 "note": "title text for pickup contact"
             },
             "save": {
