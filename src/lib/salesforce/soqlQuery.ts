@@ -19,7 +19,6 @@ export async function executeSOQLQuery<T>(query: string): Promise<APIResponse<T[
       return { error, status: response.status };
     }
     const data: SOQLResponse<T> = await response.json();
-    console.log(data)
     return { data: data.records, status: response.status };
   } catch (error) {
     return {
