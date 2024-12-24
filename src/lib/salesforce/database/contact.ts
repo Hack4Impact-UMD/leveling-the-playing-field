@@ -1,4 +1,4 @@
-import { APIResponse } from "@/types/apiTypes";
+import { APIResponse, SOQLResponse } from "@/types/apiTypes";
 import { Contact } from "@/types/types";
 
 export async function getContactById(
@@ -24,18 +24,8 @@ export async function getContactById(
     }
 
     const data = await response.json();
-    const contact: Contact = {
-      id: data.Id,
-      salutation: data.Salutation || undefined,
-      firstName: data.FirstName,
-      lastName: data.LastName,
-      email: data.Email,
-      phone: data.Phone,
-      title: data.Title || undefined,
-      accountId: data.AccountId,
-    };
     return {
-      data: contact,
+      data,
       status: response.status,
     };
   } catch (error) {
@@ -73,8 +63,6 @@ export async function createContact(
       };
     }
 
-    const data = await response.json();
-    console.log(data)
     return {
       data: { success: true },
       status: response.status,
@@ -104,7 +92,6 @@ export async function updateContact(
         body: JSON.stringify(body),
       }
     );
-    console.log(response);
     if (!response.ok) {
       const error = await response.json();
       return {
