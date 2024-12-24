@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     `;
     try {
         const res: APIResponse<PricebookEntry[]> = await executeSOQLQuery(query);
-        if (isError(res)) { return res; }
+        if (isError(res)) { return NextResponse.json(res.error, { status: res.status }); }
         const data = res.data;
         const groupedByFamily = data.reduce((acc, product) => {
             const family = product.Product2.Family || 'Misc';
@@ -28,6 +28,6 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(groupedByFamily, { status: 200 });
     } catch (error) {
         console.error((error as Error).message);
-        return NextResponse.json({ status: 500 });
+        return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
     }
 }
