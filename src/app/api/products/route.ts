@@ -11,12 +11,10 @@ export async function GET(req: NextRequest) {
     `;
     try {
         const res: APIResponse<PricebookEntry[]> = await executeSOQLQuery(query);
-        console.log(res)
         if (isError(res)) { return res; }
         const data = res.data;
-        console.log(data);
         const groupedByFamily = data.reduce((acc, product) => {
-            const family = product.Product2.Family || 'Uncategorized';
+            const family = product.Product2.Family || 'Misc';
             if (!acc[family]) {
                 acc[family] = [];
             }
