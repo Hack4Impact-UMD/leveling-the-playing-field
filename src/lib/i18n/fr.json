@@ -211,6 +211,10 @@
         "quantity": {
             "text": "Quantité",
             "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "Impossible de payer",
+            "note": "checkout error text"
         }
     },
     "searchPage": {

@@ -211,6 +211,10 @@
         "quantity": {
             "text": "Quantity",
             "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "Unable to checkout",
+            "note": "checkout error text"
         }
     },
     "searchPage": {

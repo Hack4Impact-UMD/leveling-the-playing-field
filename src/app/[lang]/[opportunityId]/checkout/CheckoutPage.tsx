@@ -4,8 +4,8 @@ import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
-import LoadingPage from "../../loading";
 import { useRouter } from "next/navigation";
+import Loading from "@/components/Loading";
 
 export interface Equipment {
   product: Product;  // Contains Product object with id, name, and category
@@ -18,8 +18,10 @@ export interface SportsItems {
 
 const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: string }) => {
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string; equipment: Equipment[] }[]>([]);
-  const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>();
+  const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>({});
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [checkoutError, setCheckoutError] = useState<boolean>(false);
   const loadedPosted = useRef<boolean>(false);
 
   const router = useRouter();
@@ -68,18 +70,12 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   };
 
   const handleCheckout = async () => {
-    const productList = selectedEquipment.flatMap(({ sport, equipment }) =>
+    const productList = selectedEquipment.flatMap(({ equipment }) =>
       equipment.map(({ product, quantity }) => ({
-        pricebookEntryId: product.id,
-        quantity: quantity,
+        PricebookEntryId: product.id,
+        Quantity: quantity,
       }))
     );
-    console.log(productList);
-    console.log(JSON.stringify({
-      StageName: "Posted",
-      products: productList
-    }))
-
     try {
       const response = await fetch(`/api/opportunity/${opportunityId}`, {
         method: "PUT",
@@ -87,12 +83,12 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          StageName: "Posted",
           products: productList
         }),
       });
       if (!response.ok) {
         console.warn("Failed to checkout");
+        setCheckoutError(true);
         return;
       }
       router.replace(`/${lang}/receipts`)
@@ -137,7 +133,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         }
         const body = await response.json();
         if (body.StageName == "Posted") {
-          router.replace(`/${lang}/receipts`);
+          router.push(`/${lang}/receipts`);
         }
       } catch (error) {
         console.error("Error loading opportunity data:", error)
@@ -146,12 +142,18 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }
     }
 
-    loadOpportunityStage();
-    loadProductData();
-    loadDict();
-  }, [lang]);
+    setLoading(true);
+    const loadAllData = async () => {
+      Promise.all([
+        loadOpportunityStage(),
+        loadProductData(),
+        loadDict()
+      ]).then(() => setLoading(false));
+    }
+    loadAllData();
+  }, []);
 
-  if (!dict || !sportsItemsMap || !loadedPosted.current) return <LoadingPage />;
+  if (loading) return <Loading />;
 
   const getUnselectedSports = (): string[] => {
     const allSports = Object.keys(sportsItemsMap);
@@ -168,14 +170,14 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
 
   return (
     <div className="flex flex-col items-center bg-white h-screen p-8 overflow-scroll">
-      <h1 className="text-3xl font-bold mb-4 text-black">{dict.checkoutPage.addSport.text}</h1>
+      <h1 className="text-3xl font-bold mb-4 text-black">{dict?.checkoutPage.addSport.text}</h1>
       <div className="mb-6 rounded-full w-24 h-24 bg-teal text-white flex items-center justify-center p-4">
         <ShoppingCartIcon />
       </div>
       <div className="w-full max-w-md space-y-4">
         {getUnselectedSports().length > 0 && selectedEquipment.length < Object.keys(sportsItemsMap).length && Object.keys(sportsItemsMap).length > 0 && (
           <button onClick={() => addSportSection("")} className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold">
-            {dict.checkoutPage.addSport.text}
+            {dict?.checkoutPage.addSport.text}
           </button>
         )}
         {selectedEquipment.map(({ sport, equipment }, index) => (
@@ -188,7 +190,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
             removeSelectedEquipment={removeSelectedEquipment}
             removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: string) => selectSport(index, newSport)}
-            dict={dict}
+            dict={dict || {}}
             sportsItemsMap={sportsItemsMap}
           />
         ))}
@@ -196,8 +198,9 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
 
       <div className="w-full max-w-md mt-auto">
         <button className="w-full bg-teal text-white py-3 rounded-md mt-8 font-semibold" onClick={handleCheckout}>
-          {dict.checkoutPage.checkout.text}
+          {dict?.checkoutPage.checkout.text}
         </button>
+        {checkoutError && <p className="font-cabin font-bold text-red-500">{dict?.checkoutPage.checkoutError.text}</p>}
         <div className="w-full mt-20"></div>
       </div>
     </div>
