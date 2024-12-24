@@ -34,7 +34,8 @@ export async function PUT(
       return NextResponse.json({ message: "Opportunity is already posted" }, { status: 403 });
     }
     
-    const body = await request.json();
+    let body;
+    try { body = await request.json(); } catch (error) { return NextResponse.json({ message: "Bad Request" }, { status: 400 }); }
     if (!body.products || body.products.length === 0) {
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
