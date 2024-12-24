@@ -1,23 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Product } from "@/types/types";
+import { PricebookEntry, Product } from "@/types/types";
 import { executeSOQLQuery } from "@/lib/salesforce/soqlQuery";
-
-interface QueryResponse<T> {
-    totalSize: number;
-    done: boolean;
-    records: Array<T>;
-}
-
-interface PricebookEntry {
-    Id: string;
-    Name: string;
-    Product2Id: string;
-    Product2: Product2;
-}
-
-interface Product2 {
-    Family: string;
-}
+import { APIResponse, isError } from "@/types/apiTypes";
 
 export async function GET(req: NextRequest) {
     const query = `
@@ -26,15 +10,18 @@ export async function GET(req: NextRequest) {
         WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = true ORDER BY Product2.Family, Name
     `;
     try {
-        const data: QueryResponse<PricebookEntry> = await executeSOQLQuery(query);
-        const records = data.records;
-        const groupedByFamily = records.reduce((acc, product) => {
+        const res: APIResponse<PricebookEntry[]> = await executeSOQLQuery(query);
+        console.log(res)
+        if (isError(res)) { return res; }
+        const data = res.data;
+        console.log(data);
+        const groupedByFamily = data.reduce((acc, product) => {
             const family = product.Product2.Family || 'Uncategorized';
             if (!acc[family]) {
                 acc[family] = [];
             }
             acc[family].push({
-                id: product.Id,
+                id: product.Id || '',
                 name: product.Name,
                 category: family,
             });
