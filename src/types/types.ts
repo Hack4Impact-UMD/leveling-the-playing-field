@@ -1,32 +1,55 @@
 export interface Account {
-  id: string;
-  recordType: "Beneficiary";
-  name: string;
-  phoneNumber: string;
-  email: string;
-  billingAddress: Address;
-  market: Market
+  Id: string;
+  Name: string;
+  Phone: string;
+  Email__c: string;
+  BillingAddress: Address;
 }
 
 export interface Contact {
-  id: string;
-  salutation?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  title?: string;
-  accountId: string;
+  Id: string;
+  Salutation?: string;
+  FirstName: string;
+  LastName: string;
+  Name: string;
+  Email: string;
+  Phone: string;
+  Title?: string;
+  AccountId: string;
 }
 
 export interface Opportunity {
-  id: string;
-  name: string;
-  closeDate: Date;
-  stage: Stage;
-  giftType: GiftType;
-  market: Market;
-  primaryContactId: string;
+  Id: string;
+  Name: string;
+  CloseDate: Date;
+  StageName: Stage;
+  Gift_Type__c: GiftType;
+  Market__c: Market;
+  Primary_Contact__c: string;
+}
+
+export interface OpportunityLineItem {
+  Id?: string;
+  OpportunityId: string;
+  PricebookEntryId: string;
+  Quantity: number;
+UnitPrice?: number;
+}
+
+export interface PricebookEntry {
+  Id?: string;
+  Name: string;
+  Product2Id?: string;
+  Product2: Product2;
+}
+
+interface Product2 {
+  Family: string;
+}
+
+export interface CheckoutItem {
+  PricebookEntryId: string;
+  Quantity: number;
 }
 
 export type Stage = "Site Visit/Call" | "Posted";
@@ -43,7 +66,7 @@ export interface Address {
   city: string;
   state: string;
   country: string;
-  zipCode: number;
+  postalCode: string;
 }
 
 export enum Market {
