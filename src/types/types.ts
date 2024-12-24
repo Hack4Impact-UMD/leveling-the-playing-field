@@ -7,7 +7,7 @@ export interface Account {
 }
 
 export interface Contact {
-  Id: string;
+  Id?: string;
   Salutation?: string;
   FirstName: string;
   LastName: string;
@@ -19,7 +19,7 @@ export interface Contact {
 }
 
 export interface Opportunity {
-  Id: string;
+  Id?: string;
   Name: string;
   CloseDate: Date;
   StageName: Stage;
