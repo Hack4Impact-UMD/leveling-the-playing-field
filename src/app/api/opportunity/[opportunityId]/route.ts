@@ -1,28 +1,18 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { refreshAccessToken } from '@/lib/salesforce/authorization';
+import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
+import { APIResponse, isError } from '@/types/apiTypes';
+import { createOpportunityLineItem, deleteOpportunity, getOpportunityById, updateOpportunity, updateOpportunityLineItem } from '@/lib/salesforce/database/opportunity';
+import { CheckoutItem, Opportunity, OpportunityLineItem, PricebookEntry } from '@/types/types';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(error, { status: response.status });
-    }
-
-    const data = await response.json();
-    return NextResponse.json(data, { status: 200 });
+    const res = await getOpportunityById(params.opportunityId, accessToken);
+    return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
     console.error('Salesforce API Error:', error);
     return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
@@ -30,62 +20,75 @@ export async function GET(
 }
 
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
+    const { opportunityId } = params;
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-    const body = await request.json();
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(error, { status: response.status });
+    
+    const postedCheckRes: APIResponse<Opportunity> = await getOpportunityById(opportunityId, accessToken);
+    if (isError(postedCheckRes)) {
+      return NextResponse.json({ error: "Error processing request" }, { status: 500 });
+    } else if (postedCheckRes.data.StageName === "Posted") {
+      return NextResponse.json({ message: "Opportunity is already posted" }, { status: 403 });
+    }
+    
+    let body;
+    try { body = await request.json(); } catch (error) { return NextResponse.json({ message: "Bad Request" }, { status: 400 }); }
+    if (!body.products || body.products.length === 0) {
+      return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
 
-    return NextResponse.json({ success: true }, { status: 200 });
+    const responses = await Promise.all(body.products.map(async (product: CheckoutItem): Promise<APIResponse<{ success: true }>> => {
+      const existenceCheckRes: APIResponse<OpportunityLineItem[]> = await executeSOQLQuery(`SELECT Id FROM OpportunityLineItem WHERE OpportunityId = '${opportunityId}' AND PricebookEntryId = '${product.PricebookEntryId}'`);
+      if (isError(existenceCheckRes)) {
+        return existenceCheckRes;
+      }
+      const exists = existenceCheckRes.data.length > 0;
+      if (exists) {
+        return updateOpportunityLineItem(existenceCheckRes.data[0].Id || "", accessToken, { Quantity: product.Quantity });
+      }
+
+      const unitPriceRes: APIResponse<{ UnitPrice: number }[]> = await executeSOQLQuery(`SELECT UnitPrice FROM PricebookEntry WHERE Id = '${product.PricebookEntryId}'`)
+      return isError(unitPriceRes) ? unitPriceRes :
+        createOpportunityLineItem({
+          OpportunityId: opportunityId,
+          ...product,
+          UnitPrice: unitPriceRes.data[0].UnitPrice
+        }, accessToken)
+    }))
+
+    responses.forEach((res: APIResponse<{ success: true }>) => {
+      if (isError(res)) {
+        return NextResponse.json({ message: "Unable to checkout all items"}, { status: 500 })
+      }
+    });
+
+    const res = await updateOpportunity(opportunityId, accessToken, { StageName: "Posted" });
+    return NextResponse.json(isError(res) ? res.error : { success: true }, { status: res.status === 204 ? 200 : res.status });
   } catch (error) {
-    console.error('Salesforce API Error:', error);
-    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+    console.error("Salesforce API Error:", error);
+    return NextResponse.json(
+      { error: "Error processing request" },
+      { status: 500 }
+    );
   }
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-    
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/sobjects/Opportunity/${params.opportunityId}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(error, { status: response.status });
-    }
-
-    return NextResponse.json({ success: true }, { status: 200 });
+    const res = await deleteOpportunity(params.opportunityId, accessToken);
+    return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
-    console.error('Salesforce API Error:', error);
-    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
+    console.error("Salesforce API Error:", error);
+    return NextResponse.json(
+      { error: "Error processing request" },
+      { status: 500 }
+    );
   }
 } 

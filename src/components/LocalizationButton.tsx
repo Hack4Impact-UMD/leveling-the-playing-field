@@ -22,7 +22,7 @@ export default function LocalizationButton() {
     return (
         <div className="relative inline-block">
             {isOpen && (
-                <div className="absolute bottom-full mb-2 w-40 bg-white shadow-lg rounded-md z-10">
+                <div className="absolute right-0 bottom-full mb-2 w-40 bg-white shadow-lg rounded-md z-10">
                     <div
                         onClick={() => selectLanguage("English")}
                         className="flex items-center px-2 py-2 text-gray-800 hover:bg-gray-200 cursor-pointer space-x-2"
