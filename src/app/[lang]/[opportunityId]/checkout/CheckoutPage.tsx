@@ -77,13 +77,13 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }))
     );
     try {
-      const response = await fetch(`/api/opportunity/${opportunityId}`, {
+      const response = await fetch(`/api/opportunities/${opportunityId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          products: productList
+          products: productList,
         }),
       });
       if (!response.ok) {
@@ -122,7 +122,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
 
     const loadOpportunityStage = async () => {
       try {
-        const response = await fetch(`/api/opportunity/${opportunityId}`, {
+        const response = await fetch(`/api/opportunities/${opportunityId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
