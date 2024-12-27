@@ -2,7 +2,7 @@ async function testSalesforceOperations() {
   try {
     // 1. create an opportunity
     console.log('1. Testing CREATE...');
-    const createResponse = await fetch('http://localhost:3000/api/opportunity', {
+    const createResponse = await fetch('http://localhost:3000/api/opportunities', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,13 +25,13 @@ async function testSalesforceOperations() {
 
     // 2. get the opportunity
     console.log('\n2. Testing GET...');
-    const getResponse = await fetch(`http://localhost:3000/api/opportunity/${opportunityId}`);
+    const getResponse = await fetch(`http://localhost:3000/api/opportunities/${opportunityId}`);
     const getResult = await getResponse.json();
     console.log('Get Result:', getResult);
 
     // 3. update the opportunity
     console.log('\n3. Testing UPDATE...');
-    const updateResponse = await fetch(`http://localhost:3000/api/opportunity/${opportunityId}`, {
+    const updateResponse = await fetch(`http://localhost:3000/api/opportunities/${opportunityId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ async function testSalesforceOperations() {
 
     // 4. delete the opportunity
     console.log('\n4. Testing DELETE...');
-    const deleteResponse = await fetch(`http://localhost:3000/api/opportunity/${opportunityId}`, {
+    const deleteResponse = await fetch(`http://localhost:3000/api/opportunities/${opportunityId}`, {
       method: 'DELETE'
     });
     const deleteResult = await deleteResponse.json();
