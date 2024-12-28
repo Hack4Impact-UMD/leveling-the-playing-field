@@ -1,15 +1,17 @@
 import { APIResponse, SOQLResponse } from "@/types/apiTypes";
 import { refreshAccessToken } from "./authorization";
 
-export async function executeSOQLQuery<T>(query: string): Promise<APIResponse<T[]>> {
+export async function executeSOQLQuery<T>(query: string, accessToken?: string): Promise<APIResponse<T[]>> {
   try {
-    const access_token = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    if (!accessToken) {
+      accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    }
     const url = new URL("/services/data/v62.0/query", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
     url.searchParams.set("q", query);
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${access_token}`, // Use your Salesforce OAuth token
+        Authorization: `Bearer ${accessToken}`, // Use your Salesforce OAuth token
         "Content-Type": "application/json",
       },
     });
