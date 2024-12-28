@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { refreshAccessToken } from '@/lib/salesforce/authorization';
 import { Contact } from '@/types/types';
-import { createContact } from '@/lib/salesforce/database/contact';
+import { createContact, getContactsByAccountId } from '@/lib/salesforce/database/contact';
 import { isError } from '@/types/apiTypes';
 
 export async function GET(request: NextRequest) {
-  const accountId = request.nextUrl.searchParams.get("accountId");
+  const accountId: string | null = request.nextUrl.searchParams.get("accountId");
 
   if (!accountId) {
     return NextResponse.json(
@@ -15,29 +15,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const accessToken = await refreshAccessToken(
-      process.env.SALESFORCE_REFRESH_TOKEN || ""
-    );
-
-    const query = `SELECT Id, FirstName, LastName, Email FROM Contact WHERE AccountId = '${accountId}'`;
-    const response = await fetch(
-      `${
-        process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN
-      }/services/data/v56.0/query?q=${encodeURIComponent(query)}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.json();
-      return NextResponse.json(error, { status: response.status });
-    }
-
-    const data = await response.json();
-    return NextResponse.json({ contacts: data.records }, { status: 200 });
+    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const res = await getContactsByAccountId(accountId, accessToken);
+    return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
     console.error("Salesforce API Error:", error);
     return NextResponse.json(

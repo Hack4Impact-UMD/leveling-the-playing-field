@@ -1,5 +1,6 @@
 import { APIResponse, SOQLResponse } from "@/types/apiTypes";
 import { Contact } from "@/types/types";
+import { executeSOQLQuery } from "../soqlQuery";
 
 export async function getContactById(
   contactId: string,
@@ -36,6 +37,12 @@ export async function getContactById(
       status: 500,
     };
   }
+}
+
+export async function getContactsByAccountId(accountId: string, accessToken?: string): Promise<APIResponse<Omit<Contact, "AccountId">[]>> {
+  return executeSOQLQuery(`SELECT Id, Salutation, FirstName, LastName, Name, Email, Phone, Title
+                           FROM Contact
+                           WHERE AccountId = '${accountId}'`, accessToken);
 }
 
 export async function createContact(
