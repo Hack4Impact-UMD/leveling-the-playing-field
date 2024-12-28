@@ -195,6 +195,26 @@
         "selectedEquipment": {
             "text": "Seleccionar Equipo",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VERIFICAR",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Seleccione Deporte",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Seleccionado:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Cantidad",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "No se puede realizar el pago",
+            "note": "checkout error text"
         }
     },
     "searchPage": {

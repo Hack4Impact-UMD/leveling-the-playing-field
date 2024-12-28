@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
-
     const query = `SELECT Id, Name, StageName, CloseDate FROM Opportunity WHERE AccountId = '${accountId}' AND StageName = '${status}'`;
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN}/services/data/v56.0/query?q=${encodeURIComponent(query)}`,
