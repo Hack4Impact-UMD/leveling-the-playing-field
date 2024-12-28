@@ -1,4 +1,4 @@
-import { APIResponse, SOQLResponse } from "@/types/apiTypes";
+import { APIResponse } from "@/types/apiTypes";
 import { Contact } from "@/types/types";
 import { executeSOQLQuery } from "../soqlQuery";
 
