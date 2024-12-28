@@ -26,6 +26,7 @@ export interface Opportunity {
   Gift_Type__c: GiftType;
   Market__c: Market;
   Primary_Contact__c: string;
+  AccountId: string
 }
 
 export interface OpportunityLineItem {
@@ -33,7 +34,7 @@ export interface OpportunityLineItem {
   OpportunityId: string;
   PricebookEntryId: string;
   Quantity: number;
-UnitPrice?: number;
+  UnitPrice?: number;
 }
 
 export interface PricebookEntry {
