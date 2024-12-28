@@ -1,0 +1,296 @@
+{
+    "loginPage": {
+        "title": {
+            "text": "Bienvenue!",
+            "note": "Header text for the page"
+        },
+        "loginButton": {
+            "text": "Se connecter avec Google",
+            "note": "login button"
+        },
+        "application": {
+            "text": "Application de l'Organisation",
+            "note": "lower button text"
+        }
+    },
+    "profilePage": {
+        "title": {
+            "text": "Profil de l'Organisation",
+            "note": "Header text"
+        },
+        "contact": {
+            "header": {
+                "text": "Personnes de Contact",
+                "note": "text in top green box"
+            },
+            "name": {
+                "text": "Nom",
+                "note": "text above name fill in the blank"
+            },
+            "phone": {
+                "text": "Numéro de Téléphone",
+                "note": "text above phone number fill in the blank"
+            },
+            "email": {
+                "text": "Email",
+                "note": "text above email fill in the blank"
+            },
+            "button": {
+                "text": "Ajouter un Contact",
+                "note": "text for the add contact button"
+            },
+            "deletePopup": {
+                "confirmationText": {
+                    "text": "Êtes-vous sûr de vouloir supprimer ce contact?",
+                    "note": "delete confirmation text"
+                },
+                "yes": {
+                    "text": "Oui",
+                    "note": "yes button text"
+                },
+                "no": {
+                    "text": "Non",
+                    "note": "no button text"
+                }
+            }
+        },
+        "location": {
+            "header": {
+                "text": "Emplacement",
+                "note": "text in second green box"
+            },
+            "addressOne": {
+                "text": "Adresse Ligne 1",
+                "note": "text above 1st address fill in the blank"
+            },
+            "addressTwo": {
+                "text": "Adresse Ligne 2",
+                "note": "text above 2nd address fill in the blank"
+            },
+            "city": {
+                "text": "Ville",
+                "note": "text above city fill in the blank"
+            },
+            "state": {
+                "text": "État",
+                "note": "text above State fill in the blank"
+            },
+            "zipcode": {
+                "text": "Code Postal",
+                "note": "text above zipcode fill in the blank"
+            },
+            "country": {
+                "text": "Pays",
+                "note": "text above Country fill in the blank"
+            }
+        }
+    },
+    "number": {
+        "header": {
+            "text": "Numéro de Contact",
+            "note": "text in third green box"
+        },
+        "box": {
+            "text": "Numéro",
+            "note": "text above phone fill in the blank"
+        }
+    },
+    "appointmentsPage": {
+        "title": {
+            "text": "Rendez-vous",
+            "note": "Header text"
+        },
+        "lowerTitle": {
+            "text": "Prendre un Nouveau Rendez-vous",
+            "note": "Text above button"
+        },
+        "button": {
+            "text": "Sélectionner l'Emplacement",
+            "note": "text inside the button"
+        },
+        "appointmentDetails": {
+            "text": "Rendez-vous à Venir",
+            "note": "Text within upcoming appointment box"
+        },
+        "confirmationPopup": {
+            "confirmationText": {
+                "text": "Êtes-vous sûr de vouloir sélectionner cet emplacement?",
+                "note": "popup prompt"
+            },
+            "yes": {
+                "text": "Oui",
+                "note": "label for yes button"
+            },
+            "no": {
+                "text": "Non",
+                "note": "label for no button"
+            }
+        }
+    },
+    "loadingPage": {
+        "text": "Chargement de la page, veuillez patienter...",
+        "note": "loading text"
+    },
+    "pageNotFound": {
+        "center": {
+            "text": "Page Introuvable",
+            "note": "Center text"
+        },
+        "button": {
+            "text": "Retour",
+            "note": "Button Text"
+        }
+    },
+    "receiptsPage": {
+        "title": {
+            "text": "Reçus",
+            "note": "Header text"
+        },
+        "viewButton": {
+            "text": "Voir le Reçu",
+            "note": "view receipt text button"
+        },
+        "orderDetails": {
+            "warehouse": {
+                "text": "Emplacement de l'Entrepôt",
+                "note": "warehouse location text"
+            },
+            "date": {
+                "text": "Date d'Achat",
+                "note": "date of purchase for receipt text"
+            },
+            "time": {
+                "text": "Heure",
+                "note": "time of receipt text"
+            },
+            "contact": {
+                "text": "Personne de Contact",
+                "note": "point of contact text label"
+            },
+            "total": {
+                "text": "Total des Articles Vérifiés",
+                "note": "total number of items text label"
+            },
+            "orderInfo": {
+                "items": {
+                    "text": "Articles",
+                    "note": "Items list label"
+                },
+                "quantity": {
+                    "text": "Quantité",
+                    "note": "note list label"
+                }
+            }
+        }
+    },
+    "checkoutPage": {
+        "title": {
+            "text": "Ajouter un Équipement",
+            "note": "Header text"
+        },
+        "addSport": {
+            "text": "Ajouter un Sport",
+            "note": "Button text to select sport"
+        },
+        "selectedEquipment": {
+            "text": "Sélectionner l'Équipement",
+            "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VÉRIFIER",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Sélectionnez le sport",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Sélectionner:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantité",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "Impossible de payer",
+            "note": "checkout error text"
+        }
+    },
+    "searchPage": {
+        "searchByEquipment": {
+            "searchBar": {
+                "text": "Recherche par Équipement",
+                "note": "text within the search bar"
+            },
+            "filter": {
+                "header": {
+                    "text": "Filtrer",
+                    "note": "Header text for orange filter box"
+                },
+                "regionFilter": {
+                    "text": "Sélectionner la région",
+                    "note": "text for region drop down"
+                },
+                "sportFilter": {
+                    "text": "Sélectionner le sport",
+                    "note": "text for sport drop down"
+                },
+                "reset": {
+                    "text": "Réinitialiser",
+                    "note": "reset for drop down text"
+                },
+                "apply": {
+                    "text": "Appliquer",
+                    "note": "button text to apply filters"
+                }
+            },
+            "sort": {
+                "header": {
+                    "text": "Trier par",
+                    "note": "text by equipment/location toggle"
+                },
+                "apply": {
+                    "text": "Appliquer",
+                    "note": "button text to apply filters"
+                }
+            }
+        },
+        "searchByLocation": {
+            "searchBar": {
+                "text": "Recherche par Emplacement",
+                "note": "text within the search bar in light teal box"
+            },
+            "filter": {
+                "header": {
+                    "text": "Filtrer",
+                    "note": "Header text for orange filter box"
+                },
+                "sportFilter": {
+                    "header": {
+                        "text": "Catégorie de Sport",
+                        "note": "header text for the drop down"
+                    },
+                    "box": {
+                        "text": "Sélectionner le sport",
+                        "note": "text inside the sport drop down"
+                    }
+                },
+                "reset": {
+                    "text": "Réinitialiser",
+                    "note": "reset for drop down text"
+                },
+                "apply": {
+                    "text": "Appliquer",
+                    "note": "button text to apply filters"
+                }
+            },
+            "locations": {
+                "available": {
+                    "text": "Équipement Disponible",
+                    "note": "text showing equipment available in potential locations, appears with/without toggling dropdown"
+                }
+            }
+        }
+    }
+}
