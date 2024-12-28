@@ -1,5 +1,6 @@
 import { APIResponse, SOQLResponse } from "@/types/apiTypes";
-import { Opportunity, OpportunityLineItem } from "@/types/types";
+import { Opportunity, OpportunityLineItem, Stage } from "@/types/types";
+import { executeSOQLQuery } from "../soqlQuery";
 
 export async function getOpportunityById(
   opportunityId: string,
@@ -31,6 +32,13 @@ export async function getOpportunityById(
       status: 500,
     };
   }
+}
+
+export async function getOpportunitiesByAccountId(accountId: string, stageName?: Stage, accessToken?: string): Promise<APIResponse<Omit<Opportunity, "AccountId">[]>> {
+  console.log(accountId, stageName, accessToken)
+  return executeSOQLQuery(`SELECT Id, Name, CloseDate, StageName, Gift_Type__c, Market__c, Primary_Contact__c
+                           FROM Opportunity
+                           WHERE AccountId = '${accountId}'${stageName ? ` AND StageName = '${stageName}'` : ''}`, accessToken);
 }
 
 export async function createOpportunity(
