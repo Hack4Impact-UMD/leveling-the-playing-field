@@ -1,6 +1,11 @@
 // page.tsx
-import ThankYouPage from './thankyouPage';
+import { Locale } from '@/lib/i18n/dictionaries';
+import ThankYouPage from './ThankYouPage';
 
-export default function ThankYouPageWrapper() {
-  return <ThankYouPage />;
+interface ThankYouPageParams {
+  lang: Locale;
+}
+
+export default function ThankYouPageWrapper({ params }: { params: ThankYouPageParams }) {
+  return <ThankYouPage {...params}/>;
 }

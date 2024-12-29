@@ -292,5 +292,19 @@
                 }
             }
         }
+    },
+    "thankYouPage": {
+        "thankYou": {
+            "text": "Merci!",
+            "note": "Thank you title text"
+        },
+        "successfulCheckout": {
+            "text": "Vous avez vérifié avec succès!",
+            "note": "Successful checkout text"
+        },
+        "viewReceipt": {
+            "text": "Afficher le reçu",
+            "note": "button text to redirect to receipts page"
+        }
     }
 }
