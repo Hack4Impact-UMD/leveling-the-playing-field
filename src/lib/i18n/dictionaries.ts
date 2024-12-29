@@ -1,4 +1,4 @@
-type Locale = "en" | "es" | "fr";
+export type Locale = "en" | "es" | "fr";
 
 const dictionaries = {
   en: () => import('./en.json').then((module) => module.default),

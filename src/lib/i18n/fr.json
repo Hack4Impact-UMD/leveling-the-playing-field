@@ -199,6 +199,26 @@
         "selectedEquipment": {
             "text": "Sélectionner l'Équipement",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VÉRIFIER",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Sélectionnez le sport",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Sélectionner:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantité",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "Impossible de payer",
+            "note": "checkout error text"
         }
     },
     "searchPage": {
@@ -275,6 +295,20 @@
                     "note": "text showing equipment available in potential locations, appears with/without toggling dropdown"
                 }
             }
+        }
+    },
+    "thankYouPage": {
+        "thankYou": {
+            "text": "Merci!",
+            "note": "Thank you title text"
+        },
+        "successfulCheckout": {
+            "text": "Vous avez vérifié avec succès!",
+            "note": "Successful checkout text"
+        },
+        "viewReceipt": {
+            "text": "Afficher le reçu",
+            "note": "button text to redirect to receipts page"
         }
     }
 }
