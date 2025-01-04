@@ -9,6 +9,7 @@ import {
 } from "@/components/shadcn/Dialog"
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
+import { Opportunity, OpportunityLineItem } from "@/types/types";
 
 const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
@@ -31,25 +32,6 @@ interface ReceiptsPageDict {
   };
 }
 
-interface Item {
-  name: string;
-  quantity: number;
-}
-
-interface SportItems {
-  sport: string;
-  items: Item[];
-}
-
-interface Receipt {
-  market: string;
-  dateOfOrder: string;
-  time: string;
-  pointOfContact: string;
-  itemsCheckedOut: number;
-  itemList: SportItems[];
-}
-
 interface ReceiptsPageProps {
   lang: Locale;
 }
@@ -57,7 +39,7 @@ interface ReceiptsPageProps {
 export default function ReceiptsPage(props: ReceiptsPageProps) {
   const { lang } = props;
   const [dict, setDict] = useState<ReceiptsPageDict | null>(null);
-  const [receipts, setReceipts] = useState<Receipt[]>([]);
+  const [receipts, setReceipts] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,34 +48,23 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
       const dictionary = await getDict(lang);
       setDict(dictionary);
     };
-    fetchDict();
-  }, []);
 
-  useEffect(() => {
     const fetchReceipts = async () => {
       try {
-        const response = await fetch(`/api/opportunity?accountId=${ACCOUNT_ID}&status=Posted`);
+        const response = await fetch(`/api/opportunities?accountId=${ACCOUNT_ID}&stage=Posted`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to fetch opportunities');
         }
         const data = await response.json();
-        
-        // Validate that records exist
-        if (!data.records || !Array.isArray(data.records)) {
-          throw new Error('Invalid response format');
-        }
-        
-        setReceipts(data.records);
+        setReceipts(data);
       } catch (err) {
         setError((err as Error).message);
         console.error('Error fetching receipts:', err);
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchReceipts();
+    Promise.all([fetchDict(), fetchReceipts()]).then(() => setLoading(false))
   }, []);
 
   if (loading) return <Loading />;
