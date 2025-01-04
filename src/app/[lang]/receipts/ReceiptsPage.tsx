@@ -74,7 +74,15 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
     </div>
   );
 
-  const sortedReceipts = receipts.sort((a, b) => new Date(b.dateOfOrder).getTime() - new Date(a.dateOfOrder).getTime());
+  const sortedReceipts = receipts.sort((a, b) => new Date(b.CloseDate).getTime() - new Date(a.CloseDate).getTime());
+
+  const getTotalItems = (receipt: Opportunity) => {
+    let totalItems = 0;
+    receipt.LineItems?.forEach((lineItem: OpportunityLineItem) => {
+      totalItems += lineItem.Quantity;
+    })
+    return totalItems;
+  }
 
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
@@ -90,32 +98,26 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
                   <span className="font-bold mr-1">
                     {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
                   </span>
-                  <span>{receipt.market}</span>
+                  <span>{receipt.Market__c}</span>
                 </div>
                 <div className="text-sm md:text-base">
                   <span className="font-bold mr-1">
                     {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
                   </span>
-                  <span>{receipt.dateOfOrder}</span>
-                </div>
-                <div className="text-sm md:text-base">
-                  <span className="font-bold mr-1">
-                    {dict?.receiptsPage?.orderDetails?.time?.text ?? "Time"}:
-                  </span>
-                  <span>{receipt.time}</span>
+                  <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
                 </div>
                 <div className="text-sm md:text-base">
                   <span className="font-bold mr-1">
                     {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
                   </span>
-                  <span>{receipt.pointOfContact}</span>
+                  <span>{receipt.Primary_Contact__c}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm md:text-base">
                   <div>
                     <span className="font-bold mr-1">
                       {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
                     </span>
-                    <span>{receipt.itemsCheckedOut}</span>
+                    <span>{getTotalItems(receipt)}</span>
                   </div>
                   <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-sm md:text-base">
                     {dict?.receiptsPage?.viewButton?.text ?? "View Receipt"}
@@ -134,35 +136,29 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
                   </span>
-                  <span>{receipt.market}</span>
+                  <span>{receipt.Market__c}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
                   </span>
-                  <span>{receipt.dateOfOrder}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.time?.text ?? "Time"}:
-                  </span>
-                  <span>{receipt.time}</span>
+                  <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
                   </span>
-                  <span>{receipt.pointOfContact}</span>
+                  <span>{receipt.Primary_Contact__c}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="font-bold">
                     {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
                   </span>
-                  <span>{receipt.itemsCheckedOut}</span>
+                  <span>{getTotalItems(receipt)}</span>
                 </div>
               </div>
               <div className="flex flex-wrap">
-                {receipt.itemList.map((sportItem, sportIndex) => (
+                {receipt.LineItems?.map((sportItem, sportIndex) => (
                   <div key={sportIndex} className="w-full md:w-1/2 px-2 mb-4">
                     <div className="bg-orange-500 text-center text-white rounded-full px-2 py-1 mb-2 w-fit mx-auto">
                       <h3 className="font-bold text-sm">{sportItem.sport}</h3>
