@@ -1,19 +1,19 @@
 "use client";  
 
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/Select"
 import SearchIcon from '@/components/icons/SearchIcon';
 import FilterIcon from '@/components/icons/FilterIcon';
 import FilterComponent from './FilterComponent';
 import ListComponent from './ListComponent';
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/Input"
 
 interface Equipment {
   name: string;
