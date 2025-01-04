@@ -32,10 +32,10 @@ export default function ReceiptModal(props: ReceiptModalProps) {
                 </tr>
               </thead>
               <tbody>
-                {receipt.productsGroupedByFamily[family].map((item, itemIndex) => (
-                  <tr key={itemIndex}>
-                    <td className="py-1 text-center">{item.PricebookEntry.Name}</td>
-                    <td className="py-1 text-center">{item.Quantity}</td>
+                {receipt.productsGroupedByFamily[family].map((product, productIndex) => (
+                  <tr key={productIndex}>
+                    <td className="py-1 text-center">{product.PricebookEntry.Name}</td>
+                    <td className="py-1 text-center">{product.Quantity}</td>
                   </tr>
                 ))}
               </tbody>
