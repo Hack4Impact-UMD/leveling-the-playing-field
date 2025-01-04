@@ -21,18 +21,20 @@ export interface Contact {
 export interface Opportunity {
   Id?: string;
   Name: string;
-  CloseDate: Date;
+  CloseDate: string;
   StageName: Stage;
   Gift_Type__c: GiftType;
   Market__c: Market;
   Primary_Contact__c: string;
-  AccountId: string
+  AccountId: string;
+  LineItems?: OpportunityLineItem[];
 }
 
 export interface OpportunityLineItem {
   Id?: string;
-  OpportunityId: string;
+  OpportunityId?: string;
   PricebookEntryId: string;
+  PricebookEntry: PricebookEntry;
   Quantity: number;
   UnitPrice?: number;
 }

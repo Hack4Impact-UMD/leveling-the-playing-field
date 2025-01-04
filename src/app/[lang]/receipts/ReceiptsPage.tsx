@@ -10,6 +10,7 @@ import {
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
 import { Opportunity, OpportunityLineItem } from "@/types/types";
+import ReceiptModal from "./ReceiptModal";
 
 const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
@@ -82,6 +83,23 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
       totalItems += lineItem.Quantity;
     })
     return totalItems;
+  }
+
+  const aggregateLineItems = (receipt: Opportunity) => {
+    const productsGroupedByFamily: Record<string, OpportunityLineItem[]> = {};
+    receipt.LineItems?.forEach((lineItem: OpportunityLineItem) => {
+      const family = lineItem.PricebookEntry.Product2.Family;
+      if (!productsGroupedByFamily[family]) {
+        productsGroupedByFamily[family] = [lineItem];
+      } else { 
+        productsGroupedByFamily[family].push(lineItem);
+      }
+    });
+    return {
+      ...receipt,
+      LineItems: undefined,
+      productsGroupedByFamily
+    }
   }
 
   return (
@@ -157,37 +175,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
                   <span>{getTotalItems(receipt)}</span>
                 </div>
               </div>
-              <div className="flex flex-wrap">
-                {receipt.LineItems?.map((sportItem, sportIndex) => (
-                  <div key={sportIndex} className="w-full md:w-1/2 px-2 mb-4">
-                    <div className="bg-orange-500 text-center text-white rounded-full px-2 py-1 mb-2 w-fit mx-auto">
-                      <h3 className="font-bold text-sm">{sportItem.sport}</h3>
-                    </div>
-                    <div className="border-teal border-2 rounded-lg p-2">
-                      <table className="table-auto w-full text-left text-sm md:text-base">
-                        <thead>
-                          <tr>
-                            <th className="py-1 text-center">
-                              {dict?.receiptsPage?.orderDetails?.orderInfo?.items?.text ?? "Item"}
-                            </th>
-                            <th className="py-1 text-center">
-                              {dict?.receiptsPage?.orderDetails?.orderInfo?.quantity?.text ?? "Quantity"}
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {sportItem.items.map((item, itemIndex) => (
-                            <tr key={itemIndex}>
-                              <td className="py-1 text-center">{item.name}</td>
-                              <td className="py-1 text-center">{item.quantity}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ReceiptModal receipt={aggregateLineItems(receipt)} dict={dict!} />
             </DialogContent>
           </Dialog>
         ))}
