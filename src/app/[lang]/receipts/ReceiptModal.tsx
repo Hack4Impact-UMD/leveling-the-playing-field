@@ -16,36 +16,31 @@ export default function ReceiptModal(props: ReceiptModalProps) {
     <DialogContent className="bg-teal-light text-white border-2 border-teal w-[85%] max-w-[500px] max-h-[90vh] rounded-3xl overflow-y-scroll">
       <DialogHeader>
         <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">
-          {dict?.receiptsPage?.orderDetails?.title?.text ?? "ORDER DETAILS"}
+          {dict.receiptsPage.orderDetails.title.text}
         </DialogTitle>
       </DialogHeader>
       <div className="space-y-2 mb-4 font-cabin-condensed text-sm md:text-base">
         <div className="flex justify-between">
           <span className="font-bold">
-            {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
+            {dict.receiptsPage.orderDetails.warehouse.text}
           </span>
           <span>{receipt.Market__c}</span>
         </div>
         <div className="flex justify-between">
           <span className="font-bold">
-            {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}
-            :
+            {dict.receiptsPage.orderDetails.date.text}
           </span>
           <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
         </div>
         <div className="flex justify-between">
           <span className="font-bold">
-            {dict?.receiptsPage?.orderDetails?.contact?.text ??
-              "Point of Contact"}
-            :
+            {dict.receiptsPage.orderDetails.contact.text}
           </span>
           <span>{receipt.Primary_Contact__c}</span>
         </div>
         <div className="flex justify-between">
           <span className="font-bold">
-            {dict?.receiptsPage?.orderDetails?.total?.text ??
-              "Total Checked Out Items"}
-            :
+            {dict.receiptsPage.orderDetails.total.text}
           </span>
           <span>{totalItems}</span>
         </div>
@@ -61,12 +56,10 @@ export default function ReceiptModal(props: ReceiptModalProps) {
                 <thead>
                   <tr>
                     <th className="py-1 text-center">
-                      {dict?.receiptsPage?.orderDetails?.orderInfo?.items
-                        ?.text ?? "Item"}
+                      {dict.receiptsPage.orderDetails.orderInfo.items.text}
                     </th>
                     <th className="py-1 text-center">
-                      {dict?.receiptsPage?.orderDetails?.orderInfo?.quantity
-                        ?.text ?? "Quantity"}
+                      {dict.receiptsPage.orderDetails.orderInfo.quantity.text}
                     </th>
                   </tr>
                 </thead>

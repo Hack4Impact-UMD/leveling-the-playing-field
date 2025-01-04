@@ -8,32 +8,13 @@ import ReceiptModal from "./ReceiptModal";
 
 const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
-interface ReceiptsPageDict {
-  receiptsPage: {
-    title: { text: string };
-    viewButton: { text: string };
-    orderDetails: {
-      title: { text: string };
-      warehouse: { text: string };
-      date: { text: string };
-      time: { text: string };
-      contact: { text: string };
-      total: { text: string };
-      orderInfo: {
-        items: { text: string };
-        quantity: { text: string };
-      };
-    };
-  };
-}
-
 interface ReceiptsPageProps {
   lang: Locale;
 }
 
 export default function ReceiptsPage(props: ReceiptsPageProps) {
   const { lang } = props;
-  const [dict, setDict] = useState<ReceiptsPageDict | null>(null);
+  const [dict, setDict] = useState<{ [key: string]: any }>({});
   const [receipts, setReceipts] = useState<Opportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -99,7 +80,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
       <h2 className="text-black text-3xl md:text-3xl font-bree-serif">
-        {dict?.receiptsPage?.title?.text ?? "Receipts"}
+        {dict.receiptsPage.title.text}
       </h2>
       <div className="mt-8 md:w-3/5 w-[90%]">
         {sortedReceipts.map((receipt, index) => (
@@ -108,31 +89,31 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
               <div className="px-8 py-2 w-full text-left text-white">
                 <div className="text-sm md:text-base">
                   <span className="font-bold mr-1">
-                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
+                    {dict.receiptsPage.orderDetails.warehouse.text}
                   </span>
                   <span>{receipt.Market__c}</span>
                 </div>
                 <div className="text-sm md:text-base">
                   <span className="font-bold mr-1">
-                    {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
+                    {dict.receiptsPage.orderDetails.date.text}
                   </span>
                   <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
                 </div>
                 <div className="text-sm md:text-base">
                   <span className="font-bold mr-1">
-                    {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
+                    {dict.receiptsPage.orderDetails.contact.text}
                   </span>
                   <span>{receipt.Primary_Contact__c}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm md:text-base">
                   <div>
                     <span className="font-bold mr-1">
-                      {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
+                      {dict.receiptsPage.orderDetails.total.text}
                     </span>
                     <span>{getTotalItems(receipt)}</span>
                   </div>
                   <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-sm md:text-base">
-                    {dict?.receiptsPage?.viewButton?.text ?? "View Receipt"}
+                    {dict.receiptsPage.viewButton.text}
                   </DialogTrigger>
                 </div>
               </div>
