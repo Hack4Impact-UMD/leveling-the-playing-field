@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/shadcn/Dialog"
-import { getDict } from "@/lib/i18n/dictionaries";
+import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
 
 const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
@@ -50,7 +50,12 @@ interface Receipt {
   itemList: SportItems[];
 }
 
-export default function ReceiptsPage() {
+interface ReceiptsPageProps {
+  lang: Locale;
+}
+
+export default function ReceiptsPage(props: ReceiptsPageProps) {
+  const { lang } = props;
   const [dict, setDict] = useState<ReceiptsPageDict | null>(null);
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,8 +63,7 @@ export default function ReceiptsPage() {
 
   useEffect(() => {
     const fetchDict = async () => {
-      const locale = "en";
-      const dictionary = await getDict(locale);
+      const dictionary = await getDict(lang);
       setDict(dictionary);
     };
     fetchDict();
