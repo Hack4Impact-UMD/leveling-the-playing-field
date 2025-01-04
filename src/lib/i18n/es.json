@@ -151,24 +151,24 @@
             "note": "view receipt text button"
         },
         "orderDetails": {
+            "title": {
+                "text": "Detalles del Pedido",
+                "note": "Order details title"
+            },
             "warehouse": {
-                "text": "Ubicación del Almacén",
+                "text": "Ubicación del Almacén:",
                 "note": "warehouse location text"
             },
             "date": {
-                "text": "Fecha de Compra",
+                "text": "Fecha de Compra:",
                 "note": "date of purchase for receipt text"
             },
-            "time": {
-                "text": "Hora",
-                "note": "time of receipt text"
-            },
             "contact": {
-                "text": "Persona de Contacto",
+                "text": "Persona de Contacto:",
                 "note": "point of contact text label"
             },
             "total": {
-                "text": "Total de Artículos Verificados",
+                "text": "Total de Artículos Verificados:",
                 "note": "total number of items text label"
             },
             "orderInfo": {

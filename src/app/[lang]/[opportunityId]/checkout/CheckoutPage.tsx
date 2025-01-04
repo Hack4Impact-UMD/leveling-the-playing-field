@@ -132,6 +132,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
           throw new Error("Error loading opportunity stage");
         }
         const body = await response.json();
+        console.log(body)
         if (body.StageName == "Posted") {
           router.push(`/${lang}/receipts`);
         }

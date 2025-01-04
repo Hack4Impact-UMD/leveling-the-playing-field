@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import DownArrowIcon from '@/components/icons/DownArrowIcon';
 import LocationIcon from '@/components/icons/LocationIcon';
 

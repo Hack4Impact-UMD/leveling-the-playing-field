@@ -151,24 +151,24 @@
             "note": "view receipt text button"
         },
         "orderDetails": {
+            "title": {
+                "text": "Order Details",
+                "note": "Order details title"
+            },
             "warehouse": {
-                "text": "Warehouse Location",
+                "text": "Warehouse Location:",
                 "note": "warehouse location text"
             },
             "date": {
-                "text": "Date of Purchase",
+                "text": "Date of Purchase:",
                 "note": "date of purchase for receipt text"
             },
-            "time": {
-                "text": "Time",
-                "note": "time of receipt text"
-            },
             "contact": {
-                "text": "Point of Contact",
+                "text": "Point of Contact:",
                 "note": "point of contact text label"
             },
             "total": {
-                "text": "Total Checked Out Items",
+                "text": "Total Checked Out Items:",
                 "note": "total number of items text label"
             },
             "orderInfo": {
