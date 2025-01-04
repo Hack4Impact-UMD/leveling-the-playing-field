@@ -1,4 +1,4 @@
-import { APIResponse } from "@/types/apiTypes";
+import { APIResponse, isError } from "@/types/apiTypes";
 import { Opportunity, OpportunityLineItem, Stage } from "@/types/types";
 import { executeSOQLQuery } from "../soqlQuery";
 
@@ -34,10 +34,23 @@ export async function getOpportunityById(
   }
 }
 
-export async function getOpportunitiesByAccountId(accountId: string, stageName?: Stage, accessToken?: string): Promise<APIResponse<Omit<Opportunity, "AccountId">[]>> {
-  return executeSOQLQuery(`SELECT Id, Name, CloseDate, StageName, Gift_Type__c, Market__c, Primary_Contact__c
-                           FROM Opportunity
-                           WHERE AccountId = '${accountId}'${stageName ? ` AND StageName = '${stageName}'` : ''}`, accessToken);
+export async function getOpportunitiesByAccountId(accountId: string, stageName: Stage, accessToken?: string): Promise<APIResponse<Omit<Opportunity, "AccountId">[]>> {
+  const opportunities: APIResponse<Omit<Opportunity, "AccountId">[]> = await executeSOQLQuery(`SELECT Id, Name, CloseDate, StageName, Gift_Type__c, Market__c, Primary_Contact__c
+                                                                                               FROM Opportunity
+                                                                                               WHERE AccountId = '${accountId}'${stageName ? ` AND StageName = '${stageName}'` : ''}`, accessToken);
+  if (isError(opportunities) || stageName == "Site Visit/Call") { return opportunities; }
+  const opportunitiesWithLineItems: Omit<Opportunity, "AccountId">[] = await Promise.all(opportunities.data.map(async (opportunity: Omit<Opportunity, "AccountId">) => {
+    const lineItems: APIResponse<OpportunityLineItem[]> = await executeSOQLQuery(`SELECT Id, PricebookEntryId, Quantity, PricebookEntry.Name, PricebookEntry.Product2.Family
+                                                                                  FROM OpportunityLineItem
+                                                                                  WHERE OpportunityId = '${opportunity.Id}'`, accessToken);
+    console.log(lineItems);
+    if (isError(lineItems)) { return opportunity; }
+    return {
+      ...opportunity,
+      LineItems: lineItems.data
+    }
+  }))
+  return { data: opportunitiesWithLineItems, status: opportunities.status };
 }
 
 export async function createOpportunity(
