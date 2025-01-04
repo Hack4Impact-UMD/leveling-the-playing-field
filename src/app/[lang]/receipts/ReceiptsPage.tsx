@@ -1,12 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/Dialog"
+import { Dialog, DialogTrigger } from "@/components/ui/Dialog";
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
 import { Opportunity, OpportunityLineItem } from "@/types/types";
@@ -143,40 +137,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
                 </div>
               </div>
             </div>
-            <DialogContent className="bg-teal-light text-white border-2 border-teal w-[85%] max-w-[500px] rounded-3xl">
-              <DialogHeader>
-                <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">
-                  {dict?.receiptsPage?.orderDetails?.title?.text ?? "ORDER DETAILS"}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="space-y-2 mb-4 font-cabin-condensed text-sm md:text-base">
-                <div className="flex justify-between">
-                  <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.warehouse?.text ?? "Warehouse"}:
-                  </span>
-                  <span>{receipt.Market__c}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.date?.text ?? "Date of Purchase"}:
-                  </span>
-                  <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.contact?.text ?? "Point of Contact"}:
-                  </span>
-                  <span>{receipt.Primary_Contact__c}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">
-                    {dict?.receiptsPage?.orderDetails?.total?.text ?? "Total Checked Out Items"}:
-                  </span>
-                  <span>{getTotalItems(receipt)}</span>
-                </div>
-              </div>
-              <ReceiptModal receipt={aggregateLineItems(receipt)} dict={dict!} />
-            </DialogContent>
+            <ReceiptModal receipt={aggregateLineItems(receipt)} totalItems={getTotalItems(receipt)} dict={dict!} />
           </Dialog>
         ))}
       </div>
