@@ -13,7 +13,7 @@ export default function ReceiptModal(props: ReceiptModalProps) {
   const productFamilies = Object.keys(receipt.productsGroupedByFamily).sort();
 
   return (
-    <DialogContent className="bg-teal-light text-white border-2 border-teal w-[85%] max-w-[500px] rounded-3xl">
+    <DialogContent className="bg-teal-light text-white border-2 border-teal w-[85%] max-w-[500px] max-h-[90vh] rounded-3xl overflow-y-scroll">
       <DialogHeader>
         <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">
           {dict?.receiptsPage?.orderDetails?.title?.text ?? "ORDER DETAILS"}
