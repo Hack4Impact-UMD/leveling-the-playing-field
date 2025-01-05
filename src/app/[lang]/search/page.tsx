@@ -1,5 +1,10 @@
+import { Locale } from "@/lib/i18n/dictionaries";
 import SearchPage from "./SearchPage"
 
-export default function SearchPageWrapper() {
-    return (<SearchPage />)
+interface SearchPageParams {
+    lang: Locale;
+}
+
+export default function SearchPageWrapper({ params }: { params: SearchPageParams }) {
+    return (<SearchPage {...params}/>)
 }

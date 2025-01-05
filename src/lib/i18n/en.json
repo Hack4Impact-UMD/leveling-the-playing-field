@@ -252,78 +252,22 @@
         }
     },
     "searchPage": {
-        "searchByEquipment": {
-            "searchBar": {
-                "text": "Search By Equipment",
-                "note": "text within the search bar"
-            },
-            "filter": {
-                "header": {
-                    "text": "Filter",
-                    "note": "Header text for orange filter box"
-                },
-                "regionFilter": {
-                    "text": "Select region",
-                    "note": "text for region drop down"
-                },
-                "sportFilter": {
-                    "text": "Select sport",
-                    "note": "text for sport drop down"
-                },
-                "reset": {
-                    "text": "reset",
-                    "note": "reset for drop down text"
-                },
-                "apply": {
-                    "text": "Apply",
-                    "note": "button text to apply filters"
-                }
-            },
-            "sort": {
-                "header": {
-                    "text": "Sort By",
-                    "note": "text by equipment/location toggle"
-                },
-                "apply": {
-                    "text": "Apply",
-                    "note": "button text to apply filters"
-                }
-            }
+        "searchBar": {
+            "text": "Search",
+            "note": "text within the search bar"
         },
-        "searchByLocation": {
-            "searchBar": {
-                "text": "Search By Location",
-                "note": "text within the search bar in light teal box"
+        "toggleMenu": {
+            "menuText": {
+                "text": "Show",
+                "note": "text for the menu label"
             },
-            "filter": {
-                "header": {
-                    "text": "Filter",
-                    "note": "Header text for orange filter box"
-                },
-                "sportFilter": {
-                    "header": {
-                        "text": "Sport Category",
-                        "note": "header text for the drop down"
-                    },
-                    "box": {
-                        "text": "Select sport",
-                        "note": "text inside the sport drop down"
-                    }
-                },
-                "reset": {
-                    "text": "reset",
-                    "note": "reset for drop down text"
-                },
-                "apply": {
-                    "text": "Apply",
-                    "note": "button text to apply filters"
-                }
+            "equipment": {
+                "text": "Equipment",
+                "note": "text to show when equipment list is being shown"
             },
-            "locations": {
-                "available": {
-                    "text": "Equipment Available",
-                    "note": "text showing equipment available in potential locations, appears with/without toggling dropdown"
-                }
+            "warehouses": {
+                "text": "Warehouses",
+                "note": "text to show when warehouse list is being shown"
             }
         }
     },

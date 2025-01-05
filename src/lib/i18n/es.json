@@ -252,78 +252,22 @@
         }
     },
     "searchPage": {
-        "searchByEquipment": {
-            "searchBar": {
-                "text": "Buscar por Equipo",
-                "note": "text within the search bar"
-            },
-            "filter": {
-                "header": {
-                    "text": "Filtrar",
-                    "note": "Header text for orange filter box"
-                },
-                "regionFilter": {
-                    "text": "Seleccionar región",
-                    "note": "text for region drop down"
-                },
-                "sportFilter": {
-                    "text": "Seleccionar deporte",
-                    "note": "text for sport drop down"
-                },
-                "reset": {
-                    "text": "Restablecer",
-                    "note": "reset for drop down text"
-                },
-                "apply": {
-                    "text": "Aplicar",
-                    "note": "button text to apply filters"
-                }
-            },
-            "sort": {
-                "header": {
-                    "text": "Ordenar por",
-                    "note": "text by equipment/location toggle"
-                },
-                "apply": {
-                    "text": "Aplicar",
-                    "note": "button text to apply filters"
-                }
-            }
+        "searchBar": {
+            "text": "Buscar",
+            "note": "text within the search bar"
         },
-        "searchByLocation": {
-            "searchBar": {
-                "text": "Buscar por Ubicación",
-                "note": "text within the search bar in light teal box"
+        "toggleMenu": {
+            "menuText": {
+                "text": "Espectáculo",
+                "note": "text for the menu label"
             },
-            "filter": {
-                "header": {
-                    "text": "Filtrar",
-                    "note": "Header text for orange filter box"
-                },
-                "sportFilter": {
-                    "header": {
-                        "text": "Categoría de Deporte",
-                        "note": "header text for the drop down"
-                    },
-                    "box": {
-                        "text": "Seleccionar deporte",
-                        "note": "text inside the sport drop down"
-                    }
-                },
-                "reset": {
-                    "text": "Restablecer",
-                    "note": "reset for drop down text"
-                },
-                "apply": {
-                    "text": "Aplicar",
-                    "note": "button text to apply filters"
-                }
+            "equipment": {
+                "text": "Equipo",
+                "note": "text to show when equipment list is being shown"
             },
-            "locations": {
-                "available": {
-                    "text": "Equipo Disponible",
-                    "note": "text showing equipment available in potential locations, appears with/without toggling dropdown"
-                }
+            "warehouses": {
+                "text": "Almacenes",
+                "note": "text to show when warehouse list is being shown"
             }
         }
     },
