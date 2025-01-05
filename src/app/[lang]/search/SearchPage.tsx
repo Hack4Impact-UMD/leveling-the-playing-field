@@ -29,7 +29,13 @@ interface GroupedEquipment {
   products: Product[];
 }
 
-const warehouses = [Market.GREATER_WASHINGTON, Market.BALTIMORE, Market.WESTERN_NEW_YORK, Market.PHILADELPHIA, Market.OHIO];
+const warehouses = [
+  Market.BALTIMORE,
+  Market.GREATER_WASHINGTON,
+  Market.OHIO,
+  Market.PHILADELPHIA,
+  Market.WESTERN_NEW_YORK,
+];
 
 const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -99,7 +105,7 @@ const SearchPage = () => {
   if (loading) { return <Loading /> }
 
   return (
-    <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 103px)' }}>
+    <div className="p-4 overflow-y-auto max-h-[calc(100vh - 103px)]">
       <div className="flex items-center space-x-2 mb-4">
         <div className="relative flex-grow border-black bg-teal-light rounded-3xl text-white">
           <div className="absolute left-3 top-1/2 -translate-y-1/2">
@@ -108,14 +114,14 @@ const SearchPage = () => {
           <Input
             value={searchTerm}
             onChange={handleSearch}
-            placeholder={`Search by ${searchMode === 'equipment' ? 'Category' : 'Location'}`}
+            placeholder="Search"
             className="pl-14 pr-4 w-full border-teal-light2 bg-teal-light2 rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
         </div>
       </div>
 
       <div className="flex items-center space-x-3 mb-4 font-ubuntu-condensed">
-        <span className="text-black font-ubuntu-condensed">Sort by:</span>
+        <span className="text-black font-ubuntu-condensed">Show:</span>
         <Select 
           onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
           value={searchMode}
@@ -124,8 +130,8 @@ const SearchPage = () => {
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="equipment" className="">Category</SelectItem>
-            <SelectItem value="location" className="">Location</SelectItem>
+            <SelectItem value="equipment" className="font-ubuntu-condensed">Products</SelectItem>
+            <SelectItem value="location" className="font-ubuntu-condensed">Locations</SelectItem>
           </SelectContent>
         </Select>
       </div>
