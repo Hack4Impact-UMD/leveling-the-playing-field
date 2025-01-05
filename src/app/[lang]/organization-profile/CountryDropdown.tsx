@@ -29,7 +29,7 @@ export default function CountryDropdownComponent({ label, error, country, onCoun
         <CountryDropdown
             value={country}
             onChange={handleChange}
-            className={`text-black text-2xl font-cabin-condensed border-2 rounded-lg w-full bg-transparent ${isInvalid ? 'border-red-500' : 'border-gray-400'}`}
+            classes={`text-black text-2xl font-cabin-condensed border-2 rounded-lg w-full bg-transparent ${isInvalid ? 'border-red-500' : 'border-gray-400'}`}
         />
 
         {isInvalid &&

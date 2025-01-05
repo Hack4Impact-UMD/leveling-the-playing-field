@@ -32,7 +32,7 @@ const initContacts: Contact[] = [
 ];
 
 //export default function OrganizationProfile() {
-export default function OrganizationProfile({ dict }: { dict: any }) {  
+export default function OrganizationProfilePage({ dict }: { dict: any }) {  
     const [orgName, setOrgName] = useState<string>('');
     const [contacts, setContacts] = useState<Contact[]>(initContacts);
     const [location, setLocation] = useState<Location>({
