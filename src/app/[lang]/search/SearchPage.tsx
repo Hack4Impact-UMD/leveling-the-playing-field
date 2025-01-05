@@ -12,17 +12,7 @@ import {
 import SearchIcon from '@/components/icons/SearchIcon';
 import ListComponent from './ListComponent';
 import { Product, Market } from "@/types/types";
-import { APIResponse } from '@/types/apiTypes';
 import Loading from '@/components/Loading';
-
-interface Equipment {
-  name: string;
-  quantity: number;
-  sport: string;
-  warehouse: string;
-  totalQuantity?: number; 
-  locations?: { warehouse: string; quantity: number }[]; 
-}
 
 interface GroupedEquipment {
   category: string;
