@@ -16,3 +16,9 @@ export type APIResponse<T> = APIResponseSuccess<T> | APIResponseError
 export function isError(response: APIResponse<any>): response is APIResponseError {
   return "error" in response
 }
+
+export interface SOQLResponse<T> {
+  totalSize: number;
+  done: boolean;
+  records: Array<T>;
+}

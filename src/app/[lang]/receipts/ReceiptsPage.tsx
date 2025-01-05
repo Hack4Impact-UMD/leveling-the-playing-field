@@ -1,170 +1,124 @@
 "use client"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/shadcn/Dialog"
+import { useEffect, useState } from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/Dialog";
+import { Locale, getDict } from "@/lib/i18n/dictionaries";
+import Loading from "@/components/Loading";
+import { Opportunity, OpportunityLineItem } from "@/types/types";
+import ReceiptModal from "./ReceiptModal";
 
-interface Item {
-  name: string;
-  quantity: number;
+const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
+
+interface ReceiptsPageProps {
+  lang: Locale;
 }
 
-interface SportItems {
-  sport: string;
-  items: Item[];
-}
+export default function ReceiptsPage(props: ReceiptsPageProps) {
+  const { lang } = props;
+  const [dict, setDict] = useState<{ [key: string]: any }>({});
+  const [receipts, setReceipts] = useState<Opportunity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-interface Receipt {
-  city: string;
-  state: string;
-  dateOfOrder: string;
-  startTime: string;
-  endTime: string;
-  pointOfContact: {
-    firstName: string;
-    lastName: string;
-  };
-  itemsCheckedOut: number;
-  itemList: SportItems[];
-}
+  useEffect(() => {
+    const fetchDict = async () => {
+      const dictionary = await getDict(lang);
+      setDict(dictionary);
+    };
 
-const receipts: Receipt[] = [
-  {
-    city: "New York",
-    state: "NY",
-    dateOfOrder: "2024-10-15",
-    startTime: "12:00 pm",
-    endTime: "01:00 pm",
-    pointOfContact: {
-      firstName: "John",
-      lastName: "Doe",
-    },
-    itemsCheckedOut: 5,
-    itemList: [
-      {
-        sport: "Soccer",
-        items: [
-          { name: "Balls", quantity: 5 },
-          { name: "Cleats", quantity: 2 },
-        ],
-      },
-      {
-        sport: "Tennis",
-        items: [
-          { name: "Rackets", quantity: 3 },
-        ],
-      },
-    ],
-  },
-  {
-    city: "Los Angeles",
-    state: "CA",
-    dateOfOrder: "2024-10-20",
-    startTime: "02:00 pm",
-    endTime: "03:00 pm",
-    pointOfContact: {
-      firstName: "Jane",
-      lastName: "Smith",
-    },
-    itemsCheckedOut: 7,
-    itemList: [
-      {
-        sport: "Basketball",
-        items: [
-          { name: "Balls", quantity: 5 },
-        ],
-      },
-      {
-        sport: "Lacrosse",
-        items: [
-          { name: "Sticks", quantity: 2 },
-          { name: "Goals", quantity: 3 },
-        ],
-      },
-    ],
-  },
-];
+    const fetchReceipts = async () => {
+      try {
+        const response = await fetch(`/api/opportunities?accountId=${ACCOUNT_ID}&stage=Posted`);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to fetch opportunities');
+        }
+        const data = await response.json();
+        setReceipts(data);
+      } catch (err) {
+        setError((err as Error).message);
+        console.error('Error fetching receipts:', err);
+      }
+    };
 
-const sortedReceipts = receipts.sort((a, b) => new Date(b.dateOfOrder).getTime() - new Date(a.dateOfOrder).getTime());
+    Promise.all([fetchDict(), fetchReceipts()]).then(() => setLoading(false))
+  }, []);
 
-export default function ReceiptsPage() {
+  if (loading) return <Loading />;
+  if (error) return (
+    <div className="flex justify-center items-center h-screen text-2xl font-bree-serif text-red-700">
+      Error: {error}
+    </div>
+  );
+
+  const sortedReceipts = receipts.sort((a, b) => new Date(b.CloseDate).getTime() - new Date(a.CloseDate).getTime());
+
+  const getTotalItems = (receipt: Opportunity) => {
+    let totalItems = 0;
+    receipt.LineItems?.forEach((lineItem: OpportunityLineItem) => {
+      totalItems += lineItem.Quantity;
+    })
+    return totalItems;
+  }
+
+  const aggregateLineItems = (receipt: Opportunity) => {
+    const productsGroupedByFamily: Record<string, OpportunityLineItem[]> = {};
+    receipt.LineItems?.forEach((lineItem: OpportunityLineItem) => {
+      const family = lineItem.PricebookEntry.Product2.Family;
+      if (!productsGroupedByFamily[family]) {
+        productsGroupedByFamily[family] = [lineItem];
+      } else { 
+        productsGroupedByFamily[family].push(lineItem);
+      }
+    });
+    return {
+      ...receipt,
+      LineItems: undefined,
+      productsGroupedByFamily
+    }
+  }
+
   return (
     <div className="flex flex-col items-center container mx-auto my-6 font-cabin-condensed">
-      <h2 className="text-black text-3xl md:text-3xl font-bree-serif">Receipts</h2>
+      <h2 className="text-black text-3xl md:text-3xl font-bree-serif">
+        {dict.receiptsPage.title.text}
+      </h2>
       <div className="mt-8 md:w-3/5 w-[90%]">
         {sortedReceipts.map((receipt, index) => (
           <Dialog key={index}>
-            <div className="bg-teal-light border-teal border-4 rounded-2xl shadow-lg mt-4">
+            <div className="bg-teal-light border-teal border-2 rounded-2xl shadow-lg mt-4">
               <div className="px-8 py-2 w-full text-left text-white">
-                <div className="text-sm md:text-base">{receipt.city}, {receipt.state}</div>
-                <div className="text-sm md:text-base">{receipt.dateOfOrder}</div>
-                <div className="text-sm md:text-base">{receipt.startTime} - {receipt.endTime}</div>
-                <div className="text-sm md:text-base">Point of Contact: {receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}</div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm md:text-base"># Items Checked Out: {receipt.itemsCheckedOut}</span>
-                  <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-xs md:text-sm">
-                    View Receipt
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict.receiptsPage.orderDetails.warehouse.text}
+                  </span>
+                  <span>{receipt.Market__c}</span>
+                </div>
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict.receiptsPage.orderDetails.date.text}
+                  </span>
+                  <span>{new Date(receipt.CloseDate).toLocaleDateString()}</span>
+                </div>
+                <div className="text-sm md:text-base">
+                  <span className="font-bold mr-1">
+                    {dict.receiptsPage.orderDetails.contact.text}
+                  </span>
+                  <span>{receipt.Primary_Contact__c}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm md:text-base">
+                  <div>
+                    <span className="font-bold mr-1">
+                      {dict.receiptsPage.orderDetails.total.text}
+                    </span>
+                    <span>{getTotalItems(receipt)}</span>
+                  </div>
+                  <DialogTrigger className="text-white underline cursor-pointer hover:opacity-80 text-sm md:text-base">
+                    {dict.receiptsPage.viewButton.text}
                   </DialogTrigger>
                 </div>
               </div>
             </div>
-            <DialogContent className="bg-teal-light text-white border-4 border-teal w-[85%] max-w-[500px] rounded-3xl">
-              <DialogHeader>
-                <DialogTitle className="text-white text-2xl md:text-3xl font-bree-serif font-normal">ORDER DETAILS</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-2 mb-4 font-cabin-condensed text-sm md:text-base">
-                <div className="flex justify-between">
-                  <span className="font-bold">Warehouse Location:</span>
-                  <span>{receipt.city}, {receipt.state}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Date of Purchase:</span>
-                  <span>{receipt.dateOfOrder}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Time:</span>
-                  <span>{receipt.startTime} - {receipt.endTime}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Point of Contact:</span>
-                  <span>{receipt.pointOfContact.firstName} {receipt.pointOfContact.lastName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Total Checked Out Items:</span>
-                  <span>{receipt.itemsCheckedOut}</span>
-                </div>
-              </div>
-              <div className="flex flex-wrap">
-                {receipt.itemList.map((sportItem, sportIndex) => (
-                  <div key={sportIndex} className="w-full md:w-1/2 px-2 mb-4">
-                    <div className="bg-orange-500 text-center text-white rounded-full px-2 py-1 mb-2 w-fit mx-auto">
-                      <h3 className="font-bold text-sm">{sportItem.sport}</h3>
-                    </div>
-                    <div className="border-teal border-2 rounded-lg p-2">
-                      <table className="table-auto w-full text-left text-sm md:text-base">
-                        <thead>
-                          <tr>
-                            <th className="py-1 text-center">Item</th>
-                            <th className="py-1 text-center">Quantity</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {sportItem.items.map((item, itemIndex) => (
-                            <tr key={itemIndex}>
-                              <td className="py-1 text-center">{item.name}</td>
-                              <td className="py-1 text-center">{item.quantity}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </DialogContent>
+            <ReceiptModal receipt={aggregateLineItems(receipt)} totalItems={getTotalItems(receipt)} dict={dict!} />
           </Dialog>
         ))}
       </div>
