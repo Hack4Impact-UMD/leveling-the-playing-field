@@ -1,17 +1,26 @@
 "use client";  
 
 import React, { useState, useEffect } from 'react';
+import { Input } from "@/components/ui/Input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/Select"
 import SearchIcon from '@/components/icons/SearchIcon';
 import ListComponent from './ListComponent';
-import { Input } from "@/components/ui/input"
 import { Product, Market } from "@/types/types";
+
+interface Equipment {
+  name: string;
+  quantity: number;
+  sport: string;
+  warehouse: string;
+  totalQuantity?: number; 
+  locations?: { warehouse: string; quantity: number }[]; 
+}
 
 interface GroupedEquipment {
   category: string;

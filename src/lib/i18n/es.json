@@ -151,24 +151,24 @@
             "note": "view receipt text button"
         },
         "orderDetails": {
+            "title": {
+                "text": "Detalles del Pedido",
+                "note": "Order details title"
+            },
             "warehouse": {
-                "text": "Ubicación del Almacén",
+                "text": "Ubicación del Almacén:",
                 "note": "warehouse location text"
             },
             "date": {
-                "text": "Fecha de Compra",
+                "text": "Fecha de Compra:",
                 "note": "date of purchase for receipt text"
             },
-            "time": {
-                "text": "Hora",
-                "note": "time of receipt text"
-            },
             "contact": {
-                "text": "Persona de Contacto",
+                "text": "Persona de Contacto:",
                 "note": "point of contact text label"
             },
             "total": {
-                "text": "Total de Artículos Verificados",
+                "text": "Total de Artículos Verificados:",
                 "note": "total number of items text label"
             },
             "orderInfo": {
@@ -195,6 +195,26 @@
         "selectedEquipment": {
             "text": "Seleccionar Equipo",
             "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VERIFICAR",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Seleccione Deporte",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Seleccionado:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Cantidad",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "No se puede realizar el pago",
+            "note": "checkout error text"
         }
     },
     "searchPage": {
@@ -271,6 +291,20 @@
                     "note": "text showing equipment available in potential locations, appears with/without toggling dropdown"
                 }
             }
+        }
+    },
+    "thankYouPage": {
+        "thankYou": {
+            "text": "¡Gracias!",
+            "note": "Thank you title text"
+        },
+        "successfulCheckout": {
+            "text": "¡Has realizado el check out exitosamente!",
+            "note": "Successful checkout text"
+        },
+        "viewReceipt": {
+            "text": "Ver recibo",
+            "note": "button text to redirect to receipts page"
         }
     }
 }

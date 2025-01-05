@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Product, Market } from "@/types/types";
 import DownArrowIcon from '@/components/icons/DownArrowIcon';
 
@@ -37,7 +37,7 @@ const ListComponent: React.FC<ListCompProps> = ({item, selectedEquipments, searc
       : 
       <Button
         onClick={() => toggleEquipment(item)}
-        className={`p-0 w-full border-0 block h-auto ${selectedEquipments.has((item as GroupedEquipment).category) ? 'mb-4' : ''}`} 
+        className={`p-0 ${selectedEquipments.has((item as GroupedEquipment).category) && 'mb-4'} w-full border-0 block h-auto`}
         variant="outline"
       >
         {!selectedEquipments.has((item as GroupedEquipment).category) ? (
