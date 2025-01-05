@@ -12,6 +12,8 @@ import {
 import SearchIcon from '@/components/icons/SearchIcon';
 import ListComponent from './ListComponent';
 import { Product, Market } from "@/types/types";
+import { APIResponse } from '@/types/apiTypes';
+import Loading from '@/components/Loading';
 
 interface Equipment {
   name: string;
@@ -34,36 +36,32 @@ const SearchPage = () => {
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
   const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
-
-  // Sample data with quantities
-  const equipmentList: Product[] = [
-    { name: 'Soccer Ball', category: 'Soccer', id: "0" },
-    { name: 'Basketball', category: 'Basketball', id: "1" },
-    { name: 'Tennis Racket', category: 'Tennis', id: "2" },
-    { name: 'Tennis Balls', category: 'Tennis', id: "3" },
-    { name: 'Tennis Shoes', category: 'Tennis', id: "4" },
-    { name: 'Tennis Shoes', category: 'Tennis', id: "5" },
-    { name: 'Tennis Shoes', category: 'Tennis', id: "6" }
-  ];
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   useEffect(() => {
-    const groupedEquipment = equipmentList.reduce((acc: GroupedEquipment[], item) => {
-      const existingItem = acc.find(g => g.category === item.category);
-      if (existingItem) {
-        existingItem.products.push(item);
-      } else {
-        acc.push({
-          category: item.category,
-          products: [item]
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
+        if (!res.ok) {
+          const error = await res.json();
+          console.error("Error fetching products:", error)
+        }
+        const data: Record<string, Product[]> = await res.json();
+        const groupedProducts: GroupedEquipment[] = Object.entries(data).map(([category, products]) => {
+          return { category, products }
         });
+        setGroupedEquipmentList(groupedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
       }
-      return acc;
-    }, []);
-    setGroupedEquipmentList(groupedEquipment);
+    }
+
+    setLoading(true);
+    fetchProducts().then(() => setLoading(false));
   }, []);
 
   const applyFilters = (): Market[] | GroupedEquipment[] => {
@@ -97,6 +95,8 @@ const SearchPage = () => {
       return newSet;
     });
   };
+
+  if (loading) { return <Loading /> }
 
   return (
     <div className="p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 103px)' }}>
