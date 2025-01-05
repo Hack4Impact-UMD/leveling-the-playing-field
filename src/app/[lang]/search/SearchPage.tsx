@@ -13,6 +13,7 @@ import SearchIcon from '@/components/icons/SearchIcon';
 import ListComponent from './ListComponent';
 import { Product, Market } from "@/types/types";
 import Loading from '@/components/Loading';
+import { Locale, getDict } from '@/lib/i18n/dictionaries';
 
 interface GroupedEquipment {
   category: string;
@@ -27,11 +28,17 @@ const warehouses = [
   Market.WESTERN_NEW_YORK,
 ];
 
-const SearchPage = () => {
+interface SearchPageProps {
+  lang: Locale;
+}
+
+const SearchPage = (props: SearchPageProps) => {
+  const { lang } = props;
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
   const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
+  const [dict, setDict] = useState<{ [key: string]: any }>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +46,11 @@ const SearchPage = () => {
   };
 
   useEffect(() => {
+    const loadDict = async () => {
+      const dict = await getDict(lang);
+      setDict(dict);
+    }
+
     const fetchProducts = async () => {
       try {
         const res = await fetch("/api/products");
@@ -57,7 +69,7 @@ const SearchPage = () => {
     }
 
     setLoading(true);
-    fetchProducts().then(() => setLoading(false));
+    Promise.all([loadDict(), fetchProducts()]).then(() => setLoading(false));
   }, []);
 
   const applyFilters = (): Market[] | GroupedEquipment[] => {
@@ -104,14 +116,14 @@ const SearchPage = () => {
           <Input
             value={searchTerm}
             onChange={handleSearch}
-            placeholder="Search"
+            placeholder={dict.searchPage.searchBar.text}
             className="pl-14 pr-4 w-full border-teal-light2 bg-teal-light2 rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
         </div>
       </div>
 
       <div className="flex items-center space-x-3 mb-4 font-ubuntu-condensed">
-        <span className="text-black font-ubuntu-condensed">Show:</span>
+        <span className="text-black font-ubuntu-condensed">{dict.searchPage.toggleMenu.menuText.text}</span>
         <Select 
           onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
           value={searchMode}
@@ -120,8 +132,8 @@ const SearchPage = () => {
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="equipment" className="font-ubuntu-condensed">Products</SelectItem>
-            <SelectItem value="location" className="font-ubuntu-condensed">Locations</SelectItem>
+            <SelectItem value="equipment" className="font-ubuntu-condensed">{dict.searchPage.toggleMenu.equipment.text}</SelectItem>
+            <SelectItem value="location" className="font-ubuntu-condensed">{dict.searchPage.toggleMenu.warehouses.text}</SelectItem>
           </SelectContent>
         </Select>
       </div>
