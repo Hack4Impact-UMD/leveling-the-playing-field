@@ -8,35 +8,46 @@ import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 interface ContactItemProps {
     dictLabels : any;
     dictErrors : any;
-    name: string;
+    firstName: string;
+    lastName: string
     phoneNumber: string;
     email: string;
     onEdit: (updatedContact: { name: string; phoneNumber: string; email: string }) => void;
     onDelete: () => void;
 }
 
-export default function ContactEntry({ dictLabels, dictErrors, name, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
-    const [isNameEditable, setIsNameEditable] = useState(false);
+export default function ContactEntry({ dictLabels, dictErrors, firstName, lastName, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
+    const [isFirstNameEditable, setIsFirstNameEditable] = useState(false);
+    const [isLastNameEditable, setIsLastNameEditable] = useState(false);
     const [isPhoneEditable, setIsPhoneEditable] = useState(false);
     const [isEmailEditable, setIsEmailEditable] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editedName, setEditedName] = useState(name);
+    const [editedFirstName, setEditedFirstName] = useState(firstName);
+    const [editedLastName, setEditedLastName] = useState(lastName);
     const [editedPhoneNumber, setEditedPhoneNumber] = useState(phoneNumber);
     const [editedEmail, setEditedEmail] = useState(email);
-    const [isInvalidName, setIsInvalidName] = useState(false);
+    const [isInvalidFirstName, setIsInvalidFirstName] = useState(false);
+    const [isInvalidLastName, setIsInvalidLastName] = useState(false);
     const [isInvalidPhone, setIsInvalidPhone] = useState(false);
     const [isInvalidEmail, setIsInvalidEmail] = useState(false);
-    const nameInputRef = useRef<HTMLInputElement>(null);
+    const firstNameInputRef = useRef<HTMLInputElement>(null);
+    const lastNameInputRef = useRef<HTMLInputElement>(null);
     const phoneInputRef = useRef<HTMLInputElement>(null);
     const emailInputRef = useRef<HTMLInputElement>(null);
 
-    const handleNameEditClick = () => {
-        setIsNameEditable(true);
-        setTimeout(() => nameInputRef.current && nameInputRef.current.focus(), 0);
+    const handleFirstNameEditClick = () => {
+        setIsFirstNameEditable(true);
+        setTimeout(() => firstNameInputRef.current && firstNameInputRef.current.focus(), 0);
     };
+
+    const handleLastNameEditClick = () => {
+        setIsLastNameEditable(true);
+        setTimeout(() => lastNameInputRef.current && lastNameInputRef.current.focus(), 0);
+    }
 
     const handlePhoneEditClick = () => {
         setIsPhoneEditable(true);
+        console.log(phoneInputRef.current)
         setTimeout(() => phoneInputRef.current && phoneInputRef.current.focus(), 0);
     };
 
@@ -78,9 +89,14 @@ export default function ContactEntry({ dictLabels, dictErrors, name, phoneNumber
         return true;
     };
 
-    const validateName = () => {
-        setIsInvalidName(!editedName.trim());
-        return editedName.trim().length > 0;
+    const validateFirstName = () => {
+        setIsInvalidFirstName(!editedFirstName.trim());
+        return editedFirstName.trim().length > 0;
+    };
+
+    const validateLastName = () => {
+      setIsInvalidLastName(!editedLastName.trim());
+      return editedLastName.trim().length > 0;
     };
 
     const validateEmail = () => {
@@ -98,24 +114,31 @@ export default function ContactEntry({ dictLabels, dictErrors, name, phoneNumber
         return true;
     };
 
-    const handleNameKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && validateName()) {
-            setIsNameEditable(false);
-            onEdit({ name: editedName, phoneNumber: editedPhoneNumber, email: editedEmail });
+    const handleFirstNameKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && validateFirstName()) {
+            setIsFirstNameEditable(false);
+            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
         }
     };
+
+    const handleLastNameKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && validateLastName()) {
+            setIsLastNameEditable(false);
+            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
+        }
+    }
 
     const handlePhoneKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validatePhone()) {
             setIsPhoneEditable(false);
-            onEdit({ name: editedName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
         }
     };
 
     const handleEmailKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validateEmail()) {
             setIsEmailEditable(false);
-            onEdit({ name: editedName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
         }
     };
 
@@ -139,64 +162,91 @@ export default function ContactEntry({ dictLabels, dictErrors, name, phoneNumber
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
                             <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.name.text}</label>
-                            {isNameEditable ? (
+                            {isFirstNameEditable ? (
                                 <input
                                     type="text"
-                                    value={editedName}
-                                    ref={nameInputRef}
-                                    onChange={(e) => setEditedName(e.target.value)}
-                                    onKeyDown={handleNameKeyDown}
-                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidName ? 'border-red-500' : 'border-gray-400'}`}
+                                    value={editedFirstName}
+                                    ref={firstNameInputRef}
+                                    onChange={(e) => setEditedFirstName(e.target.value)}
+                                    onKeyDown={handleFirstNameKeyDown}
+                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidFirstName ? 'border-red-500' : 'border-gray-400'}`}
                                 />
                             ) : (
-                                <p className="text-black text-2xl font-cabin-condensed">{name}</p>
+                                <p className="text-black text-2xl font-cabin-condensed">{firstName}</p>
                             )}
                         </div>
-                        <button className="self-start py-2 pr-2" onClick={handleNameEditClick}>
+                        <button className="self-start py-2 pr-2" onClick={handleFirstNameEditClick}>
                             <EditIcon />
                         </button>
                     </div>
-                    <hr className={`border-1 mt-2 ${isInvalidName ? 'border-red-500' : 'border-[#00000066]'}`} />
-                    {isInvalidName && (
+                    <hr className={`border-1 mt-2 ${isInvalidFirstName ? 'border-red-500' : 'border-[#00000066]'}`} />
+                    {isInvalidFirstName && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
                             <p className="text-[#00000066] text-[10px]">{dictErrors.contactName.text}</p>
                         </div>
                     )}
                 </div>
-
-                <div className="basis-3/5">
+                <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.phone.text}</label>
-                            {isPhoneEditable ? (
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.name.text}</label>
+                            {isLastNameEditable ? (
                                 <input
-                                    type="tel"
-                                    value={editedPhoneNumber}
-                                    ref={phoneInputRef}
-                                    onChange={handlePhoneInputChange}
-                                    onKeyDown={handlePhoneKeyDown}
-                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidPhone ? 'border-red-500' : 'border-gray-400'}`}
+                                    type="text"
+                                    value={editedLastName}
+                                    ref={lastNameInputRef}
+                                    onChange={(e) => setEditedLastName(e.target.value)}
+                                    onKeyDown={handleLastNameKeyDown}
+                                    className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidLastName ? 'border-red-500' : 'border-gray-400'}`}
                                 />
                             ) : (
-                                <p className="text-black text-2xl font-cabin-condensed">{phoneNumber}</p>
+                                <p className="text-black text-2xl font-cabin-condensed">{lastName}</p>
                             )}
                         </div>
-                        <button className="self-start py-2 pr-2" onClick={handlePhoneEditClick}>
+                        <button className="self-start py-2 pr-2" onClick={handleLastNameEditClick}>
                             <EditIcon />
                         </button>
                     </div>
-                    <hr className={`border-1 mt-2 ${isInvalidPhone ? 'border-red-500' : 'border-[#00000066]'}`} />
-                    {isInvalidPhone && (
+                    <hr className={`border-1 mt-2 ${isInvalidLastName ? 'border-red-500' : 'border-[#00000066]'}`} />
+                    {isInvalidLastName && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
-                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactPhoneNumber.text}r</p>
+                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactName.text}</p>
                         </div>
                     )}
-                </div>                
+                </div> 
             </div>
 
-
+            <div className="basis-3/5">
+                <div className="flex items-center">
+                    <div className="flex-grow flex flex-col">
+                        <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.phone.text}</label>
+                        {isPhoneEditable ? (
+                            <input
+                                type="tel"
+                                value={editedPhoneNumber}
+                                ref={phoneInputRef}
+                                onChange={handlePhoneInputChange}
+                                onKeyDown={handlePhoneKeyDown}
+                                className={`text-black text-2xl font-cabin-condensed border-2 rounded w-full bg-transparent ${isInvalidPhone ? 'border-red-500' : 'border-gray-400'}`}
+                            />
+                        ) : (
+                            <p className="text-black text-2xl font-cabin-condensed">{phoneNumber}</p>
+                        )}
+                    </div>
+                    <button className="self-start py-2 pr-2" onClick={handlePhoneEditClick}>
+                        <EditIcon />
+                    </button>
+                </div>
+                <hr className={`border-1 mt-2 ${isInvalidPhone ? 'border-red-500' : 'border-[#00000066]'}`} />
+                {isInvalidPhone && (
+                    <div className="flex flex-row items-center space-x-1">
+                        <AttentionCircleIcon />
+                        <p className="text-[#00000066] text-[10px]">{dictErrors.contactPhoneNumber.text}r</p>
+                    </div>
+                )}
+            </div>
 
             <div className="flex items-center mt-4">
                 <div className="flex-grow flex flex-col">
