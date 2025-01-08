@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 }
 
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
     const body: Contact = await request.json();
