@@ -23,9 +23,13 @@
                 "text": "Points of contact",
                 "note": "text in top green box"
             },
-            "name": {
-                "text": "Name",
-                "note": "text above name fill in the blank"
+            "firstName": {
+                "text": "First Name",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Last Name",
+                "note": "text above last name fill in the blank"
             },
             "phone": {
                 "text": "Phone Number",

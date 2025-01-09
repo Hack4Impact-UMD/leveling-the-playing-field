@@ -23,9 +23,13 @@
                 "text": "Personas de Contacto",
                 "note": "text in top green box"
             },
-            "name": {
-                "text": "Nombre",
-                "note": "text above name fill in the blank"
+            "firstName": {
+                "text": "Nombre de pila",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Apellido",
+                "note": "text above last name fill in the blank"
             },
             "phone": {
                 "text": "Número de Teléfono",

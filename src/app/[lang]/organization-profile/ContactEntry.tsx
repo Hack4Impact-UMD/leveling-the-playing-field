@@ -161,7 +161,7 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                 <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.name.text}</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.firstName.text}</label>
                             {isFirstNameEditable ? (
                                 <input
                                     type="text"
@@ -190,7 +190,7 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                 <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.name.text}</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.lastName.text}</label>
                             {isLastNameEditable ? (
                                 <input
                                     type="text"

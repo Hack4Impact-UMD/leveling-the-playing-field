@@ -111,7 +111,7 @@ export default function AddContactModal(props: AddContactModalProps) {
                 <div className="flex-grow flex flex-col">
                   <label className="text-white text-lg font-cabin-condensed">
                     <span className="text-red-500">*</span>
-                    {dict.profilePage.contact.name.text}
+                    {dict.profilePage.contact.firstName.text}
                   </label>
                   <input
                     type="text"
@@ -142,7 +142,7 @@ export default function AddContactModal(props: AddContactModalProps) {
                 <div className="flex-grow flex flex-col">
                   <label className="text-white text-lg font-cabin-condensed">
                     <span className="text-red-500">*</span>
-                    {dict.profilePage.contact.name.text}
+                    {dict.profilePage.contact.lastName.text}
                   </label>
                   <input
                     type="text"
