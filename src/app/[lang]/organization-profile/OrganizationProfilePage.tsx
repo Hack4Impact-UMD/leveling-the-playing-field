@@ -9,13 +9,8 @@ import EditableField from './EditableField';
 import CountryDropdownComponent from './CountryDropdown';
 import StateDropdown from './StateDropdown';
 import Loading from '@/components/Loading';
-
-interface Contact {
-    id: number;
-    name: string;
-    phoneNumber: string
-    email: string;
-}
+import { Account, Contact } from '@/types/types';
+import AddContactModal from './AddContactModal';
 
 interface Location {
     addressLine1: string;
@@ -26,15 +21,10 @@ interface Location {
     country: string;
 }
 
-// temp data for testing
-const initContacts: Contact[] = [
-    { id: 1, name: 'Name1', phoneNumber : '000-000-0000', email: 'contactemail1@gmail.com' },
-];
-
 //export default function OrganizationProfile() {
 export default function OrganizationProfilePage({ dict }: { dict: any }) {  
-    const [orgName, setOrgName] = useState<string>('');
-    const [contacts, setContacts] = useState<Contact[]>(initContacts);
+    const [account, setAccount] = useState<Account>();
+    const [contacts, setContacts] = useState<Contact[]>([]);
     const [location, setLocation] = useState<Location>({
         addressLine1: '100 Sunshine Lane',
         addressLine2: '100 Sunshine Lane',
@@ -44,6 +34,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         country: 'United States',
       });
     const [contactNumber, setContactNumber] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
     
     // const [location, setLocation] = useState<Location>({
     //     addressLine1: '',
@@ -57,77 +48,61 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
     // const [loading, setLoading] = useState<boolean>(true);
     // const [error, setError] = useState<string | null>(null);
 
-    const accountId = "001UR00000BaSDxYAN"  //temp 
+    const accountId = "001U800000FYoL8IAL";  //temp 
 
     useEffect(() => {
-        //placeholder values
-        setOrgName('XYZ Org.');
-        setContactNumber('000-000-0000');
+        const fetchAccount = async () => {
+            try {
+                const res = await fetch(`/api/accounts/${accountId}`);
+                if (!res.ok) {
+                    const error = await res.json();
+                    console.log("Error fetching account", error);
+                }
+                const data: Account = await res.json();
+                setAccount(data);
+            } catch (error) {
+                console.error("Error fetching account", error);
+            }
+        }
+
+        const fetchContacts = async () => {
+            try {
+                const res = await fetch(`/api/contacts?accountId=${accountId}`);
+                if (!res.ok) {
+                    const error = await res.json();
+                    console.error("Error fetching contacts", error);
+                }
+                const data: Contact[] = await res.json();
+                setContacts(data);
+            } catch (error) {
+                console.error("Error fetching contacts", error);
+            }
+        }
+
+        setLoading(true);
+        Promise.all([fetchAccount(), fetchContacts()]).then(() => setLoading(false));
     }, []);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //       try {
-    //         setLoading(true);
-    //         const accountRes = await fetch(`/api/account/${accountId}`);
-    //         const contactRes = await fetch(`/api/contact?accountId=${accountId}`);
-    //         if (!accountRes.ok || !contactRes.ok) {
-    //           throw new Error("Failed to fetch data");
-    //         }
-    //         const accountData = await accountRes.json();
-    //         const contactData = await contactRes.json();
-    
-    //         setOrgName(accountData.name);
-    //         setContactNumber(accountData.contactNumber);
-    //         setLocation({
-    //           addressLine1: accountData.location.addressLine1,
-    //           addressLine2: accountData.location.addressLine2,
-    //           city: accountData.location.city,
-    //           state: accountData.location.state,
-    //           zipCode: accountData.location.zipCode,
-    //           country: accountData.location.country,
-    //         });
-    //         setContacts(contactData.contacts || []);
-    //       } catch (error: any) {
-    //         setError(error.message || "Error fetching data");
-    //       } finally {
-    //         setLoading(false);
-    //       }
-    //     };
-    
-    //     if (accountId) {
-    //         fetchData();
-    //     }
-    // }, [accountId]);
+    const handleAddContact = async (newContact: Partial<Contact>) => {
+        try {
+          let res = await fetch(`/api/contacts`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ AccountId: accountId, ...newContact }),
+          });
+          if (!res.ok) { throw new Error("Failed to create contact"); }
 
-    const handleAddContact = () => {
-        const newContact: Contact = {
-          id: contacts.length + 1,
-          name: `Name${contacts.length + 1}`,
-          phoneNumber: '000-000-0000',
-          email: `contactemail${contacts.length + 1}@gmail.com`,
-        };
-        setContacts([...contacts, newContact]);
+          res = await fetch(`/api/contacts?accountId=${accountId}`)
+          const newContacts = await res.json();
+          setContacts(newContacts);
+        } catch (error: any) {
+          alert(error.message || "Error adding contact");
+          console.error(error)
+        }
     };
 
-    // const handleAddContact = async () => {
-    //     try {
-    //       const newContact = { name: "New Contact", phoneNumber: "", email: "" };
-    //       const res = await fetch(`/api/contact`, {
-    //         method: "POST",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ accountId, ...newContact }),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to add contact");
-    //       const createdContact = await res.json();
-    //       setContacts([...contacts, createdContact]);
-    //     } catch (error: any) {
-    //       alert(error.message || "Error adding contact");
-    //     }
-    // };
-
-    const handleRemoveContact = (id: number) => {
-        setContacts(contacts.filter((contact) => contact.id !== id));
+    const handleRemoveContact = (id: string) => {
+        setContacts(contacts.filter((contact) => contact.Id !== id));
     };
 
     // const handleRemoveContact = async (id: number) => {
@@ -142,7 +117,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     const handleEditContact = (updatedContact: Contact) => {
         setContacts(
-            contacts.map((contact) => (contact.id === updatedContact.id ? updatedContact : contact))
+            contacts.map((contact) => (contact.Id === updatedContact.Id ? updatedContact : contact))
         );
     };
 
@@ -253,6 +228,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         }));
     };
   
+    if (loading) { return <Loading /> }
 
     return (
       <div className="flex flex-col items-center container mx-auto my-6 pb-32">
@@ -260,31 +236,29 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         
         <div className="flex flex-row justify-start items-center mt-4"> 
             <ProfileIcon color='black'/>
-            <h2 className="text-black text-4xl ml-2 font-bree-serif">{orgName}</h2> 
+            <h2 className="text-black text-4xl ml-2 font-bree-serif">{account?.Name}</h2> 
         </div>
 
         <ProfileHeader title={dict.profilePage.contact.header.text} />
         <div className="w-full pl-2">
             {contacts.map((contact) => (
                 <ContactEntry 
-                    key={contact.id} 
+                    key={contact.Id} 
                     dictLabels={dict.profilePage.contact}
                     dictErrors={dict.profilePage.errors}
-                    name={contact.name}    
-                    email={contact.email} 
-                    phoneNumber={contact.phoneNumber}
+                    firstName={contact.FirstName}
+                    lastName={contact.LastName}
+                    email={contact.Email} 
+                    phoneNumber={contact.Phone}
                     onEdit={(updatedFields: { name: string; phoneNumber: string; email: string }) =>
                     handleEditContact({ ...contact, ...updatedFields })} 
-                    onDelete={() => handleRemoveContact(contact.id)}
+                    onDelete={() => handleRemoveContact(contact.Id!)}
                     />
             ))}
         </div>
 
         <div className="w-full flex flex-row justify-end pt-4">
-            <ContactButton
-                label={dict.profilePage.contact.button.text}
-                onClick={handleAddContact}
-            />
+            <AddContactModal dict={dict} handleAddContact={handleAddContact}/>
         </div>
         
         <ProfileHeader title={dict.profilePage.location.header.text} />
