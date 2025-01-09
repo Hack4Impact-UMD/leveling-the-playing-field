@@ -216,6 +216,9 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                         </div>
                     )}
                 </div> 
+                <button onClick={openModal}>
+                    <XIcon />
+                </button>
             </div>
 
             <div className="basis-3/5">
@@ -267,9 +270,6 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                 <div className="self-start flex flex-col justify-end space-y-5">
                     <button className="ml-1" onClick={handleEmailEditClick}>
                         <EditIcon />
-                    </button>
-                    <button onClick={openModal}>
-                        <XIcon />
                     </button>
                 </div>
             </div>
