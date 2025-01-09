@@ -21,7 +21,6 @@ interface Location {
     country: string;
 }
 
-//export default function OrganizationProfile() {
 export default function OrganizationProfilePage({ dict }: { dict: any }) {  
     const [account, setAccount] = useState<Account>();
     const [contacts, setContacts] = useState<Contact[]>([]);
@@ -90,7 +89,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ AccountId: accountId, ...newContact }),
           });
-          if (!res.ok) { throw new Error("Failed to create contact"); }
+          if (!res.ok) { alert("Failed to create contact. Please try again later.") }
 
           res = await fetch(`/api/contacts?accountId=${accountId}`)
           const newContacts = await res.json();
@@ -101,19 +100,15 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         }
     };
 
-    const handleRemoveContact = (id: string) => {
-        setContacts(contacts.filter((contact) => contact.Id !== id));
+    const handleRemoveContact = async (id: string) => {
+        try {
+          const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+          if (!res.ok) { alert("Failed to delete contact. Please try again later."); }
+          setContacts(contacts.filter((contact) => contact.Id !== id));
+        } catch (error: any) {
+          alert(error.message || "Error deleting contact");
+        }
     };
-
-    // const handleRemoveContact = async (id: number) => {
-    //     try {
-    //       const res = await fetch(`/api/contact/${id}`, { method: "DELETE" });
-    //       if (!res.ok) throw new Error("Failed to delete contact");
-    //       setContacts(contacts.filter((contact) => contact.id !== id));
-    //     } catch (error: any) {
-    //       alert(error.message || "Error deleting contact");
-    //     }
-    // };
 
     const handleEditContact = (updatedContact: Contact) => {
         setContacts(
