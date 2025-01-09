@@ -234,7 +234,7 @@ export default function AddContactModal(props: AddContactModalProps) {
         </div>
         <DialogClose className="w-1/2 h-3/4 bg-orange hover:bg-orange-light rounded-lg">
           <button onClick={handleAddContactClick}>
-            Hello there
+            {dict.profilePage.contact.button.text}
           </button>
         </DialogClose>
       </DialogContent>
