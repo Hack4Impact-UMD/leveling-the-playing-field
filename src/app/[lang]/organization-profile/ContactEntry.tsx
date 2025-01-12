@@ -3,6 +3,7 @@ import EditIcon from '@/components/icons/EditIcon';
 import XIcon from '@/components/icons/XIcon';
 import ConfirmationModal from './ConfirmationModal';
 import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
+import { Contact } from '@/types/types';
 
 
 interface ContactItemProps {
@@ -12,7 +13,7 @@ interface ContactItemProps {
     lastName: string
     phoneNumber: string;
     email: string;
-    onEdit: (updatedContact: { name: string; phoneNumber: string; email: string }) => void;
+    onEdit: (updatedContact: Partial<Contact>) => void;
     onDelete: () => void;
 }
 
@@ -117,28 +118,28 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
     const handleFirstNameKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validateFirstName()) {
             setIsFirstNameEditable(false);
-            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ FirstName: editedFirstName });
         }
     };
 
     const handleLastNameKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validateLastName()) {
             setIsLastNameEditable(false);
-            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ LastName: editedLastName });
         }
     }
 
     const handlePhoneKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validatePhone()) {
             setIsPhoneEditable(false);
-            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ Phone: editedPhoneNumber });
         }
     };
 
     const handleEmailKeyDown = (e: React.KeyboardEvent) => {
         if (e.key === 'Enter' && validateEmail()) {
             setIsEmailEditable(false);
-            onEdit({ name: editedFirstName, phoneNumber: editedPhoneNumber, email: editedEmail });
+            onEdit({ Email: editedEmail });
         }
     };
 

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import ProfileIcon from "@/components/icons/ProfileIcon";
-import ContactButton from './ContactButton';
 import ContactEntry from './ContactEntry';
 import ProfileHeader from './ProfileHeader';
 import EditableField from './EditableField';
@@ -12,27 +11,9 @@ import Loading from '@/components/Loading';
 import { Account, Contact } from '@/types/types';
 import AddContactModal from './AddContactModal';
 
-interface Location {
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    zipCode: string;
-    country: string;
-}
-
 export default function OrganizationProfilePage({ dict }: { dict: any }) {  
     const [account, setAccount] = useState<Account>();
     const [contacts, setContacts] = useState<Contact[]>([]);
-    const [location, setLocation] = useState<Location>({
-        addressLine1: '100 Sunshine Lane',
-        addressLine2: '100 Sunshine Lane',
-        city: 'City',
-        state: 'Maryland',
-        zipCode: '123456',
-        country: 'United States',
-      });
-    const [contactNumber, setContactNumber] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
     
     // const [location, setLocation] = useState<Location>({
@@ -110,29 +91,38 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         }
     };
 
-    const handleEditContact = (updatedContact: Contact) => {
-        setContacts(
-            contacts.map((contact) => (contact.Id === updatedContact.Id ? updatedContact : contact))
-        );
+    const handleEditContact = async (contactId: string, updates: Partial<Contact>) => {
+        try {
+          const res = await fetch(`/api/contacts/${contactId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updates),
+          });
+          if (!res.ok) { alert("Failed to update contact. Please try again later."); }
+          setContacts(
+            contacts.map((contact) =>
+              contact.Id === contactId ? { ...contact, ...updates} : contact
+            )
+          );
+        } catch (error: any) {
+          alert(error.message || "Error editing contact");
+        }
     };
 
-    // const handleEditContact = async (updatedContact: Contact) => {
-    //     try {
-    //       const res = await fetch(`/api/contact/${updatedContact.id}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify(updatedContact),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to update contact");
-    //       setContacts(
-    //         contacts.map((contact) =>
-    //           contact.id === updatedContact.id ? updatedContact : contact
-    //         )
-    //       );
-    //     } catch (error: any) {
-    //       alert(error.message || "Error editing contact");
-    //     }
-    // };
+    const handleEditAccount = async (updates: Partial<Account>) => {
+        try {
+            const res = await fetch(`/api/accounts/${accountId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(updates),
+            });
+            console.log(res)
+            if (!res.ok) { alert("Failed to update account. Please try again later."); }
+            setAccount({ ...account, ...updates } as Account)
+        } catch (error: any) {
+            alert(error.message || "Error editing account.");
+        }
+    }
 
     // const handleLocationFieldSave = async (field: keyof Location, newValue: string) => {
     //     try {
@@ -199,29 +189,6 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
     // if (error) {
     //     return <p className="text-red-500">{error}</p>;
     // }
-
-
-    const handleLocationFieldSave = (field: keyof Location, newValue: string) => {
-        setLocation((prevLocation) => ({
-          ...prevLocation,
-          [field]: newValue,
-        }));
-    };
-    
-    const handleCountryChange = (newCountry: string) => {
-        setLocation((prevLocation) => ({
-          ...prevLocation,
-          country: newCountry,
-          state: '',
-        }));
-    };
-    
-    const handleStateChange = (newState: string) => {
-        setLocation((prevLocation) => ({
-          ...prevLocation,
-          state: newState,
-        }));
-    };
   
     if (loading) { return <Loading /> }
 
@@ -245,8 +212,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
                     lastName={contact.LastName}
                     email={contact.Email} 
                     phoneNumber={contact.Phone}
-                    onEdit={(updatedFields: { name: string; phoneNumber: string; email: string }) =>
-                    handleEditContact({ ...contact, ...updatedFields })} 
+                    onEdit={(updates: Partial<Contact>) => handleEditContact(contact.Id!, updates)} 
                     onDelete={() => handleRemoveContact(contact.Id!)}
                     />
             ))}
@@ -261,18 +227,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
             error={dict.profilePage.errors.valid.text}
             label={dict.profilePage.location.addressOne.text}
             type="text"
-            value={location.addressLine1}
-            onSave={(newValue) => handleLocationFieldSave('addressLine1', newValue)}
+            value={account?.BillingStreet || ""}
+            onSave={(street: string) => handleEditAccount({ BillingStreet: street })}
             required={true}
-        />
-
-        <EditableField
-            error={dict.profilePage.errors.valid.text}
-            label={dict.profilePage.location.addressTwo.text}
-            type="text"
-            value={location.addressLine2}
-            onSave={(newValue) => handleLocationFieldSave('addressLine2', newValue)}
-            required={false}
         />
 
         <div className="w-full flex flex-row space-x-4">
@@ -281,9 +238,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
                     error={dict.profilePage.errors.locationCity.text}
                     label={dict.profilePage.location.city.text}
                     type="text"
-                    value={location.city}
+                    value={account?.BillingCity || ""}
                     pattern={/^[A-Za-z\s]+$/}
-                    onSave={(newValue) => handleLocationFieldSave('city', newValue)}
+                    onSave={(city: string) => handleEditAccount({ BillingCity: city })}
                     required={true}
                 />
             </div>
@@ -292,9 +249,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
                 <StateDropdown
                     label={dict.profilePage.location.state.text}
                     error={dict.profilePage.errors.required.text}
-                    country={location.country}
-                    state={location.state}
-                    onStateChange={handleStateChange}
+                    country={account?.BillingCountry || ""}
+                    state={account?.BillingState || ""}
+                    onStateChange={(state: string) => handleEditAccount({ BillingState: state })}
                 />
             </div>
         </div>    
@@ -304,8 +261,8 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
                 <CountryDropdownComponent
                     label={dict.profilePage.location.country.text}
                     error={dict.profilePage.errors.required.text}
-                    country={location.country}
-                    onCountryChange={handleCountryChange}
+                    country={account!.BillingCountry}
+                    onCountryChange={(country: string) => handleEditAccount({ BillingCountry: country, BillingState: "" })}
                 />  
             </div>
 
@@ -314,9 +271,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
                     error={dict.profilePage.errors.locationZipcode.text}
                     label={dict.profilePage.location.zipcode.text}
                     type="text"
-                    value={location.zipCode}
+                    value={account!.BillingPostalCode}
                     pattern={/^\d+$/}
-                    onSave={(newValue) => handleLocationFieldSave('zipCode', newValue)}
+                    onSave={(postalCode: string) => handleEditAccount({ BillingPostalCode: postalCode })}
                     required={true}
                 />
             </div>
@@ -335,9 +292,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
             error={dict.profilePage.errors.valid.text}
             label={dict.profilePage.number.box.text}
             type="tel"
-            value={contactNumber}
+            value={account?.Phone || ""}
             pattern={/^\d{3}-\d{3}-\d{4}$/}
-            onSave={(newNumber: string) => setContactNumber(newNumber)}
+            onSave={(newNumber: string) => handleEditAccount({ Phone: newNumber })}
             required={true}
         />
       </div>
