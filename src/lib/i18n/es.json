@@ -23,9 +23,13 @@
                 "text": "Personas de Contacto",
                 "note": "text in top green box"
             },
-            "name": {
-                "text": "Nombre",
-                "note": "text above name fill in the blank"
+            "firstName": {
+                "text": "Nombre de pila",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Apellido",
+                "note": "text above last name fill in the blank"
             },
             "phone": {
                 "text": "Número de Teléfono",
@@ -83,16 +87,50 @@
                 "text": "País",
                 "note": "text above Country fill in the blank"
             }
-        }
-    },
-    "number": {
-        "header": {
-            "text": "Número de Contacto",
-            "note": "text in third green box"
         },
-        "box": {
-            "text": "Número",
-            "note": "text above phone fill in the blank"
+        "number": {
+            "header": {
+                "text": "Número de Contacto",
+                "note": "text in third green box"
+            },
+            "box": {
+                "text": "Número",
+                "note": "text above phone fill in the blank"
+            }
+        },
+       "errors": {
+            "contactName": {
+                "text": "Por favor ingresa un nombre válido",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Por favor ingresa un número de teléfono válido",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "Por favor, introduce una dirección de correo electrónico válida",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Por favor ingrese una dirección válida línea 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Por favor ingresa una ciudad válida",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Por favor ingresa un código postal válido",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "Este campo es obligatorio",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Por favor ingrese un válido",
+                "note": "Error text for non-contact fields"
+            }
         }
     },
     "appointmentsPage": {

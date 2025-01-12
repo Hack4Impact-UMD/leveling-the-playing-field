@@ -23,9 +23,13 @@
                 "text": "Points of contact",
                 "note": "text in top green box"
             },
-            "name": {
-                "text": "Name",
-                "note": "text above name fill in the blank"
+            "firstName": {
+                "text": "First Name",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Last Name",
+                "note": "text above last name fill in the blank"
             },
             "phone": {
                 "text": "Phone Number",
@@ -92,6 +96,40 @@
             "box": {
                 "text": "Number",
                 "note": "text above phone fill in the blank"
+            }
+        },
+        "errors": {
+            "contactName": {
+                "text": "Please enter a valid name",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Please enter a valid phone number",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "Please enter a valid email address",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Please enter a valid address line 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Please enter a valid city",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Please enter a valid zipcode",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "This field is required",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Please enter a valid",
+                "note": "Error text for non-contact fields"
             }
         }
     },
