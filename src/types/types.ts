@@ -3,7 +3,11 @@ export interface Account {
   Name: string;
   Phone: string;
   Email__c: string;
-  BillingAddress: Address;
+  BillingStreet: string;
+  BillingCity: string;
+  BillingState: string;
+  BillingCountry: string;
+  BillingPostalCode: string;
 }
 
 export interface Contact {
@@ -62,14 +66,6 @@ export interface Product {
   id: string;
   name: string;
   category: string;
-}
-
-export interface Address {
-  street: string;
-  city: string;
-  state: string;
-  country: string;
-  postalCode: string;
 }
 
 export enum Market {
