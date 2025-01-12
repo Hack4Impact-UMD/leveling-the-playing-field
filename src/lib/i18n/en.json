@@ -1,0 +1,292 @@
+{
+    "loginPage": {
+        "title": {
+            "text": "Welcome!",
+            "note": "Header text for the page"
+        },
+        "loginButton": {
+            "text": "Login with Google",
+            "note": "login button"
+        },
+        "application": {
+            "text": "Organization Application",
+            "note": "lower button text"
+        }
+    },
+    "profilePage": {
+        "title": {
+            "text": "Organization Profile",
+            "note": "Header text"
+        },
+        "contact": {
+            "header": {
+                "text": "Points of contact",
+                "note": "text in top green box"
+            },
+            "firstName": {
+                "text": "First Name",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Last Name",
+                "note": "text above last name fill in the blank"
+            },
+            "phone": {
+                "text": "Phone Number",
+                "note": "text above phone number fill in the blank"
+            },
+            "email": {
+                "text": "Email",
+                "note": "text above email fill in the blank"
+            },
+            "button": {
+                "text": "Add Contact",
+                "note": "text for the add contact button"
+            },
+            "deletePopup": {
+                "confirmationText": {
+                    "text": "Are you sure you want to delete this contact?",
+                    "note": "delete confirmation text"
+                },
+                "yes": {
+                    "text": "Yes",
+                    "note": "yes button text"
+                },
+                "no": {
+                    "text": "No",
+                    "note": "no button text"
+                }
+            }
+        },
+        "location": {
+            "header": {
+                "text": "Location",
+                "note": "text in second green box"
+            },
+            "addressOne": {
+                "text": "Address Line 1",
+                "note": "text above 1st address fill in the blank"
+            },
+            "addressTwo": {
+                "text": "Address Line 2",
+                "note": "text above 2nd address fill in the blank"
+            },
+            "city": {
+                "text": "City",
+                "note": "text above city fill in the blank"
+            },
+            "state": {
+                "text": "State",
+                "note": "text above State fill in the blank"
+            },
+            "zipcode": {
+                "text": "Zipcode",
+                "note": "text above zipcode fill in the blank"
+            },
+            "country": {
+                "text": "Country",
+                "note": "text above Country fill in the blank"
+            }
+        },
+        "number": {
+            "header": {
+                "text": "Contact Number",
+                "note": "text in third green box"
+            },
+            "box": {
+                "text": "Number",
+                "note": "text above phone fill in the blank"
+            }
+        },
+        "errors": {
+            "contactName": {
+                "text": "Please enter a valid name",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Please enter a valid phone number",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "Please enter a valid email address",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Please enter a valid address line 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Please enter a valid city",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Please enter a valid zipcode",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "This field is required",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Please enter a valid",
+                "note": "Error text for non-contact fields"
+            }
+        }
+    },
+    "appointmentsPage": {
+        "title": {
+            "text": "Appointments",
+            "note": "Header text"
+        },
+        "lowerTitle": {
+            "text": "Book New Appointment",
+            "note": "Text above button"
+        },
+        "button": {
+            "text": "Select Location",
+            "note": "text inside the button"
+        },
+        "appointmentDetails": {
+            "text": "Upcoming Appointment",
+            "note": "Text within upcoming appointment box"
+        },
+        "confirmationPopup": {
+            "confirmationText": {
+                "text": "Are you sure you want to select this location?",
+                "note": "popup prompt"
+            },
+            "yes": {
+                "text": "Yes",
+                "note": "label for yes button"
+            },
+            "no": {
+                "text": "No",
+                "note": "label for no button"
+            }
+        }
+    },
+    "loadingPage": {
+        "text": "Loading page, please wait...",
+        "note": "loading text"
+    },
+    "pageNotFound": {
+        "center": {
+            "text": "Page Not Found",
+            "note": "Center text"
+        },
+        "button": {
+            "text": "Go Back",
+            "note": "Button Text"
+        }
+    },
+    "receiptsPage": {
+        "title": {
+            "text": "Receipts",
+            "note": "Header text"
+        },
+        "viewButton": {
+            "text": "View Receipt",
+            "note": "view receipt text button"
+        },
+        "orderDetails": {
+            "title": {
+                "text": "Order Details",
+                "note": "Order details title"
+            },
+            "warehouse": {
+                "text": "Warehouse Location:",
+                "note": "warehouse location text"
+            },
+            "date": {
+                "text": "Date of Purchase:",
+                "note": "date of purchase for receipt text"
+            },
+            "contact": {
+                "text": "Point of Contact:",
+                "note": "point of contact text label"
+            },
+            "total": {
+                "text": "Total Checked Out Items:",
+                "note": "total number of items text label"
+            },
+            "orderInfo": {
+                "items": {
+                    "text": "Items",
+                    "note": "Items list label"
+                },
+                "quantity": {
+                    "text": "Quantity",
+                    "note": "note list label"
+                }
+            }
+        }
+    },
+    "checkoutPage": {
+        "title": {
+            "text": "Add Equipment",
+            "note": "Header text"
+        },
+        "addSport": {
+            "text": "Add Sport",
+            "note": "Button text to add sport"
+        },
+        "selectedEquipment": {
+            "text": "Select Equipment",
+            "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "CHECKOUT",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Select Sport",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Selected:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Quantity",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "Unable to checkout",
+            "note": "checkout error text"
+        }
+    },
+    "searchPage": {
+        "searchBar": {
+            "text": "Search",
+            "note": "text within the search bar"
+        },
+        "toggleMenu": {
+            "menuText": {
+                "text": "Show",
+                "note": "text for the menu label"
+            },
+            "equipment": {
+                "text": "Equipment",
+                "note": "text to show when equipment list is being shown"
+            },
+            "warehouses": {
+                "text": "Warehouses",
+                "note": "text to show when warehouse list is being shown"
+            }
+        }
+    },
+    "thankYouPage": {
+        "thankYou": {
+            "text": "Thank You!",
+            "note": "Thank you title text"
+        },
+        "successfulCheckout": {
+            "text": "You've checked out successfully!",
+            "note": "Successful checkout text"
+        },
+        "viewReceipt": {
+            "text": "View Receipt",
+            "note": "button text to redirect to receipts page"
+        }
+    }
+}

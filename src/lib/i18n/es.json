@@ -1,0 +1,292 @@
+{
+    "loginPage": {
+        "title": {
+            "text": "¡Bienvenido!",
+            "note": "Header text for the page"
+        },
+        "loginButton": {
+            "text": "Iniciar sesión con Google",
+            "note": "login button"
+        },
+        "application": {
+            "text": "Aplicación de la Organización",
+            "note": "lower button text"
+        }
+    },
+    "profilePage": {
+        "title": {
+            "text": "Perfil de la Organización",
+            "note": "Header text"
+        },
+        "contact": {
+            "header": {
+                "text": "Personas de Contacto",
+                "note": "text in top green box"
+            },
+            "firstName": {
+                "text": "Nombre de pila",
+                "note": "text above first name fill in the blank"
+            },
+            "lastName": {
+                "text": "Apellido",
+                "note": "text above last name fill in the blank"
+            },
+            "phone": {
+                "text": "Número de Teléfono",
+                "note": "text above phone number fill in the blank"
+            },
+            "email": {
+                "text": "Correo Electrónico",
+                "note": "text above email fill in the blank"
+            },
+            "button": {
+                "text": "Agregar Contacto",
+                "note": "text for the add contact button"
+            },
+            "deletePopup": {
+                "confirmationText": {
+                    "text": "¿Está seguro de que desea eliminar este contacto?",
+                    "note": "delete confirmation text"
+                },
+                "yes": {
+                    "text": "Sí",
+                    "note": "yes button text"
+                },
+                "no": {
+                    "text": "No",
+                    "note": "no button text"
+                }
+            }
+        },
+        "location": {
+            "header": {
+                "text": "Ubicación",
+                "note": "text in second green box"
+            },
+            "addressOne": {
+                "text": "Dirección Línea 1",
+                "note": "text above 1st address fill in the blank"
+            },
+            "addressTwo": {
+                "text": "Dirección Línea 2",
+                "note": "text above 2nd address fill in the blank"
+            },
+            "city": {
+                "text": "Ciudad",
+                "note": "text above city fill in the blank"
+            },
+            "state": {
+                "text": "Estado",
+                "note": "text above State fill in the blank"
+            },
+            "zipcode": {
+                "text": "Código Postal",
+                "note": "text above zipcode fill in the blank"
+            },
+            "country": {
+                "text": "País",
+                "note": "text above Country fill in the blank"
+            }
+        },
+        "number": {
+            "header": {
+                "text": "Número de Contacto",
+                "note": "text in third green box"
+            },
+            "box": {
+                "text": "Número",
+                "note": "text above phone fill in the blank"
+            }
+        },
+       "errors": {
+            "contactName": {
+                "text": "Por favor ingresa un nombre válido",
+                "note": "Error text for invalid contact name"
+            },
+            "contactPhoneNumber": {
+                "text": "Por favor ingresa un número de teléfono válido",
+                "note": "Error text for invalid contact phone number"
+            },
+            "contactEmail": {
+                "text": "Por favor, introduce una dirección de correo electrónico válida",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationAddressOne": {
+                "text": "Por favor ingrese una dirección válida línea 1",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationCity": {
+                "text": "Por favor ingresa una ciudad válida",
+                "note": "Error text for invalid contact email address"
+            },
+            "locationZipcode": {
+                "text": "Por favor ingresa un código postal válido",
+                "note": "Error text for invalid zip code"
+            },
+            "required": {
+                "text": "Este campo es obligatorio",
+                "note": "Error text for country and state dropdowns"
+            },
+            "valid": {
+                "text": "Por favor ingrese un válido",
+                "note": "Error text for non-contact fields"
+            }
+        }
+    },
+    "appointmentsPage": {
+        "title": {
+            "text": "Citas",
+            "note": "Header text"
+        },
+        "lowerTitle": {
+            "text": "Reservar Nueva Cita",
+            "note": "Text above button"
+        },
+        "button": {
+            "text": "Seleccionar Ubicación",
+            "note": "text inside the button"
+        },
+        "appointmentDetails": {
+            "text": "Cita Próxima",
+            "note": "Text within upcoming appointment box"
+        },
+        "confirmationPopup": {
+            "confirmationText": {
+                "text": "¿Está seguro de que desea seleccionar esta ubicación?",
+                "note": "popup prompt"
+            },
+            "yes": {
+                "text": "Sí",
+                "note": "label for yes button"
+            },
+            "no": {
+                "text": "No",
+                "note": "label for no button"
+            }
+        }
+    },
+    "loadingPage": {
+        "text": "Cargando la página, por favor espere...",
+        "note": "loading text"
+    },
+    "pageNotFound": {
+        "center": {
+            "text": "Página No Encontrada",
+            "note": "Center text"
+        },
+        "button": {
+            "text": "Regresar",
+            "note": "Button Text"
+        }
+    },
+    "receiptsPage": {
+        "title": {
+            "text": "Recibos",
+            "note": "Header text"
+        },
+        "viewButton": {
+            "text": "Ver Recibo",
+            "note": "view receipt text button"
+        },
+        "orderDetails": {
+            "title": {
+                "text": "Detalles del Pedido",
+                "note": "Order details title"
+            },
+            "warehouse": {
+                "text": "Ubicación del Almacén:",
+                "note": "warehouse location text"
+            },
+            "date": {
+                "text": "Fecha de Compra:",
+                "note": "date of purchase for receipt text"
+            },
+            "contact": {
+                "text": "Persona de Contacto:",
+                "note": "point of contact text label"
+            },
+            "total": {
+                "text": "Total de Artículos Verificados:",
+                "note": "total number of items text label"
+            },
+            "orderInfo": {
+                "items": {
+                    "text": "Artículos",
+                    "note": "Items list label"
+                },
+                "quantity": {
+                    "text": "Cantidad",
+                    "note": "note list label"
+                }
+            }
+        }
+    },
+    "checkoutPage": {
+        "title": {
+            "text": "Agregar Equipo",
+            "note": "Header text"
+        },
+        "addSport": {
+            "text": "Agregar Deporte",
+            "note": "Button text to select sport"
+        },
+        "selectedEquipment": {
+            "text": "Seleccionar Equipo",
+            "note": "Button text to select equipment"
+        },
+        "checkout": {
+            "text": "VERIFICAR",
+            "note": "Button text to checkout"
+        },
+        "selectSport": {
+            "text": "Seleccione Deporte",
+            "note": "Button text to select sport"
+        },
+        "selected": {
+            "text": "Seleccionado:",
+            "note": "prefix for selected sport"
+        },
+        "quantity": {
+            "text": "Cantidad",
+            "note": "placeholder text for empty equipment quantity"
+        },
+        "checkoutError": {
+            "text": "No se puede realizar el pago",
+            "note": "checkout error text"
+        }
+    },
+    "searchPage": {
+        "searchBar": {
+            "text": "Buscar",
+            "note": "text within the search bar"
+        },
+        "toggleMenu": {
+            "menuText": {
+                "text": "Espectáculo",
+                "note": "text for the menu label"
+            },
+            "equipment": {
+                "text": "Equipo",
+                "note": "text to show when equipment list is being shown"
+            },
+            "warehouses": {
+                "text": "Almacenes",
+                "note": "text to show when warehouse list is being shown"
+            }
+        }
+    },
+    "thankYouPage": {
+        "thankYou": {
+            "text": "¡Gracias!",
+            "note": "Thank you title text"
+        },
+        "successfulCheckout": {
+            "text": "¡Has realizado el check out exitosamente!",
+            "note": "Successful checkout text"
+        },
+        "viewReceipt": {
+            "text": "Ver recibo",
+            "note": "button text to redirect to receipts page"
+        }
+    }
+}
