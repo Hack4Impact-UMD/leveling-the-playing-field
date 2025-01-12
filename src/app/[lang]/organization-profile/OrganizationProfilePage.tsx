@@ -15,18 +15,6 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
     const [account, setAccount] = useState<Account>();
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    
-    // const [location, setLocation] = useState<Location>({
-    //     addressLine1: '',
-    //     addressLine2: '',
-    //     city: '',
-    //     state: '',
-    //     zipCode: '',
-    //     country: '',
-    //   });
-    // const [contactNumber, setContactNumber] = useState<string>('');
-    // const [loading, setLoading] = useState<boolean>(true);
-    // const [error, setError] = useState<string | null>(null);
 
     const accountId = "001U800000FYoL8IAL";  //temp 
 
@@ -123,72 +111,6 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
             alert(error.message || "Error editing account.");
         }
     }
-
-    // const handleLocationFieldSave = async (field: keyof Location, newValue: string) => {
-    //     try {
-    //       const updatedLocation = { ...location, [field]: newValue };
-    //       const res = await fetch(`/api/account/${accountId}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ location: updatedLocation }),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to update location");
-    //       setLocation(updatedLocation);
-    //     } catch (error : any) {
-    //       alert(error.message || "Error saving location");
-    //     }
-    // };
-      
-    // const handleCountryChange = async (newCountry: string) => {
-    //     try {
-    //       const updatedLocation = { ...location, country: newCountry, state: "" };
-    //       const res = await fetch(`/api/account/${accountId}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ location: updatedLocation }),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to update country");
-    //       setLocation(updatedLocation);
-    //     } catch (error : any) {
-    //       alert(error.message || "Error updating country");
-    //     }
-    // };
-      
-    // const handleStateChange = async (newState: string) => {
-    //     try {
-    //       const updatedLocation = { ...location, state: newState };
-    //       const res = await fetch(`/api/account/${accountId}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ location: updatedLocation }),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to update state");
-    //       setLocation(updatedLocation);
-    //     } catch (error : any) {
-    //       alert(error.message || "Error updating state");
-    //     }
-    // };
-
-    // const handleNumberSave = async (newNumber: string) => {
-    //     try {
-    //       const res = await fetch(`/api/account/${accountId}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({ contactNumber: newNumber }),
-    //       });
-    //       if (!res.ok) throw new Error("Failed to update number");
-    //       setContactNumber(newNumber);
-    //     } catch (error : any) {
-    //       alert(error.message || "Error saving number");
-    //     }
-    // };
-
-    // if (loading) {
-    //     return <Loading />;
-    // } 
-    // if (error) {
-    //     return <p className="text-red-500">{error}</p>;
-    // }
   
     if (loading) { return <Loading /> }
 
@@ -280,14 +202,6 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         </div>
 
         <ProfileHeader title={dict.profilePage.number.header.text} />
-        {/* <EditableField
-                label="Number"
-                type="tel"
-                value={contactNumber}
-                pattern={/^\d{3}-\d{3}-\d{4}$/}
-                onSave={(newNumber: string) => handleNumberSave(newNumber)}
-                required={true}
-        /> */}
         <EditableField
             error={dict.profilePage.errors.valid.text}
             label={dict.profilePage.number.box.text}
