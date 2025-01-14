@@ -13,6 +13,8 @@ import LocalizationButton from "@/components/LocalizationButton";
 import { useState, useEffect } from "react";
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
+import { auth, signInWithGooglePopup } from "@/lib/firebase/googleAuthentication";
+import { useRouter } from "next/navigation";
 
 interface LoginPageProps {
   lang: Locale;
@@ -22,6 +24,8 @@ export default function LoginPage(props: LoginPageProps) {
   const { lang } = props;
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const router = useRouter();
 
   useEffect(() => {
     const loadDict = async () => {
@@ -39,7 +43,7 @@ export default function LoginPage(props: LoginPageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 text-center relative font-cabin-condensed">
       {/* Title at the Top */}
-      <h1 className="absolute top-1 text-6xl font-bree-serif text-black">
+      <h1 className="absolute top-1 text-6xl font-bree-serif text-black" onClick={() => auth.signOut()}>
         {dict!.loginPage.title.text}
       </h1>
 
@@ -56,7 +60,7 @@ export default function LoginPage(props: LoginPageProps) {
 
       {/* Centered Login Button */}
       <div className="relative bg-teal-light2 p-6 rounded-full w-72 h-72 flex flex-col items-center justify-center">
-        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl">
+        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl" onClick={async () => await signInWithGooglePopup()}>
           <GoogleIcon />
           <span>{dict!.loginPage.loginButton.text}</span>
         </button>
@@ -89,7 +93,7 @@ export default function LoginPage(props: LoginPageProps) {
       </div>
 
       {/* Organization Application Button */}
-      <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg">
+      <button className="mt-6 px-6 py-2 rounded-full bg-teal-700 text-white text-lg" onClick={() => router.push("https://form.jotform.com/232446768208059")}>
         {dict!.loginPage.application.text}
       </button>
 
