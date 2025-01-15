@@ -43,7 +43,7 @@ export default function LoginPage(props: LoginPageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200 text-center relative font-cabin-condensed">
       {/* Title at the Top */}
-      <h1 className="absolute top-1 text-6xl font-bree-serif text-black" onClick={() => auth.signOut()}>
+      <h1 className="absolute top-1 text-6xl font-bree-serif text-black">
         {dict!.loginPage.title.text}
       </h1>
 
