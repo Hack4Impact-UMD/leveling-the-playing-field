@@ -15,6 +15,7 @@ export default function AuthProvider({
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<IdTokenResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (newUser) => {
@@ -27,6 +28,7 @@ export default function AuthProvider({
             console.error(await res.json());
             setUser(null);
             setToken(null);
+            setError("We were unable to log you in. Please ensure you've been added to your organization's contacts list and try again later.");
             return;
           }
           newToken = await newUser.getIdTokenResult(true); // Force refresh token since claims have changed
@@ -41,6 +43,10 @@ export default function AuthProvider({
     });
     return () => unsubscribe();
   }, []);
+
+  if (error) {
+    return <div>{error}</div>
+  }
 
   if (loading) {
     return <Loading />
