@@ -1,3 +1,5 @@
+import { IdTokenResult, User } from "firebase/auth";
+
 export interface Account {
   Id: string;
   Name: string;
@@ -74,6 +76,12 @@ export enum Market {
   WESTERN_NEW_YORK = "Western New York",
   PHILADELPHIA = "Philadelphia",
   OHIO = "Ohio"
+}
+
+export interface AuthContextType {
+  user: User | null;
+  token: IdTokenResult | null;
+  loading: boolean;
 }
 
 export enum Role {
