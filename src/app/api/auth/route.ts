@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase/firebaseAdminConfig";
 import { executeSOQLQuery } from "@/lib/salesforce/soqlQuery";
 import { APIResponse, isError } from "@/types/apiTypes";
-import { Contact } from "@/types/types";
+import { Contact, Role } from "@/types/types";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     if (!decodedToken.email) {
       await adminAuth.deleteUser(decodedToken.uid);
       return NextResponse.json({ error: 'User does not have a valid email address' }, { status: 400, statusText: "Bad Request" });
-    } else if (!decodedToken.salesforceIds) {
+    } else if (!decodedToken.role) {
       const res: APIResponse<Contact[]> = await executeSOQLQuery(`SELECT Id, AccountId
                                                                   FROM Contact
                                                                   WHERE Email = '${decodedToken.email}'
@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
       }
 
       await adminAuth.setCustomUserClaims(decodedToken.uid, {
+        role: Role.USER,
         salesforceIds: {
           accountId: res.data[0].AccountId,
           contactId: res.data[0].Id,

@@ -26,7 +26,7 @@ export default function AuthProvider({
       setLoading(true);
       if (newUser) {
         let newToken = await newUser.getIdTokenResult();
-        if (!newToken.claims.salesforceIds) {
+        if (!newToken.claims.role) {
           const res = await fetch(`/api/auth`, { method: "POST", body: JSON.stringify({ idToken: newToken.token }) });
           if (!res.ok) {
             console.error(await res.json());

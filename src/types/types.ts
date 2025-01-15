@@ -75,3 +75,8 @@ export enum Market {
   PHILADELPHIA = "Philadelphia",
   OHIO = "Ohio"
 }
+
+export enum Role {
+  ADMIN = "admin",
+  USER = "user"
+}
