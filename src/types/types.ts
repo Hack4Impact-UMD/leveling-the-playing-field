@@ -40,7 +40,7 @@ export interface OpportunityLineItem {
   Id?: string;
   OpportunityId?: string;
   PricebookEntryId: string;
-  PricebookEntry: PricebookEntry;
+  PricebookEntry?: PricebookEntry;
   Quantity: number;
   UnitPrice?: number;
 }
