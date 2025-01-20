@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase/firebaseAdminConfig";
 import { executeSOQLQuery } from "@/lib/salesforce/soqlQuery";
 import { APIResponse, isError } from "@/types/apiTypes";
-import { Contact, Role } from "@/types/types";
+import { Account, Contact, Role } from "@/types/types";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,8 +22,22 @@ export async function POST(req: NextRequest) {
       if (isError(res)) {
         return NextResponse.json({ error: res.error }, { status: res.status });
       } else if (res.data.length === 0) {
-        await adminAuth.deleteUser(decodedToken.uid);
-        return NextResponse.json({ error: "User's email has not been added to a an existing organization's account" }, { status: 400, statusText: "Bad Request" });
+        const accountRes: APIResponse<Account[]> = await executeSOQLQuery(`SELECT Id FROM Account WHERE Email__c = '${decodedToken.email}' LIMIT 1`);
+        if (isError(accountRes)) {
+          return NextResponse.json({ error: accountRes.error }, { status: accountRes.status });
+        } else if (accountRes.data.length === 0) {
+          await adminAuth.deleteUser(decodedToken.uid);
+          return NextResponse.json({ error: "User's email has not been added to an existing organization's account" }, { status: 400, statusText: "Bad Request" });
+        }
+        
+        await adminAuth.setCustomUserClaims(decodedToken.uid, {
+          role: Role.USER,
+          salesforceIds: {
+            accountId: accountRes.data[0].Id,
+            contactId: null,
+          }
+        });
+        return NextResponse.json({ message: "User's IDs have been set" }, { status: 200, statusText: "OK" });
       }
 
       await adminAuth.setCustomUserClaims(decodedToken.uid, {
