@@ -19,7 +19,7 @@ export default function AuthProvider({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (newUser) => {
-      setLoading(true);
+    setLoading(true);
       if (newUser) {
         let newToken = await newUser.getIdTokenResult();
         if (!newToken.claims.role) {
@@ -29,6 +29,7 @@ export default function AuthProvider({
             setUser(null);
             setToken(null);
             setError("We were unable to log you in. Please ensure you've been added to your organization's contacts list and try again later.");
+            auth.signOut();
             return;
           }
           newToken = await newUser.getIdTokenResult(true); // Force refresh token since claims have changed
@@ -45,7 +46,7 @@ export default function AuthProvider({
   }, []);
 
   if (error) {
-    return <div>{error}</div>
+    return <div className="text-red-500">{error}</div>
   }
 
   if (loading) {
