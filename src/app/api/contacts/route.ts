@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { refreshAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/authorization';
 import { Contact } from '@/types/types';
 import { createContact, getContactsByAccountId } from '@/lib/salesforce/database/contact';
 import { isError } from '@/types/apiTypes';
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const accessToken = await getAccessToken();
     const res = await getContactsByAccountId(accountId, accessToken);
     return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const accessToken = await getAccessToken();
     const body: Contact = await request.json();
     const response = await createContact(accessToken, body);
     return NextResponse.json(isError(response) ? response.error : response.data, { status: response.status });

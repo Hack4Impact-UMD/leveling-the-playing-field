@@ -1,10 +1,10 @@
 import { APIResponse, SOQLResponse } from "@/types/apiTypes";
-import { refreshAccessToken } from "./authorization";
+import { getAccessToken } from "./authorization";
 
 export async function executeSOQLQuery<T>(query: string, accessToken?: string): Promise<APIResponse<T[]>> {
   try {
     if (!accessToken) {
-      accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+      accessToken = await getAccessToken();
     }
     const url = new URL("/services/data/v62.0/query", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
     url.searchParams.set("q", query);
@@ -17,7 +17,7 @@ export async function executeSOQLQuery<T>(query: string, accessToken?: string): 
     });
     if (!response.ok) {
       const error = await response.json();
-      console.log(error)
+      console.error(error)
       return { error, status: response.status };
     }
     const data: SOQLResponse<T> = await response.json();

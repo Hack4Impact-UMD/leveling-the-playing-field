@@ -1,3 +1,6 @@
+import { Role } from "@/types/types";
+import { adminAuth } from "../firebase/firebaseAdminConfig";
+
 export function getSalesforceAuthURL(): string {
   const authURL = new URL("/services/oauth2/authorize", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN)
   const searchParams = authURL.searchParams;
@@ -29,12 +32,53 @@ export async function getTokensFromAuthCode(authCode: string) {
   }
 }
 
-export async function refreshAccessToken(refreshToken: string) {
-  const url = new URL("/services/oauth2/token", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
-  const res = await fetch(url.toString(), {
+export async function getAccessToken() {
+  const user = await adminAuth.getUserByEmail(process.env.ADMIN_EMAIL || "");
+  const tokens = user.customClaims?.tokens;
+  if (!tokens?.refreshToken) {
+    throw Error("Refresh token not found. Please contact website admin for help.")
+  } else if (tokens?.accessToken && Date.now() / 1000 < tokens?.expirationTime - 10) {
+    return tokens?.accessToken;
+  }
+
+  const accessToken = await refreshAccessToken(tokens?.refreshToken);
+  const expirationTime = await getTokenExpirationTime(accessToken);
+  await adminAuth.setCustomUserClaims(user.uid, {
+    role: Role.ADMIN,
+    tokens: {
+      refreshToken: tokens?.refreshToken,
+      accessToken,
+      expirationTime
+    }
+  });
+  return accessToken;
+}
+
+async function getTokenExpirationTime(accessToken: string) {
+  const url = new URL("/services/oauth2/introspect", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
+  const res = await fetch(url, {
     method: "POST",
     headers: {
       "content-type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      token: accessToken,
+      client_id: process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_ID || "",
+      client_secret: process.env.SALESFORCE_CLIENT_SECRET || "",
+      token_type_hint: "access_token"
+    })
+  })
+  const body = await res.json();
+  return body.exp;
+}
+
+async function refreshAccessToken(refreshToken: string) {
+  const url = new URL("/services/oauth2/token", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "cache-control": "no-cache",
     },
     body: new URLSearchParams({
       grant_type: "refresh_token",

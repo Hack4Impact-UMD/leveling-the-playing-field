@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { refreshAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/authorization';
 import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
 import { APIResponse, isError } from '@/types/apiTypes';
 import { createOpportunityLineItem, deleteOpportunity, getOpportunityById, updateOpportunity, updateOpportunityLineItem } from '@/lib/salesforce/database/opportunity';
@@ -10,7 +10,7 @@ export async function GET(
   { params }: { params: { opportunityId: string } }
 ) {
   try {
-    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const accessToken = await getAccessToken();
     const res = await getOpportunityById(params.opportunityId, accessToken);
     return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
@@ -25,7 +25,7 @@ export async function PUT(
 ) {
   try {
     const { opportunityId } = params;
-    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const accessToken = await getAccessToken();
     
     const postedCheckRes: APIResponse<Opportunity> = await getOpportunityById(opportunityId, accessToken);
     if (isError(postedCheckRes)) {
@@ -81,7 +81,7 @@ export async function DELETE(
   { params }: { params: { opportunityId: string } }
 ) {
   try {
-    const accessToken = await refreshAccessToken(process.env.SALESFORCE_REFRESH_TOKEN || "");
+    const accessToken = await getAccessToken();
     const res = await deleteOpportunity(params.opportunityId, accessToken);
     return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
   } catch (error) {
