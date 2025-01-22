@@ -27,7 +27,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
 
     const fetchReceipts = async () => {
       try {
-        const response = await fetch(`/api/opportunities?accountId=${ACCOUNT_ID}&stage=Posted`);
+        const response = await fetch(`/api/accounts/${ACCOUNT_ID}/opportunities?stage=Posted`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to fetch opportunities');
@@ -63,7 +63,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
   const aggregateLineItems = (receipt: Opportunity) => {
     const productsGroupedByFamily: Record<string, OpportunityLineItem[]> = {};
     receipt.LineItems?.forEach((lineItem: OpportunityLineItem) => {
-      const family = lineItem.PricebookEntry.Product2.Family;
+      const family = lineItem.PricebookEntry!.Product2.Family;
       if (!productsGroupedByFamily[family]) {
         productsGroupedByFamily[family] = [lineItem];
       } else { 

@@ -35,7 +35,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
         const fetchContacts = async () => {
             try {
-                const res = await fetch(`/api/contacts?accountId=${accountId}`);
+                const res = await fetch(`/api/accounts/${accountId}/contacts`);
                 if (!res.ok) {
                     const error = await res.json();
                     console.error("Error fetching contacts", error);
@@ -60,7 +60,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
           });
           if (!res.ok) { alert("Failed to create contact. Please try again later.") }
 
-          res = await fetch(`/api/contacts?accountId=${accountId}`)
+          res = await fetch(`/api/accounts/${accountId}/contacts`)
           const newContacts = await res.json();
           setContacts(newContacts);
         } catch (error: any) {

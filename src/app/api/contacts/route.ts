@@ -1,32 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccessToken } from '@/lib/salesforce/authorization';
 import { Contact } from '@/types/types';
-import { createContact, getContactsByAccountId } from '@/lib/salesforce/database/contact';
+import { createContact } from '@/lib/salesforce/database/contact';
 import { isError } from '@/types/apiTypes';
-
-export async function GET(request: NextRequest) {
-  const accountId: string | null = request.nextUrl.searchParams.get("accountId");
-
-  if (!accountId) {
-    return NextResponse.json(
-      { error: "accountId query parameter is required" },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const accessToken = await getAccessToken();
-    const res = await getContactsByAccountId(accountId, accessToken);
-    return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
-  } catch (error) {
-    console.error("Salesforce API Error:", error);
-    return NextResponse.json(
-      { error: "Error processing request" },
-      { status: 500 }
-    );
-  }
-}
-
 
 export async function POST(request: NextRequest) {
   try {
