@@ -1,12 +1,11 @@
-import { signInWithRedirect, getRedirectResult, User, signInWithPopup } from "firebase/auth";
+import { getRedirectResult, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "./firebaseConfig";
 
-
-const signInWithGooglePopup = async () => {
+export async function signInWithGooglePopup() {
     return signInWithPopup(auth, provider);
 };
 
-const getGoogleRedirectResult = async () => {
+export async function getGoogleRedirectResult() {
     try {
         const result = await getRedirectResult(auth);
         return result;
@@ -15,5 +14,3 @@ const getGoogleRedirectResult = async () => {
         throw error;
     }
 };
-
-export { auth, signInWithGooglePopup, getGoogleRedirectResult }
