@@ -23,7 +23,7 @@ export default function AuthProvider({
       if (newUser) {
         let newToken = await newUser.getIdTokenResult();
         if (!newToken.claims.role) {
-          const res = await fetch(`/api/auth`, { method: "POST", body: JSON.stringify({ idToken: newToken.token }) });
+          const res = await fetch(`/api/auth?idToken=${newToken.token}`, { method: "POST" });
           if (!res.ok) {
             console.error(await res.json());
             setUser(null);

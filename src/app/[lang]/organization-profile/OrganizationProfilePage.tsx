@@ -10,18 +10,20 @@ import StateDropdown from './StateDropdown';
 import Loading from '@/components/Loading';
 import { Account, Contact } from '@/types/types';
 import AddContactModal from './AddContactModal';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 export default function OrganizationProfilePage({ dict }: { dict: any }) {  
     const [account, setAccount] = useState<Account>();
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const auth = useAuth();
     const accountId = "001U800000FYoL8IAL";  //temp 
 
     useEffect(() => {
         const fetchAccount = async () => {
             try {
-                const res = await fetch(`/api/accounts/${accountId}`);
+                const res = await fetch(`/api/accounts/${accountId}?idToken=${auth.token?.token}`);
                 if (!res.ok) {
                     const error = await res.json();
                     console.log("Error fetching account", error);
@@ -35,7 +37,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
         const fetchContacts = async () => {
             try {
-                const res = await fetch(`/api/accounts/${accountId}/contacts`);
+                const res = await fetch(`/api/accounts/${accountId}/contacts?idToken=${auth.token?.token}`);
                 if (!res.ok) {
                     const error = await res.json();
                     console.error("Error fetching contacts", error);
@@ -53,7 +55,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     const handleAddContact = async (newContact: Partial<Contact>) => {
         try {
-          let res = await fetch(`/api/contacts`, {
+          let res = await fetch(`/api/contacts?idToken=${auth.token?.token}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ AccountId: accountId, ...newContact }),
@@ -71,7 +73,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     const handleRemoveContact = async (id: string) => {
         try {
-          const res = await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+          const res = await fetch(`/api/contacts/${id}?idToken=${auth.token?.token}`, { method: "DELETE" });
           if (!res.ok) { alert("Failed to delete contact. Please try again later."); }
           setContacts(contacts.filter((contact) => contact.Id !== id));
         } catch (error: any) {
@@ -81,7 +83,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     const handleEditContact = async (contactId: string, updates: Partial<Contact>) => {
         try {
-          const res = await fetch(`/api/contacts/${contactId}`, {
+          const res = await fetch(`/api/contacts/${contactId}?idToken=${auth.token?.token}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(updates),
@@ -99,7 +101,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     const handleEditAccount = async (updates: Partial<Account>) => {
         try {
-            const res = await fetch(`/api/accounts/${accountId}`, {
+            const res = await fetch(`/api/accounts/${accountId}?idToken=${auth.token?.token}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updates),

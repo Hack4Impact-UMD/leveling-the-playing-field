@@ -4,12 +4,21 @@ import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
 import { APIResponse, isError } from '@/types/apiTypes';
 import { createOpportunityLineItem, deleteOpportunity, getOpportunityById, updateOpportunity, updateOpportunityLineItem } from '@/lib/salesforce/database/opportunity';
 import { CheckoutItem, Opportunity, OpportunityLineItem, PricebookEntry } from '@/types/types';
+import { hasOpportunityAccess, isAuthenticated } from '@/lib/firebase/serverAuthentication';
 
 export async function GET(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
+    const idToken = req.nextUrl.searchParams.get('idToken');
+    const decodedToken = await isAuthenticated(idToken);
+    const { opportunityId } = params;
+    if (!decodedToken) {
+      return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
+    } else if (!(await hasOpportunityAccess(decodedToken, opportunityId))) {
+      return NextResponse.json({ error: "You do not have permission to access this resource." }, { status: 403, statusText: "Forbidden" });
+    }
     const accessToken = await getAccessToken();
     const res = await getOpportunityById(params.opportunityId, accessToken);
     return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });
@@ -20,13 +29,20 @@ export async function GET(
 }
 
 export async function PUT(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
+    const idToken = req.nextUrl.searchParams.get('idToken');
+    const decodedToken = await isAuthenticated(idToken);
     const { opportunityId } = params;
+    if (!decodedToken) {
+      return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
+    } else if (!(await hasOpportunityAccess(decodedToken, opportunityId))) {
+      return NextResponse.json({ error: "You do not have permission to update this resource." }, { status: 403, statusText: "Forbidden" });
+    }
+
     const accessToken = await getAccessToken();
-    
     const postedCheckRes: APIResponse<Opportunity> = await getOpportunityById(opportunityId, accessToken);
     if (isError(postedCheckRes)) {
       return NextResponse.json({ error: "Error processing request" }, { status: 500 });
@@ -35,7 +51,7 @@ export async function PUT(
     }
     
     let body;
-    try { body = await request.json(); } catch (error) { return NextResponse.json({ message: "Bad Request" }, { status: 400 }); }
+    try { body = await req.json(); } catch (error) { return NextResponse.json({ message: "Bad Request" }, { status: 400 }); }
     if (!body.products || body.products.length === 0) {
       return NextResponse.json({ error: "Bad Request" }, { status: 400 });
     }
@@ -77,10 +93,18 @@ export async function PUT(
 }
 
 export async function DELETE(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { opportunityId: string } }
 ) {
   try {
+    const idToken = req.nextUrl.searchParams.get('idToken');
+    const decodedToken = await isAuthenticated(idToken);
+    const { opportunityId } = params;
+    if (!decodedToken) {
+      return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
+    } else if (!(await hasOpportunityAccess(decodedToken, opportunityId))) {
+      return NextResponse.json({ error: "You do not have permission to delete this resource." }, { status: 403, statusText: "Forbidden" });
+    }
     const accessToken = await getAccessToken();
     const res = await deleteOpportunity(params.opportunityId, accessToken);
     return NextResponse.json(isError(res) ? res.error : res.data, { status: res.status });

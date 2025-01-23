@@ -6,6 +6,7 @@ import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export interface Equipment {
   product: Product;  // Contains Product object with id, name, and category
@@ -25,6 +26,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   const loadedPosted = useRef<boolean>(false);
 
   const router = useRouter();
+  const auth = useAuth();
 
   const removeSelectedEquipment = (sport: string, equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -77,7 +79,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }))
     );
     try {
-      const response = await fetch(`/api/opportunities/${opportunityId}`, {
+      const response = await fetch(`/api/opportunities/${opportunityId}?idToken=${auth.token?.token}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +102,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
   useEffect(() => {
     const loadProductData = async () => {
       try {
-        const response = await fetch("/api/products");
+        const response = await fetch(`/api/products?idToken=${auth.token?.token}`);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -122,7 +124,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
 
     const loadOpportunityStage = async () => {
       try {
-        const response = await fetch(`/api/opportunities/${opportunityId}`, {
+        const response = await fetch(`/api/opportunities/${opportunityId}?idToken=${auth.token?.token}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -3,16 +3,21 @@ import { getAccessToken } from "@/lib/salesforce/authorization";
 import { getOpportunitiesByAccountId } from "@/lib/salesforce/database/opportunity";
 import { isError } from "@/types/apiTypes";
 import { Stage } from "@/types/types";
+import { hasAccountAccess, isAuthenticated } from "@/lib/firebase/serverAuthentication";
 
-export async function GET(request: NextRequest, { params }: { params: { accountId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { accountId: string } }) {
+  const idToken = req.nextUrl.searchParams.get("idToken");
+  const decodedToken = await isAuthenticated(idToken);
   const { accountId } = params;
-  const stage: Stage | null = request.nextUrl.searchParams.get('stage') as Stage | null;
+  if (!decodedToken) {
+    return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
+  } else if (!hasAccountAccess(decodedToken, accountId)) {
+    return NextResponse.json({ error: "You do not have permission to access this resource." }, { status: 403, statusText: "Forbidden" });
+  }
 
+  const stage: Stage | null = req.nextUrl.searchParams.get('stage') as Stage | null;
   if (!stage) {
-    return NextResponse.json(
-      { error: 'stage query parameter is required' },
-      { status: 400, statusText: 'Bad Request' }
-    );
+    return NextResponse.json({ error: "Stage query parameter is required." }, { status: 400, statusText: "Bad Request" });
   }
 
   try {

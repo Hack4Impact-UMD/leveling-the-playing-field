@@ -2,15 +2,18 @@ import { NextRequest, NextResponse } from "next/server";
 import { PricebookEntry, Product } from "@/types/types";
 import { executeSOQLQuery } from "@/lib/salesforce/soqlQuery";
 import { APIResponse, isError } from "@/types/apiTypes";
+import { isAuthenticated } from "@/lib/firebase/serverAuthentication";
 
 export async function GET(req: NextRequest) {
-    const query = `
-        SELECT Id, Name, product2id, Product2.Family
-        FROM PricebookEntry
-        WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = true ORDER BY Product2.Family, Name
-    `;
     try {
-        const res: APIResponse<PricebookEntry[]> = await executeSOQLQuery(query);
+        const idToken = req.nextUrl.searchParams.get('idToken');
+        if (!(await isAuthenticated(idToken))) {
+          return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
+        }
+        const res: APIResponse<PricebookEntry[]> = await executeSOQLQuery(`SELECT Id, Name, product2id, Product2.Family
+                                                                           FROM PricebookEntry
+                                                                           WHERE Pricebook2Id = '01si0000002Ip3WAAS' AND IsActive = true
+                                                                           ORDER BY Product2.Family, Name`);
         if (isError(res)) { return NextResponse.json(res.error, { status: res.status }); }
         const data = res.data;
         const groupedByFamily = data.reduce((acc, product) => {

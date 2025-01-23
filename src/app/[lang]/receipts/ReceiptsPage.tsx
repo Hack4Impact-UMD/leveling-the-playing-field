@@ -5,6 +5,7 @@ import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
 import { Opportunity, OpportunityLineItem } from "@/types/types";
 import ReceiptModal from "./ReceiptModal";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
@@ -19,6 +20,8 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const auth = useAuth();
+
   useEffect(() => {
     const fetchDict = async () => {
       const dictionary = await getDict(lang);
@@ -27,7 +30,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
 
     const fetchReceipts = async () => {
       try {
-        const response = await fetch(`/api/accounts/${ACCOUNT_ID}/opportunities?stage=Posted`);
+        const response = await fetch(`/api/accounts/${ACCOUNT_ID}/opportunities?idToken=${auth.token?.token}&stage=Posted`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to fetch opportunities');

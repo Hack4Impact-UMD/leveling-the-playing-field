@@ -14,6 +14,7 @@ import ListComponent from './ListComponent';
 import { Product, Market } from "@/types/types";
 import Loading from '@/components/Loading';
 import { Locale, getDict } from '@/lib/i18n/dictionaries';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface GroupedEquipment {
   category: string;
@@ -41,6 +42,8 @@ const SearchPage = (props: SearchPageProps) => {
   const [dict, setDict] = useState<{ [key: string]: any }>({});
   const [loading, setLoading] = useState<boolean>(true);
 
+  const auth = useAuth();
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -53,7 +56,7 @@ const SearchPage = (props: SearchPageProps) => {
 
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch(`/api/products?idToken=${auth.token?.token}`);
         if (!res.ok) {
           const error = await res.json();
           console.error("Error fetching products:", error)

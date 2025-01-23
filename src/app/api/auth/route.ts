@@ -6,10 +6,13 @@ import { Account, Contact, Role } from "@/types/types";
 
 export async function POST(req: NextRequest) {
   try {
-    const { idToken } = await req.json();
-    const decodedToken = await adminAuth.verifyIdToken(idToken);
-    if (!decodedToken) {
-      return NextResponse.json({ error: 'Invalid ID token' }, { status: 401, statusText: "Unauthorized" });
+    const idToken = req.nextUrl.searchParams.get('idToken')
+    if (!idToken) { return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" }); }
+    let decodedToken = undefined;
+    try {
+      decodedToken = await adminAuth.verifyIdToken(idToken);
+    } catch (error) {
+      return NextResponse.json({ error: "You are not authenticated." }, { status: 401, statusText: "Unauthorized" });
     }
     if (!decodedToken.email) {
       await adminAuth.deleteUser(decodedToken.uid);
