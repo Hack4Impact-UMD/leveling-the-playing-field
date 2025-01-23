@@ -1,4 +1,4 @@
-import { IdTokenResult, User } from "firebase/auth";
+import { IdTokenResult, ParsedToken, User } from "firebase/auth";
 
 export interface Account {
   Id: string;
@@ -87,4 +87,12 @@ export interface AuthContextType {
 export enum Role {
   ADMIN = "admin",
   USER = "user"
+}
+
+export interface UserClaims extends ParsedToken {
+  role: Role;
+  salesforceIds: {
+    accountId: string;
+    contactId: string | null;
+  }
 }

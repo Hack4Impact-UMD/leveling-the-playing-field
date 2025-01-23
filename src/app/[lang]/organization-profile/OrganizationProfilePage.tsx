@@ -8,7 +8,7 @@ import EditableField from './EditableField';
 import CountryDropdownComponent from './CountryDropdown';
 import StateDropdown from './StateDropdown';
 import Loading from '@/components/Loading';
-import { Account, Contact } from '@/types/types';
+import { Account, Contact, UserClaims } from '@/types/types';
 import AddContactModal from './AddContactModal';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -18,7 +18,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
     const [loading, setLoading] = useState<boolean>(true);
 
     const auth = useAuth();
-    const accountId = "001U800000FYoL8IAL";  //temp 
+    const accountId = (auth.token?.claims as UserClaims).salesforceIds.accountId;
 
     useEffect(() => {
         const fetchAccount = async () => {

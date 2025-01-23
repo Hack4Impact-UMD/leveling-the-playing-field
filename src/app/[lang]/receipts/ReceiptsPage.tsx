@@ -3,11 +3,9 @@ import { useEffect, useState } from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/Dialog";
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
-import { Opportunity, OpportunityLineItem } from "@/types/types";
+import { Opportunity, OpportunityLineItem, UserClaims } from "@/types/types";
 import ReceiptModal from "./ReceiptModal";
 import { useAuth } from "@/components/auth/AuthProvider";
-
-const ACCOUNT_ID = "001U800000FYoL8IAL"; //temporary
 
 interface ReceiptsPageProps {
   lang: Locale;
@@ -21,6 +19,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
   const [error, setError] = useState<string | null>(null);
 
   const auth = useAuth();
+  const accountId = (auth.token?.claims as UserClaims).salesforceIds.accountId;
 
   useEffect(() => {
     const fetchDict = async () => {
@@ -30,7 +29,7 @@ export default function ReceiptsPage(props: ReceiptsPageProps) {
 
     const fetchReceipts = async () => {
       try {
-        const response = await fetch(`/api/accounts/${ACCOUNT_ID}/opportunities?idToken=${auth.token?.token}&stage=Posted`);
+        const response = await fetch(`/api/accounts/${accountId}/opportunities?idToken=${auth.token?.token}&stage=Posted`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.error || 'Failed to fetch opportunities');
