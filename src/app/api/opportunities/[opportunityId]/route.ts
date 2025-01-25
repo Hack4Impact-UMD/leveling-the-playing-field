@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/serverAuthorization';
 import { executeSOQLQuery } from '@/lib/salesforce/soqlQuery';
 import { APIResponse, isError } from '@/types/apiTypes';
 import { createOpportunityLineItem, deleteOpportunity, getOpportunityById, updateOpportunity, updateOpportunityLineItem } from '@/lib/salesforce/database/opportunity';

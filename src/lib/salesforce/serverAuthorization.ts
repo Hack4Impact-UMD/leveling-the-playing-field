@@ -1,15 +1,6 @@
 import { Role } from "@/types/types";
 import { adminAuth } from "../firebase/firebaseAdminConfig";
 
-export function getSalesforceAuthURL(): string {
-  const authURL = new URL("/services/oauth2/authorize", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN)
-  const searchParams = authURL.searchParams;
-  searchParams.set("client_id", process.env.NEXT_PUBLIC_SALESFORCE_CLIENT_ID || "");
-  searchParams.set("redirect_uri", process.env.NEXT_PUBLIC_SALESFORCE_REDIRECT_URI || "");
-  searchParams.set("response_type", "code");
-  return authURL.toString();
-}
-
 export async function getTokensFromAuthCode(authCode: string) {
   const url = new URL("/services/oauth2/token", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN)
   const res = await fetch(url.toString(), {
@@ -25,6 +16,9 @@ export async function getTokensFromAuthCode(authCode: string) {
       redirect_uri: process.env.NEXT_PUBLIC_SALESFORCE_REDIRECT_URI || "",
     })
   });
+  if (!res.ok) {
+    throw Error("Error getting tokens from auth code");
+  }
   const body = await res.json();
   return {
     refreshToken: body.refresh_token,
@@ -54,7 +48,7 @@ export async function getAccessToken() {
   return accessToken;
 }
 
-async function getTokenExpirationTime(accessToken: string) {
+export async function getTokenExpirationTime(accessToken: string) {
   const url = new URL("/services/oauth2/introspect", process.env.NEXT_PUBLIC_SALESFORCE_DOMAIN);
   const res = await fetch(url, {
     method: "POST",

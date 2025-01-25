@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAccessToken } from "@/lib/salesforce/authorization";
+import { getAccessToken } from "@/lib/salesforce/serverAuthorization";
 import { getOpportunitiesByAccountId } from "@/lib/salesforce/database/opportunity";
 import { isError } from "@/types/apiTypes";
 import { Stage } from "@/types/types";

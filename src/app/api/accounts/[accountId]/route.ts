@@ -1,5 +1,5 @@
 import { hasAccountAccess, isAuthenticated } from '@/lib/firebase/serverAuthentication';
-import { getAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/serverAuthorization';
 import { getAccountById, updateAccount } from '@/lib/salesforce/database/account';
 import { isError } from '@/types/apiTypes';
 import { NextRequest, NextResponse } from 'next/server';

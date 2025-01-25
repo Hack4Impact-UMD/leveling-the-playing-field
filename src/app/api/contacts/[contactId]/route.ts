@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/serverAuthorization';
 import { deleteContact, getContactById, updateContact } from '@/lib/salesforce/database/contact';
 import { isError } from '@/types/apiTypes';
 import { hasContactAccess, isAuthenticated } from '@/lib/firebase/serverAuthentication';

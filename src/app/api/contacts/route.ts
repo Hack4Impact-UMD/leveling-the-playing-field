@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccessToken } from '@/lib/salesforce/authorization';
+import { getAccessToken } from '@/lib/salesforce/serverAuthorization';
 import { Contact } from '@/types/types';
 import { createContact } from '@/lib/salesforce/database/contact';
 import { isError } from '@/types/apiTypes';

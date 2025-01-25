@@ -1,5 +1,5 @@
 import { APIResponse, SOQLResponse } from "@/types/apiTypes";
-import { getAccessToken } from "./authorization";
+import { getAccessToken } from "./serverAuthorization";
 
 export async function executeSOQLQuery<T>(query: string, accessToken?: string): Promise<APIResponse<T[]>> {
   try {
