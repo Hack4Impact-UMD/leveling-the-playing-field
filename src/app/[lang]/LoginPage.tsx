@@ -13,7 +13,7 @@ import LocalizationButton from "@/components/LocalizationButton";
 import { useState, useEffect } from "react";
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
-import { auth, signInWithGooglePopup } from "@/lib/firebase/googleAuthentication";
+import { auth, signInWithGooglePopup } from "@/lib/firebase/clientAuthentication";
 import { useRouter } from "next/navigation";
 
 interface LoginPageProps {

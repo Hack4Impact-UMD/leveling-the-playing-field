@@ -14,3 +14,7 @@ export async function getGoogleRedirectResult() {
         throw error;
     }
 };
+
+export async function signOut() {
+    await auth.signOut();
+}
