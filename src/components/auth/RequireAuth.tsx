@@ -3,7 +3,8 @@
 import { Role } from "@/types/types";
 import { useAuth } from "./AuthProvider";
 import { useRouter, usePathname } from "next/navigation";
-import { auth } from "@/lib/firebase/firebaseConfig";
+import AdminPage from "../AdminPage";
+import Loading from "../Loading";
 
 interface RequireAuthProps {
   children: JSX.Element;
@@ -20,17 +21,14 @@ export default function RequireAuth(props: RequireAuthProps) {
   if (allowedRoles.some((role: Role) => token?.claims.role === role) || (allowUnauthenticated && !token)) {
     return children;
   }
-
+  
   const locale = usePathname().split('/')[1];
   if (!token) {
     router.push(`/${locale}`);
+    return <Loading />
   } else if (token.claims.role === Role.USER) {
     router.push(`/${locale}/organization-profile`);
+    return <Loading />
   }
-  return (
-    <div className="flex flex-col items-center w-full text-black">
-      <h3>Admin accounts don't have any functionality on this website. Please log into Salesforce directly.</h3>
-      <button className="w-1/2 bg-teal rounded-lg" onClick={() => auth.signOut()}>Log Out</button>
-    </div>
-  );
+  return <AdminPage />
 }

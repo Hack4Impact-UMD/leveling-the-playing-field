@@ -16,5 +16,5 @@ export async function getGoogleRedirectResult() {
 };
 
 export async function signOut() {
-    await auth.signOut();
+    auth.signOut();
 }
