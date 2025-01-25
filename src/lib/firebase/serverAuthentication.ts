@@ -1,7 +1,7 @@
 import { DecodedIdToken } from "firebase-admin/auth";
 import { adminAuth } from "./firebaseAdminConfig";
 import { executeSOQLQuery } from "../salesforce/soqlQuery";
-import { Contact, Opportunity } from "@/types/types";
+import { Contact, Opportunity, Role } from "@/types/types";
 import { isError } from "@/types/apiTypes";
 
 export async function isAuthenticated(idToken: string | null): Promise<DecodedIdToken | false> {
@@ -13,6 +13,10 @@ export async function isAuthenticated(idToken: string | null): Promise<DecodedId
     console.error(error);
     return false;
   }
+}
+
+export function isAdmin(decodedToken: DecodedIdToken): boolean {
+  return decodedToken && decodedToken.role === Role.ADMIN;
 }
 
 export function hasAccountAccess(decodedToken: DecodedIdToken, accountId: string): boolean {
