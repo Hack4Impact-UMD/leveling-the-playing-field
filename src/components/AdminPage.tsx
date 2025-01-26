@@ -3,6 +3,7 @@ import { getSalesforceAuthURL } from "@/lib/salesforce/clientAuthorization";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./auth/AuthProvider";
 import { signOut } from "@/lib/firebase/clientAuthentication";
+import LogOutIcon from "./icons/LogOutIcon";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -19,7 +20,10 @@ export default function AdminPage() {
 
   return (
     <div className="flex flex-col items-center w-full text-black">
-      <h3>
+      <div className="flex w-full justify-end mt-4 mr-4" onClick={signOut}>
+        <LogOutIcon />
+      </div>
+      <h3 className="w-4/5 mt-4">
         The only function of the admin account on this website is to regenerate
         a refresh token for Salesforce. The refresh token is what allows this
         application to access the Salesforce database. If, for some reason, it
@@ -32,9 +36,6 @@ export default function AdminPage() {
         onClick={generateNewRefreshToken}
       >
         Generate New Refresh Token
-      </button>
-      <button className="w-2/3 bg-teal text-white rounded-lg" onClick={signOut}>
-        Log Out
       </button>
     </div>
   );

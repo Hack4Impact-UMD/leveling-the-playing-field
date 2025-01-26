@@ -11,6 +11,8 @@ import Loading from '@/components/Loading';
 import { Account, Contact, UserClaims } from '@/types/types';
 import AddContactModal from './AddContactModal';
 import { useAuth } from '@/components/auth/AuthProvider';
+import LogOutIcon from '@/components/icons/LogOutIcon';
+import { signOut } from '@/lib/firebase/clientAuthentication';
 
 export default function OrganizationProfilePage({ dict }: { dict: any }) {  
     const [account, setAccount] = useState<Account>();
@@ -118,6 +120,9 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
 
     return (
       <div className="flex flex-col items-center container mx-auto my-6 pb-32">
+        <div className="flex w-full justify-end" onClick={signOut}>
+            <LogOutIcon />
+        </div>
         <h2 className="text-black text-3xl font-bree-serif">{dict.profilePage.title.text}</h2> 
         
         <div className="flex flex-row justify-start items-center mt-4"> 
