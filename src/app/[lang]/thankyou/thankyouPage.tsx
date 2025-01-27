@@ -5,6 +5,7 @@ import Image from 'next/image';
 import LPFLogo from "@/../public/images/lpf-logo.png"
 import Loading from '@/components/Loading';
 import { Locale, getDict } from '@/lib/i18n/dictionaries';
+import Link from 'next/link';
 
 interface ThankYouPageProps {
   lang: Locale;
@@ -37,11 +38,11 @@ export default function ThankYouPage(props: ThankYouPageProps) {
       <p className="text-xl text-teal-800 mb-6 font-cabin-condensed">
         {dict?.thankYouPage.successfulCheckout.text}
       </p>
-      <a href="/receipts">
+      <Link href={`${lang}/d/receipts`}>
         <button className="bg-teal-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition-all duration-200 font-cabin-condensed">
           {dict?.thankYouPage.viewReceipt.text}
         </button>
-      </a>
+      </Link>
     </div>
   );
 }

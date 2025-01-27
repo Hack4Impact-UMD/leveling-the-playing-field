@@ -27,7 +27,7 @@ export default function RequireAuth(props: RequireAuthProps) {
     router.push(`/${locale}`);
     return <Loading />
   } else if (token.claims.role === Role.USER) {
-    router.push(`/${locale}/organization-profile`);
+    router.push(`/${locale}/d/organization-profile`);
     return <Loading />
   }
   return <AdminPage />

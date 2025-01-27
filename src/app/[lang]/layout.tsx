@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: JSX.Element;
 }>) {
   return (
     <html lang="en">
@@ -54,10 +54,7 @@ export default function RootLayout({
         className={`${breeSerif.variable} ${cabin.variable} ${cabinCondensed.variable} ${ubuntuCondensed.variable} antialiased bg-white-dark`}
       >
         <AuthProvider>
-          <>
-            {children}
-            <Navbar />
-          </>
+          {children}
         </AuthProvider>
       </body>
     </html>

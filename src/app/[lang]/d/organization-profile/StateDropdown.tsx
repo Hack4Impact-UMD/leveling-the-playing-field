@@ -29,7 +29,7 @@ export default function StateDropdown({ label, error, country, state, onStateCha
         country={country}
         value={state}
         onChange={handleChange}
-        className={`text-black text-2xl font-cabin-condensed border-2 rounded-lg w-full bg-transparent ${isInvalid ? 'border-red-500' : 'border-gray-400'}`}
+        classes={`text-black text-2xl font-cabin-condensed border-2 rounded-lg w-full bg-transparent ${isInvalid ? 'border-red-500' : 'border-gray-400'}`}
       />
 
       {isInvalid &&

@@ -93,7 +93,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         setCheckoutError(true);
         return;
       }
-      router.replace(`/${lang}/receipts`)
+      router.push(`/${lang}/d/receipts`)
     } catch (error) {
       console.error("Error when checking out:", error);
     }
@@ -136,7 +136,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         const body = await response.json();
         console.log(body)
         if (body.StageName == "Posted") {
-          router.push(`/${lang}/receipts`);
+          router.replace(`/${lang}/d/receipts`);
         }
       } catch (error) {
         console.error("Error loading opportunity data:", error)
