@@ -4,7 +4,8 @@ import SearchIcon from "./icons/SearchIcon";
 import ProfileIcon from "./icons/ProfileIcon";
 import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
-import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { Locale } from "@/lib/i18n/dictionaries";
 
 type IconButtonProps = {
   icon: React.ReactNode;
@@ -24,24 +25,34 @@ function IconButton({ icon, onClick }: IconButtonProps) {
   );
 }
 
-export default function Navbar() {
-  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
+enum NavbarPages {
+  ORG_PROFILE = "organization-profile",
+  SEARCH = "search",
+  APPOINTMENTS = "appointments",
+  RECEIPTS = "receipts",
+}
 
-  const handleIconClick = (label: string) => {
-    setSelectedIcon((prevSelected) => (prevSelected === label ? null : label));
+export default function Navbar() {
+  const router = useRouter();
+  const pathSegments = usePathname().split('/');
+  const locale: Locale = pathSegments[1] as Locale;
+  const currPage: NavbarPages = pathSegments[3] as NavbarPages;
+
+  const handleIconClick = (label: NavbarPages) => {
+    router.push(`/${locale}/d/${label}`)
   };
 
   return (
-    <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-xl" >
+    <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-xl">
       <IconButton
         icon={
           <ProfileIcon
             size={50}
             viewBoxSize={75}
-            showCircle={selectedIcon === "Profile"}
+            showCircle={currPage === NavbarPages.ORG_PROFILE}
           />
         }
-        onClick={() => handleIconClick("Profile")}
+        onClick={() => handleIconClick(NavbarPages.ORG_PROFILE)}
       />
 
       <IconButton
@@ -50,10 +61,10 @@ export default function Navbar() {
             size={50}
             viewBoxSize={60}
             transform="translate(5,5)"
-            showCircle={selectedIcon === "Search"}
+            showCircle={currPage === NavbarPages.SEARCH}
           />
         }
-        onClick={() => handleIconClick("Search")}
+        onClick={() => handleIconClick(NavbarPages.SEARCH)}
       />
 
       <IconButton
@@ -61,12 +72,12 @@ export default function Navbar() {
           <ShoppingCartIcon
             size={55}
             viewBoxSize={50}
-            showCircle={selectedIcon === "Appointments"}
+            showCircle={currPage === NavbarPages.APPOINTMENTS}
             transform={"translate(10,10)"}
           />
         }
-        onClick={() => handleIconClick("Appointments")}
-        />
+        onClick={() => handleIconClick(NavbarPages.APPOINTMENTS)}
+      />
 
       <IconButton
         icon={
@@ -74,10 +85,10 @@ export default function Navbar() {
             size={50}
             viewBoxSize={65}
             transform="translate(7,7)"
-            showCircle={selectedIcon === "Receipts"}
+            showCircle={currPage === NavbarPages.RECEIPTS}
           />
         }
-        onClick={() => handleIconClick("Receipts")}
+        onClick={() => handleIconClick(NavbarPages.RECEIPTS)}
       />
     </div>
   );
