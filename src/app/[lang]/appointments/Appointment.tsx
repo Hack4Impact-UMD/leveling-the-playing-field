@@ -15,10 +15,10 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
   const togglePopup = () => {
     setIsPopupVisible(prevState => !prevState);
   };
-  {isPopupVisible && 
-    (<div className='absolute z-index: 10'> 
-      <ContactPopup onButtonClick={togglePopup}/>
-      </div>)}
+  // {isPopupVisible && 
+  //   (<div className='absolute z-index: 10'> 
+  //     <ContactPopup onButtonClick={togglePopup}/>
+  //     </div>)}
   return (
     <div className="relative text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396] border-2 border-[#14676B]">
      

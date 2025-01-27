@@ -1,7 +1,7 @@
 //  this relies on the appointments component
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 
@@ -15,14 +15,57 @@ export type Appointment = {
 
 const AppointmentsPage = () => {
     const [isDropclicked, setIsisDropclicked] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
- 
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    // const { token } = useAuth();
+    // let idToken = token?.token;
+    // idToken=token.salesforceIds?.accountId(edited);
+    const idToken=null;
+      useEffect(() => {
+        
+          const fetchAppointments = async () => {
+              try {
+                 const contactResponse = await fetch(`/api/accounts/[accountId]/opportunities?stage=Site Visit/Call&idToken=${idToken}`, {
+                      method: 'GET',
+                  });
+  
+              if (!contactResponse.ok) {
+                  throw new Error('Failed to fetch contact');
+              }
+  
+              const endcontactId = await contactResponse.json(); 
 
-    const appointments: Appointment[] = [
-    { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
-    { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
-    { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
-  ];
+                  const response = await fetch(`/api/contact/${endcontactId}`, {
+                      method: 'GET',
+                  });
+                  const data= await response.json();
+
+                  interface itemty {
+                    title?: string;
+                    location?: string;
+                    timeStart?: string;
+                    timeEnd?: string;
+                  }
+                  const newAppointments: Appointment[] = data.map((item: itemty) => ({
+                    title: item.title || "Upcoming Appointment",
+                    location: item.location || "[Insert Warehouse Address]",
+                    timeStart: item.timeStart || "00:00 p.m",
+                    timeEnd: item.timeEnd || "00:00 p.m",
+                }));
+              setAppointments(newAppointments);
+              } catch (err) {
+                  console.error('Error fetching appointments:', err);
+              }
+          };
+          fetchAppointments();
+});
+
+
+  //   const appointments: Appointment[] = [
+  //   { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
+  //   { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
+  //   { title: "Upcoming Appointment", location: "[Insert Warehouse Address]", timeStart: "00:00 p.m", timeEnd: "00:00 p.m" },
+  // ];
 
 
 
@@ -78,12 +121,11 @@ const AppointmentsPage = () => {
           <div className="bg-gray-200 p-6 rounded-lg w-80 text-center">
             <h3 className="text-lg font-bold text-stone-950 mb-4">Are you sure you want to select this location?</h3>
             <div className="flex justify-around">
-              <button
-                className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
+              <button onClick={() => window.location.href = 'https://calendly.com/signup?gad_source=1'}  className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
               >
-                Yes
+              Yes
               </button>
-              <button
+              <button onClick={() => setIsModalOpen(false)}
                 className="bg-gray-400 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500"
               >
                 No
