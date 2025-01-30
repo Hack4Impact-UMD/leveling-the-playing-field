@@ -13,7 +13,7 @@ import LocalizationButton from "@/components/LocalizationButton";
 import { useState, useEffect } from "react";
 import { Locale, getDict } from "@/lib/i18n/dictionaries";
 import Loading from "@/components/Loading";
-import { auth, signInWithGooglePopup } from "@/lib/firebase/clientAuthentication";
+import { signInWithGooglePopup } from "@/lib/firebase/clientAuthentication";
 import { useRouter } from "next/navigation";
 
 interface LoginPageProps {
@@ -98,7 +98,7 @@ export default function LoginPage(props: LoginPageProps) {
       </button>
 
       {/* Language Selector */}
-      <div className="absolute bottom-32 right-4 flex items-center px-3 py-1 rounded-full h-8">
+      <div className="absolute right-4 bottom-4 flex items-center px-3 py-1">
         <LocalizationButton />
       </div>
     </div>
