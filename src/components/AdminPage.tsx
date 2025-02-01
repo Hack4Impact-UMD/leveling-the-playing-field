@@ -1,8 +1,7 @@
-import { auth } from "@/lib/firebase/firebaseConfig";
+import { signOut } from "@/lib/firebase/clientAuthentication";
 import { getSalesforceAuthURL } from "@/lib/salesforce/clientAuthorization";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./auth/AuthProvider";
-import { signOut } from "@/lib/firebase/clientAuthentication";
 import LogOutIcon from "./icons/LogOutIcon";
 
 export default function AdminPage() {
