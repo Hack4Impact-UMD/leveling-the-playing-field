@@ -1,17 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState } from 'react';
-import { Appointment } from './AppointmentsPage';
 import EditIcon from '@/components/icons/EditIcon';
 import ContactPopup from './ContactPopup';
 import { Locale } from '@/lib/i18n/dictionaries';
+import { Opportunity } from '@/types/types';
+import LocationIcon from '@/components/icons/LocationIcon';
 
 type AppointmentsComponentProps = {
-  appointment: Appointment;
-  lang: Locale
-}
+  appointment: Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c">;
+  lang: Locale;
+};
 
 const AppointmentsComponent = (props: AppointmentsComponentProps) => {
-  const { title, location, timeStart, timeEnd } = props.appointment;
+  const { Id, Name, CloseDate, Market__c } = props.appointment;
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const togglePopup = () => {
@@ -26,7 +27,7 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
     <div className="relative text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396] border-2 border-[#14676B]">
      
       <div className="flex items-center mb-2">
-        <span className="font-cabin-condensed text-lg">{title}</span>
+        <span className="font-cabin-condensed text-lg">{Name}</span>
         <span className="cursor-pointer ml-auto">
           <button
             onClick={togglePopup} 
@@ -42,10 +43,10 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
           </div>)}
       </div>
       <div className="flex items-center text-sm">
-        <span>{location}</span>
-      </div>
-      <div className="flex text-sm items-center">
-        <span>{timeStart} - {timeEnd}</span>
+        <span className='flex'>
+          <LocationIcon />
+          {Market__c}
+        </span>
       </div>
     </div>
   );

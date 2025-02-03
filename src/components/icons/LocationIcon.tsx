@@ -5,8 +5,8 @@ interface LocationIconProps {
 export default function LocationIcon({ color = "#70A8AB" }: LocationIconProps) {
   return (
     <svg
-      width="800"
-      height="800"
+      width="20"
+      height="20"
       viewBox="0 0 395.71 395.71"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
