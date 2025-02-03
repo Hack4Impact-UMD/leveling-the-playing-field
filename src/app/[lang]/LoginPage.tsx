@@ -36,6 +36,15 @@ export default function LoginPage(props: LoginPageProps) {
     loadDict().then(() => setLoading(false));
   }, []);
 
+  const handleLoginWithGoogle = async () => {
+    try {
+      await signInWithGooglePopup();
+    } catch (error) {
+      console.error(error);
+      console.log('error', error);
+    }
+  }
+
   if (loading) {
     return <Loading />
   }
@@ -60,7 +69,7 @@ export default function LoginPage(props: LoginPageProps) {
 
       {/* Centered Login Button */}
       <div className="relative bg-teal-light2 p-6 rounded-full w-72 h-72 flex flex-col items-center justify-center">
-        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl" onClick={async () => await signInWithGooglePopup()}>
+        <button className="flex items-center justify-center bg-gray-200 text-gray-800 rounded-md shadow-md px-4 py-2 w-80 border-2 border-teal-700 text-3xl" onClick={handleLoginWithGoogle}>
           <GoogleIcon />
           <span>{dict!.loginPage.loginButton.text}</span>
         </button>
