@@ -10,8 +10,8 @@ interface GroupedEquipment {
 
 interface ListCompProps {
   item: GroupedEquipment | Market;
-  selectedEquipments: Set<String>;
-  searchMode: String;
+  selectedEquipments: Set<string>;
+  searchMode: string;
   toggleEquipment: (item: GroupedEquipment | Market) => void;
 }
 

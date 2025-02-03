@@ -34,7 +34,7 @@ export default function LoginPage(props: LoginPageProps) {
     }
 
     loadDict().then(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   const handleLoginWithGoogle = async () => {
     try {

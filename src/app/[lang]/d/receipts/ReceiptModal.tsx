@@ -68,7 +68,7 @@ export default function ReceiptModal(props: ReceiptModalProps) {
                     (product, productIndex) => (
                       <tr key={productIndex}>
                         <td className="py-1 text-center">
-                          {product.PricebookEntry.Name}
+                          {product.PricebookEntry?.Name}
                         </td>
                         <td className="py-1 text-center">{product.Quantity}</td>
                       </tr>

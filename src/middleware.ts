@@ -7,8 +7,8 @@ const defaultLocale = 'en'
  
 // Get the preferred locale, similar to the above or using a library
 function getLocale(request: NextRequest) {
-  let headers = { 'accept-language': request.headers.get('accept-language') || undefined }
-  let languages = new Negotiator({ headers }).languages()
+  const headers = { 'accept-language': request.headers.get('accept-language') || undefined }
+  const languages = new Negotiator({ headers }).languages()
   return match(languages, locales, defaultLocale)
 }
  

@@ -143,8 +143,9 @@ const SearchPage = (props: SearchPageProps) => {
 
       {/* Basic information of each warehouse/location */}
       <div className="flex flex-col space-y-2 mt-8"> 
-        {applyFilters().map((item) => (
+        {applyFilters().map((item, index) => (
           <ListComponent
+            key={index}
             item={item}
             selectedEquipments={selectedEquipments}
             searchMode={searchMode}
