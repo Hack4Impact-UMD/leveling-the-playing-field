@@ -4,7 +4,7 @@
 import React, { useState , useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
-
+import ContactPopup from './ContactPopup';
 export type Appointment = {
   title: string; 
   location: string;
@@ -15,40 +15,45 @@ export type Appointment = {
 
 const AppointmentsPage = () => {
     const [isDropclicked, setIsisDropclicked] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const appointments: Appointment[] = [];
-    const contactId = 'someContactId'; // Replace with actual contactId
-  
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    // const { token } = useAuth();
+    // let idToken = token?.token;
+    // idToken=token.salesforceIds?.accountId(edited);
+    const idToken="123";
       useEffect(() => {
         
           const fetchAppointments = async () => {
               try {
-          //        const contactResponse = await fetch(`/api/contact?accountId=${accountId}`, {
-          //             method: 'GET',
-          //         });
-  
-          //     if (!contactResponse.ok) {
-          //         throw new Error('Failed to fetch contact');
-          //     }
-  
-          //     const contactId = await contactResponse.json(); 
-
-                  const response = await fetch(`/api/contact/${contactId}`, {
+                 const contactResponse = await fetch(`/api/accounts/[accountId]/opportunities?stage=Site Visit/Call&idToken=${idToken}`, {
                       method: 'GET',
                   });
-                  const data = await response.json();
-                  for (let i = 0; i < data.length; i++) {
-                      const item = data[i];
-                      const newAppointment: Appointment = {
-                          title: item.title || "Upcoming Appointment", 
-                          location:item.location|| "[Insert Warehouse Address]", 
-                          timeStart: item.timeStart|| "00:00 p.m", 
-                          timeEnd:item.timeEnd||"00:00 p.m", 
-                      };
-                      appointments.push(newAppointment);
-      
+  
+              if (!contactResponse.ok) {
+                  throw new Error('Failed to fetch contact');
+              }
+  
+              const endcontactId = await contactResponse.json(); 
+
+                  const response = await fetch(`/api/contact/${endcontactId}`, {
+                      method: 'GET',
+                  });
+                  const data= await response.json();
+
+                  interface itemty {
+                    title?: string;
+                    location?: string;
+                    timeStart?: string;
+                    timeEnd?: string;
                   }
-                } catch (err) {
+                  const newAppointments: Appointment[] = data.map((item: itemty) => ({
+                    title: item.title || "Upcoming Appointment",
+                    location: item.location || "[Insert Warehouse Address]",
+                    timeStart: item.timeStart || "00:00 p.m",
+                    timeEnd: item.timeEnd || "00:00 p.m",
+                }));
+              setAppointments(newAppointments);
+              } catch (err) {
                   console.error('Error fetching appointments:', err);
               }
           };
@@ -66,6 +71,15 @@ const AppointmentsPage = () => {
 
   const dropDown = () => setIsisDropclicked(!isDropclicked);
 
+  const handleFetch = async () => {
+    try {
+      const data = ContactPopup.fetchContactDetails(idToken); 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      console.error('Error');
+    }
+  };
+  
   const handleLocationSelect = () => {
     setIsModalOpen(true); 
   };
@@ -74,8 +88,8 @@ const AppointmentsPage = () => {
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
       <div className="flex flex-col mb-6 items-center">
         <div className="bg-teal mb-2 rounded-full p-6 relative">
-          <div className='relative -top-0.5'>
-          <AppointmentsIcon />
+          <div className='relative -top-0.5'> <button onClick={handleFetch}></button>
+          <AppointmentsIcon/>
           </div>
         </div>
             <h2 className="text-3xl font-bree-serif text-stone-950">Appointments</h2>
@@ -83,7 +97,7 @@ const AppointmentsPage = () => {
 
       <div className="max-w-md w-full">
         {appointments.map((appointment, x) => (
-          <AppointmentsComponent key={x} appointment={appointment} />
+          <AppointmentsComponent key={x} appointment={appointment} lang={'en'} />
         ))}
       </div>
     
@@ -116,12 +130,11 @@ const AppointmentsPage = () => {
           <div className="bg-gray-200 p-6 rounded-lg w-80 text-center">
             <h3 className="text-lg font-bold text-stone-950 mb-4">Are you sure you want to select this location?</h3>
             <div className="flex justify-around">
-              <button
-                className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
+              <button onClick={() => window.location.href = 'https://calendly.com/signup?gad_source=1'}  className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
               >
-                Yes
+              Yes
               </button>
-              <button
+              <button onClick={() => setIsModalOpen(false)}
                 className="bg-gray-400 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500"
               >
                 No

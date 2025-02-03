@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import React, { useState } from 'react';
 import { Appointment } from './AppointmentsPage';
 import EditIcon from '@/components/icons/EditIcon';
 import ContactPopup from './ContactPopup';
-
+import { Locale } from '@/lib/i18n/dictionaries';
 
 type AppointmentsComponentProps = {
   appointment: Appointment;
+  lang: Locale
 }
 
 const AppointmentsComponent = (props: AppointmentsComponentProps) => {
@@ -15,10 +17,11 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
   const togglePopup = () => {
     setIsPopupVisible(prevState => !prevState);
   };
-  // {isPopupVisible && 
-  //   (<div className='absolute z-index: 10'> 
-  //     <ContactPopup onButtonClick={togglePopup}/>
-  //     </div>)
+  {isPopupVisible && 
+    (<div className='absolute z-index: 10'> 
+      <ContactPopup onButtonClick={togglePopup} opportunityid={''} lang={'en'}/>
+      </div>)}
+
   return (
     <div className="relative text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396] border-2 border-[#14676B]">
      
@@ -35,7 +38,7 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
         </span>
         {isPopupVisible && 
         (<div className='absolute z-index: 10'> 
-          <ContactPopup onButtonClick={togglePopup}/>
+          <ContactPopup onButtonClick={togglePopup} lang={props.lang} opportunityid={''}/>
           </div>)}
       </div>
       <div className="flex items-center text-sm">

@@ -163,6 +163,16 @@
                 "text": "No",
                 "note": "label for no button"
             }
+        }, 
+        "contactPopup": {
+            "contactTitle": {
+                "text": "Current Pickup Contact",
+                "note": "title text for pickup contact"
+            },
+            "save": {
+                "text": "Save",
+                "note": "text for green save button"
+            }
         }
     },
     "loadingPage": {
