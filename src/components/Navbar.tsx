@@ -6,6 +6,7 @@ import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import { usePathname, useRouter } from "next/navigation";
 import { Locale } from "@/lib/i18n/dictionaries";
+import AppointmentsIcon from "./icons/AppointmentsIcon";
 
 type IconButtonProps = {
   icon: React.ReactNode;
@@ -69,11 +70,11 @@ export default function Navbar() {
 
       <IconButton
         icon={
-          <ShoppingCartIcon
-            size={55}
-            viewBoxSize={50}
+          <AppointmentsIcon 
+            size={50}
+            viewBoxSize={67}
+            transform="translate(7,7)"
             showCircle={currPage === NavbarPages.APPOINTMENTS}
-            transform={"translate(10,10)"}
           />
         }
         onClick={() => handleIconClick(NavbarPages.APPOINTMENTS)}
