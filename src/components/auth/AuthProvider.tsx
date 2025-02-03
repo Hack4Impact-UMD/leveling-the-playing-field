@@ -19,16 +19,20 @@ export default function AuthProvider({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (newUser) => {
-    setLoading(true);
+      setLoading(true);
       if (newUser) {
         let newToken = await newUser.getIdTokenResult();
         if (!newToken.claims.role) {
-          const res = await fetch(`/api/auth?idToken=${newToken.token}`, { method: "POST" });
+          const res = await fetch(`/api/auth?idToken=${newToken.token}`, {
+            method: "POST",
+          });
           if (!res.ok) {
             console.error(await res.json());
             setUser(null);
             setToken(null);
-            setError("We were unable to log you in. Please ensure you've been added to your organization's contacts list and try again later.");
+            setError(
+              "We were unable to log you in. Please ensure you've been added to your organization's contacts list and try again later."
+            );
             auth.signOut();
             return;
           }
@@ -46,11 +50,11 @@ export default function AuthProvider({
   }, []);
 
   if (error) {
-    return <div className="text-red-500">{error}</div>
+    return <div className="text-red-500">{error}</div>;
   }
 
   if (loading) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
