@@ -4,7 +4,7 @@
 import React, { useState , useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
-
+import ContactPopup from './ContactPopup';
 export type Appointment = {
   title: string; 
   location: string;
@@ -20,7 +20,7 @@ const AppointmentsPage = () => {
     // const { token } = useAuth();
     // let idToken = token?.token;
     // idToken=token.salesforceIds?.accountId(edited);
-    const idToken=null;
+    const idToken="123";
       useEffect(() => {
         
           const fetchAppointments = async () => {
@@ -71,6 +71,15 @@ const AppointmentsPage = () => {
 
   const dropDown = () => setIsisDropclicked(!isDropclicked);
 
+  const handleFetch = async () => {
+    try {
+      const data = ContactPopup.fetchContactDetails(idToken); 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      console.error('Error');
+    }
+  };
+  
   const handleLocationSelect = () => {
     setIsModalOpen(true); 
   };
@@ -79,8 +88,8 @@ const AppointmentsPage = () => {
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
       <div className="flex flex-col mb-6 items-center">
         <div className="bg-teal mb-2 rounded-full p-6 relative">
-          <div className='relative -top-0.5'>
-          <AppointmentsIcon />
+          <div className='relative -top-0.5'> <button onClick={handleFetch}></button>
+          <AppointmentsIcon/>
           </div>
         </div>
             <h2 className="text-3xl font-bree-serif text-stone-950">Appointments</h2>
@@ -88,7 +97,7 @@ const AppointmentsPage = () => {
 
       <div className="max-w-md w-full">
         {appointments.map((appointment, x) => (
-          <AppointmentsComponent key={x} appointment={appointment} />
+          <AppointmentsComponent key={x} appointment={appointment} lang={'en'} />
         ))}
       </div>
     

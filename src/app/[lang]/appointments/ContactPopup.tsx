@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import XIcon from '@/components/icons/XIcon';
 import { getDict, Locale } from '@/lib/i18n/dictionaries';
-import LoadingPage from '../[lang]/loading';
+import LoadingPage from '../loading';
+
+interface ContactPopupProps {
+  onButtonClick: () => void;
+  opportunityid: string;
+  lang: Locale;
+}
 
 interface ContactPopupProps {
   onButtonClick: () => void;
@@ -10,6 +16,7 @@ interface ContactPopupProps {
 }
 
 const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
   const [name, setName] = useState('Name');
   const [phoneNumber, setPhoneNumber] = useState('Phone Number');
