@@ -41,7 +41,6 @@ export default function LoginPage(props: LoginPageProps) {
       await signInWithGooglePopup();
     } catch (error) {
       console.error(error);
-      console.log('error', error);
     }
   }
 
