@@ -6,22 +6,32 @@ import AppointmentsComponent from "./Appointment";
 import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
 import { Locale } from "@/lib/i18n/dictionaries";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { Contact, Opportunity, UserClaims } from "@/types/types";
+import { Contact, MARKETS, Market, Opportunity, UserClaims } from "@/types/types";
 import Loading from "@/components/Loading";
+import { useRouter } from "next/navigation";
 
 interface AppointmentPageProps {
   lang: Locale;
 }
 
+//TODO: Replace Calendly links with correct ones
+const marketToCalendlyLink: Record<Market, string> = {
+  [Market.BALTIMORE]: 'https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup',
+  [Market.GREATER_WASHINGTON]: "https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup",
+  [Market.OHIO]: "https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup",
+  [Market.PHILADELPHIA]: "https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup",
+  [Market.WESTERN_NEW_YORK]: "https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup"
+}
+
 const AppointmentsPage = (props: AppointmentPageProps) => {
   const [isDropClicked, setIsDropClicked] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [todayAppointments, setTodayAppointments] = useState<Pick<Opportunity, 'Id' | 'Name' | 'CloseDate' | 'Market__c'>[]>([]);
   const [appointments, setAppointments] = useState<Pick<Opportunity, 'Id' | 'Name' | 'CloseDate' | 'Market__c'>[]>([]);
   const [contacts, setContacts] = useState<Pick<Contact, 'Id' | 'Name'>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const router = useRouter();
   const { token } = useAuth();
   const accountId = (token?.claims.salesforceIds as UserClaims).accountId;
 
@@ -83,10 +93,6 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
 
   const dropDown = () => setIsDropClicked(!isDropClicked);
 
-  const handleLocationSelect = () => {
-    setIsModalOpen(true);
-  };
-
   if (loading) {
     return <Loading />;
   }
@@ -115,7 +121,9 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
         ))}
       </div>
       <div className="max-w-md w-full">
-        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">Upcoming</h3>
+        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
+          Upcoming
+        </h3>
         {appointments.map((appointment, x) => (
           <AppointmentsComponent
             key={x}
@@ -138,46 +146,18 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
 
         {isDropClicked && (
           <div className="mt-2 w-[380px] overflow-y-auto max-h-40 bg-white rounded-md shadow-lg ">
-            {["Warehouse 1", "Warehouse 2", "Warehouse 3", "Warehouse 4"].map(
-              (location) => (
-                <div
-                  key={location}
-                  onClick={() => handleLocationSelect()}
-                  className="py-2 px-4 text-black hover:bg-green-500 cursor-pointer rounded-md"
-                >
-                  {location}
-                </div>
-              )
-            )}
+            {MARKETS.map((market) => (
+              <div
+                key={market}
+                onClick={() => router.push(marketToCalendlyLink[market])}
+                className="py-2 px-4 text-black hover:bg-green-500 cursor-pointer rounded-md"
+              >
+                {market}
+              </div>
+            ))}
           </div>
         )}
       </div>
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-200 p-6 rounded-lg w-80 text-center">
-            <h3 className="text-lg font-bold text-stone-950 mb-4">
-              Are you sure you want to select this location?
-            </h3>
-            <div className="flex justify-around">
-              <button
-                onClick={() =>
-                  (window.location.href =
-                    "https://calendly.com/signup?gad_source=1")
-                }
-                className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-400 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-500"
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

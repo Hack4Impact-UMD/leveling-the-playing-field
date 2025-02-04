@@ -78,6 +78,14 @@ export enum Market {
   OHIO = "Ohio"
 }
 
+export const MARKETS: Market[] = [
+  Market.GREATER_WASHINGTON,
+  Market.BALTIMORE,
+  Market.WESTERN_NEW_YORK,
+  Market.PHILADELPHIA,
+  Market.OHIO
+]
+
 export interface AuthContextType {
   user: User | null;
   token: IdTokenResult | null;
