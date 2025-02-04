@@ -22,7 +22,7 @@ export default function AdminPage() {
       <div className="flex w-full justify-end mt-4 mr-4" onClick={signOut}>
         <LogOutIcon />
       </div>
-      <h3 className="w-4/5 mt-4">
+      <h3 className="w-4/5 mt-4 font-bree-serif">
         The only function of the admin account on this website is to regenerate
         a refresh token for Salesforce. The refresh token is what allows this
         application to access the Salesforce database. If, for some reason, it
