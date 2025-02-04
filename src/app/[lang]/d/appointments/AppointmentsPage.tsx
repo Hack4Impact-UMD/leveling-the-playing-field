@@ -37,10 +37,16 @@ const marketToCalendlyLink: Record<Market, string> = {
 const AppointmentsPage = (props: AppointmentPageProps) => {
   const [isDropClicked, setIsDropClicked] = useState(false);
   const [todayAppointments, setTodayAppointments] = useState<
-    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c">[]
+    Pick<
+      Opportunity,
+      "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c"
+    >[]
   >([]);
   const [appointments, setAppointments] = useState<
-    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c">[]
+    Pick<
+      Opportunity,
+      "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c"
+    >[]
   >([]);
   const [contacts, setContacts] = useState<Pick<Contact, "Id" | "Name">[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -157,32 +163,38 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
         </div>
       ) : (
         <>
-          <div className="max-w-md w-full">
-            <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
-              Today
-            </h3>
-            {todayAppointments.map((appointment, i) => (
-              <Appointment
-                key={i}
-                appointment={appointment}
-                contacts={contacts}
-                lang={props.lang}
-              />
-            ))}
-          </div>
-          <div className="max-w-md w-full">
-            <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
-              Upcoming
-            </h3>
-            {appointments.map((appointment, x) => (
-              <Appointment
-                key={x}
-                appointment={appointment}
-                contacts={contacts}
-                lang={props.lang}
-              />
-            ))}
-          </div>
+          {todayAppointments.length > 0 && (
+            <div className="max-w-md w-full">
+              <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
+                Today
+              </h3>
+              {todayAppointments.map((appointment, i) => (
+                <Appointment
+                  key={i}
+                  appointment={appointment}
+                  contacts={contacts}
+                  lang={props.lang}
+                  today={true}
+                />
+              ))}
+            </div>
+          )}
+          {appointments.length > 0 && (
+            <div className="max-w-md w-full">
+              <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
+                Upcoming
+              </h3>
+              {appointments.map((appointment, x) => (
+                <Appointment
+                  key={x}
+                  appointment={appointment}
+                  contacts={contacts}
+                  lang={props.lang}
+                  today={false}
+                />
+              ))}
+            </div>
+          )}
         </>
       )}
 
