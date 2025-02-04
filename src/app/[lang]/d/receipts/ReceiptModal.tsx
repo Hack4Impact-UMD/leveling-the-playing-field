@@ -1,14 +1,15 @@
+import { useI18n } from "@/components/I18nProvider";
 import { DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
 import { Opportunity, OpportunityLineItem } from "@/types/types";
 
 interface ReceiptModalProps {
   receipt: Omit<Opportunity, "LineItems"> & { productsGroupedByFamily: Record<string, OpportunityLineItem[]>; }
   totalItems: number;
-  dict: { [key: string]: any };
 }
 
 export default function ReceiptModal(props: ReceiptModalProps) {
-  const { receipt, totalItems, dict } = props;
+  const { receipt, totalItems } = props;
+  const { dict } = useI18n();
 
   const productFamilies = Object.keys(receipt.productsGroupedByFamily).sort();
 
@@ -68,7 +69,7 @@ export default function ReceiptModal(props: ReceiptModalProps) {
                     (product, productIndex) => (
                       <tr key={productIndex}>
                         <td className="py-1 text-center">
-                          {product.PricebookEntry.Name}
+                          {product.PricebookEntry?.Name}
                         </td>
                         <td className="py-1 text-center">{product.Quantity}</td>
                       </tr>

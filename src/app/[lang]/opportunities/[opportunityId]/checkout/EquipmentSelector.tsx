@@ -1,13 +1,14 @@
+import { useI18n } from "@/components/I18nProvider";
 import { Product } from "@/types/types";
 import React from "react";
 
 interface EquipmentSelectorProps {
     availableEquipment: Product[];
     handleSelectEquipment: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-    dict: { [key: string]: any };
 }
 
-const EquipmentSelector = ({ availableEquipment, handleSelectEquipment, dict }: EquipmentSelectorProps) => {
+const EquipmentSelector = ({ availableEquipment, handleSelectEquipment }: EquipmentSelectorProps) => {
+    const { dict } = useI18n();
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">

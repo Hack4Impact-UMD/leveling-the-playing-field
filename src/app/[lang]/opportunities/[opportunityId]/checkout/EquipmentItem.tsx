@@ -1,6 +1,7 @@
 import XIcon from "@/components/icons/XIcon";
 import React from "react";
 import { Equipment, SportsItems } from "./CheckoutPage";
+import { useI18n } from "@/components/I18nProvider";
 
 interface EquipmentItemProps {
     equipment: Equipment;
@@ -10,7 +11,6 @@ interface EquipmentItemProps {
     handleUpdateEquipment: (equipment: Equipment, index: number, e: React.ChangeEvent<HTMLSelectElement>) => void;
     updateEquipmentQuantity: (index: number, e: React.ChangeEvent<HTMLInputElement>) => void;
     removeEquipment: (sport: string, equipment: Equipment) => void;
-    dict: { [key: string]: any };
 }
 
 const EquipmentItem = ({
@@ -21,8 +21,8 @@ const EquipmentItem = ({
     handleUpdateEquipment,
     updateEquipmentQuantity,
     removeEquipment,
-    dict,
 }: EquipmentItemProps) => {
+    const { dict } = useI18n();
     return (
         <div className="flex justify-between space-x-2 items-center w-full">
             <div className="flex-row flex-none items-center bg-white text-white py-2 px-2 rounded-md font-semibold">

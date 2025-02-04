@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import React, { useState } from "react";
-import EditIcon from "@/components/icons/EditIcon";
+import React, { use } from "react";
 import ContactPopup from "./ContactPopup";
-import { Locale } from "@/lib/i18n/dictionaries";
 import { Contact, Opportunity } from "@/types/types";
 import LocationIcon from "@/components/icons/LocationIcon";
 import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
 import ProfileIcon from "@/components/icons/ProfileIcon";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
 import { useRouter } from "next/navigation";
+import { useI18n } from "@/components/I18nProvider";
 
 type AppointmentProps = {
   appointment: Pick<
@@ -16,7 +15,6 @@ type AppointmentProps = {
     "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c"
   >;
   contacts: Pick<Contact, "Id" | "Name">[];
-  lang: Locale;
   today: boolean;
   handleChangeContact?: (appointmentId: string, contactId: string) => void;
 };
@@ -24,8 +22,9 @@ type AppointmentProps = {
 const Appointment = (props: AppointmentProps) => {
   const { Id, Name, CloseDate, Market__c, Primary_Contact__c } =
     props.appointment;
-  const { contacts, today, lang, handleChangeContact } = props;
+  const { contacts, today, handleChangeContact } = props;
 
+  const { dict, locale } = useI18n();
   const router = useRouter();
 
   return (
@@ -37,7 +36,7 @@ const Appointment = (props: AppointmentProps) => {
             onClick={
               today
                 ? () =>
-                    router.push(`/${props.lang}/opportunities/${Id}/checkout`)
+                    router.push(`/${locale}/opportunities/${Id}/checkout`)
                 : undefined
             }
             className="p-2 rounded hover:bg-gray-200 focus:outline-none focus:ring"
@@ -49,7 +48,6 @@ const Appointment = (props: AppointmentProps) => {
               <ContactPopup
                 appointment={{ Id, Name, Primary_Contact__c }}
                 contacts={contacts}
-                lang={lang}
                 handleChangeContact={handleChangeContact!}
               />
             )}

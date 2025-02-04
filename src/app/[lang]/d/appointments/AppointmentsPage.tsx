@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import Appointment from "./Appointment";
 import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
-import { Locale } from "@/lib/i18n/dictionaries";
 import { useAuth } from "@/components/auth/AuthProvider";
 import {
   Contact,
@@ -15,10 +14,7 @@ import {
 } from "@/types/types";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
-
-interface AppointmentPageProps {
-  lang: Locale;
-}
+import { useI18n } from "@/components/I18nProvider";
 
 //TODO: Replace Calendly links with correct ones
 const marketToCalendlyLink: Record<Market, string> = {
@@ -34,7 +30,7 @@ const marketToCalendlyLink: Record<Market, string> = {
     "https://calendly.com/d/cks-n9m-tnp/greater-washington-equipment-pickup",
 };
 
-const AppointmentsPage = (props: AppointmentPageProps) => {
+const AppointmentsPage = () => {
   const [isDropClicked, setIsDropClicked] = useState(false);
   const [todayAppointments, setTodayAppointments] = useState<
     Pick<
@@ -52,6 +48,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { dict } = useI18n();
   const router = useRouter();
   const { token } = useAuth();
   const accountId = (token?.claims.salesforceIds as UserClaims).accountId;
@@ -183,7 +180,6 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
                   key={i}
                   appointment={appointment}
                   contacts={contacts}
-                  lang={props.lang}
                   today={true}
                 />
               ))}
@@ -199,7 +195,6 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
                   key={x}
                   appointment={appointment}
                   contacts={contacts}
-                  lang={props.lang}
                   today={false}
                   handleChangeContact={handleChangeContact}
                 />

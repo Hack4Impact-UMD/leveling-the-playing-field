@@ -13,12 +13,14 @@ import AddContactModal from './AddContactModal';
 import { useAuth } from '@/components/auth/AuthProvider';
 import LogOutIcon from '@/components/icons/LogOutIcon';
 import { signOut } from '@/lib/firebase/clientAuthentication';
+import { useI18n } from '@/components/I18nProvider';
 
-export default function OrganizationProfilePage({ dict }: { dict: any }) {  
+export default function OrganizationProfilePage() {  
     const [account, setAccount] = useState<Account>();
     const [contacts, setContacts] = useState<Contact[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const { dict } = useI18n();
     const auth = useAuth();
     const accountId = (auth.token?.claims as UserClaims).salesforceIds.accountId;
 
@@ -135,8 +137,6 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
             {contacts.map((contact) => (
                 <ContactEntry 
                     key={contact.Id} 
-                    dictLabels={dict.profilePage.contact}
-                    dictErrors={dict.profilePage.errors}
                     firstName={contact.FirstName}
                     lastName={contact.LastName}
                     email={contact.Email} 
@@ -148,7 +148,7 @@ export default function OrganizationProfilePage({ dict }: { dict: any }) {
         </div>
 
         <div className="w-full flex flex-row justify-end pt-4">
-            <AddContactModal dict={dict} handleAddContact={handleAddContact}/>
+            <AddContactModal handleAddContact={handleAddContact}/>
         </div>
         
         <ProfileHeader title={dict.profilePage.location.header.text} />

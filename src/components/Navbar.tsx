@@ -4,8 +4,8 @@ import SearchIcon from "./icons/SearchIcon";
 import ProfileIcon from "./icons/ProfileIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import { usePathname, useRouter } from "next/navigation";
-import { Locale } from "@/lib/i18n/dictionaries";
 import AppointmentsIcon from "./icons/AppointmentsIcon";
+import { useI18n } from "./I18nProvider";
 
 type IconButtonProps = {
   icon: React.ReactNode;
@@ -35,7 +35,7 @@ enum NavbarPages {
 export default function Navbar() {
   const router = useRouter();
   const pathSegments = usePathname().split('/');
-  const locale: Locale = pathSegments[1] as Locale;
+  const { locale } = useI18n();
   const currPage: NavbarPages = pathSegments[3] as NavbarPages;
 
   const handleIconClick = (label: NavbarPages) => {

@@ -5,6 +5,7 @@ import PlusIcon from "@/components/icons/PlusIcon";
 import MinusIcon from "@/components/icons/MinusIcon";
 import EquipmentSelector from "./EquipmentSelector";
 import EquipmentItem from "./EquipmentItem";
+import { useI18n } from "@/components/I18nProvider";
 
 interface Props {
     removeSelectedSport: (sport: string) => void;
@@ -15,7 +16,6 @@ interface Props {
     selectedEquipment: Equipment[];
     sport: string;
     sportsItemsMap: SportsItems;
-    dict: { [key: string]: any };
 }
 
 const SportSection = ({
@@ -27,9 +27,9 @@ const SportSection = ({
     sport,
     selectedEquipment,
     sportsItemsMap,
-    dict,
 }: Props) => {
     const [renderEquipment, setRenderEquipment] = useState<boolean>(true);
+    const { dict } = useI18n();
 
     const updateEquipmentQuantity = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === "") {
@@ -147,14 +147,12 @@ const SportSection = ({
                                     handleUpdateEquipment={handleUpdateEquipment}
                                     updateEquipmentQuantity={updateEquipmentQuantity}
                                     removeEquipment={removeSelectedEquipment}
-                                    dict={dict}
                                 />
                             ))}
                             {getUnselectedEquipment().length > 0 && (
                                 <EquipmentSelector
                                     availableEquipment={getUnselectedEquipment()}
                                     handleSelectEquipment={handleSelectNewEquipment}
-                                    dict={dict}
                                 />
                             )}
                         </>

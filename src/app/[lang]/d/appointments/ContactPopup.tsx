@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getDict, Locale } from "@/lib/i18n/dictionaries";
-import LoadingPage from "../../loading";
 import EditIcon from "@/components/icons/EditIcon";
 import {
   Dialog,
@@ -19,17 +17,16 @@ import { SelectItem } from "@radix-ui/react-select";
 import XIcon from "@/components/icons/XIcon";
 import { Contact, Opportunity } from "@/types/types";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useI18n } from "@/components/I18nProvider";
 
 interface ContactPopupProps {
   appointment: Pick<Opportunity, "Id" | "Name" | "Primary_Contact__c">;
   contacts: Pick<Contact, "Id" | "Name">[];
-  lang: Locale;
   handleChangeContact: (appointmentId: string, contactId: string) => void;
 }
 
-const ContactPopup = ({ appointment, contacts, lang, handleChangeContact }: ContactPopupProps) => {
+const ContactPopup = ({ appointment, contacts, handleChangeContact }: ContactPopupProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
   const [oldContactIdx, setOldContactIdx] = useState<number | null>(
     appointment.Primary_Contact__c
       ? contacts.findIndex(
@@ -48,21 +45,7 @@ const ContactPopup = ({ appointment, contacts, lang, handleChangeContact }: Cont
   const [error, setError] = useState<string>("");
 
   const auth = useAuth();
-
-  // retrieve localization dict
-  useEffect(() => {
-    const loadDict = async () => {
-      try {
-        const loadedDict = await getDict(lang);
-        setDict(loadedDict);
-      } catch (error) {
-        console.error("Error loading dictionary:", error);
-      }
-    };
-    loadDict();
-  }, [lang]);
-
-  if (!dict) return <LoadingPage />;
+  const { dict } = useI18n();
 
   const handleConfirm = async () => {
     const res = await fetch(`/api/opportunities/${appointment.Id}?idToken=${auth.token?.token}`, {

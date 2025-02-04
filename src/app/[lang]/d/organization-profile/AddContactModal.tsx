@@ -9,14 +9,14 @@ import ContactButton from "./ContactButton";
 import { useState } from "react";
 import AttentionCircleIcon from "@/components/icons/AttentionCircleIcon";
 import { Contact } from "@/types/types";
+import { useI18n } from "@/components/I18nProvider";
 
 interface AddContactModalProps {
-  dict: { [key: string]: any };
   handleAddContact: (newContact: Partial<Contact>) => void;
 }
 
 export default function AddContactModal(props: AddContactModalProps) {
-  const { dict, handleAddContact } = props;
+  const { handleAddContact } = props;
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
@@ -25,6 +25,8 @@ export default function AddContactModal(props: AddContactModalProps) {
   const [isInvalidLastName, setIsInvalidLastName] = useState<boolean>(false);
   const [isInvalidPhone, setIsInvalidPhone] = useState<boolean>(false);
   const [isInvalidEmail, setIsInvalidEmail] = useState<boolean>(false);
+
+  const { dict } = useI18n();
 
   const validatePhone = () => {
     const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;

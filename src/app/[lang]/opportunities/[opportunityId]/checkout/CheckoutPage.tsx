@@ -2,11 +2,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import SportSection from "./SportSection";
 import ShoppingCartIcon from "@/components/icons/ShoppingCartIcon";
-import { getDict, Locale } from "@/lib/i18n/dictionaries";
 import { Product } from "@/types/types";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useI18n } from "@/components/I18nProvider";
 
 export interface Equipment {
   product: Product;  // Contains Product object with id, name, and category
@@ -17,16 +17,16 @@ export interface SportsItems {
   [key: string]: Product[];
 }
 
-const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: string }) => {
+const CheckoutPage = ({ opportunityId }: { opportunityId: string }) => {
   const [selectedEquipment, setSelectedEquipment] = useState<{ sport: string; equipment: Equipment[] }[]>([]);
   const [sportsItemsMap, setSportsItemsMap] = useState<SportsItems>({});
-  const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [checkoutError, setCheckoutError] = useState<boolean>(false);
   const loadedPosted = useRef<boolean>(false);
 
   const router = useRouter();
   const auth = useAuth();
+  const { dict, locale } = useI18n();
 
   const removeSelectedEquipment = (sport: string, equipment: Equipment) => {
     setSelectedEquipment((prevList) =>
@@ -93,7 +93,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         setCheckoutError(true);
         return;
       }
-      router.push(`/${lang}/d/receipts`)
+      router.push(`/${locale}/d/receipts`)
     } catch (error) {
       console.error("Error when checking out:", error);
     }
@@ -113,15 +113,6 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }
     };
 
-    const loadDict = async () => {
-      try {
-        const loadedDict = await getDict(lang);
-        setDict(loadedDict);
-      } catch (error) {
-        console.error("Error loading dictionary:", error);
-      }
-    };
-
     const loadOpportunityStage = async () => {
       try {
         const response = await fetch(`/api/opportunities/${opportunityId}?idToken=${auth.token?.token}`, {
@@ -136,7 +127,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
         const body = await response.json();
         console.log(body)
         if (body.StageName == "Posted") {
-          router.replace(`/${lang}/d/receipts`);
+          router.replace(`/${locale}/d/receipts`);
         }
       } catch (error) {
         console.error("Error loading opportunity data:", error)
@@ -149,8 +140,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
     const loadAllData = async () => {
       Promise.all([
         loadOpportunityStage(),
-        loadProductData(),
-        loadDict()
+        loadProductData()
       ]).then(() => setLoading(false));
     }
     loadAllData();
@@ -193,7 +183,6 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
             removeSelectedEquipment={removeSelectedEquipment}
             removeSelectedSport={removeSelectedSport}
             selectSport={(newSport: string) => selectSport(index, newSport)}
-            dict={dict || {}}
             sportsItemsMap={sportsItemsMap}
           />
         ))}

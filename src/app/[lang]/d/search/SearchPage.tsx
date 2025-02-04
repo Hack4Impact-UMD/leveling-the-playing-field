@@ -13,8 +13,8 @@ import SearchIcon from '@/components/icons/SearchIcon';
 import ListComponent from './ListComponent';
 import { Product, Market } from "@/types/types";
 import Loading from '@/components/Loading';
-import { Locale, getDict } from '@/lib/i18n/dictionaries';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { useI18n } from '@/components/I18nProvider';
 
 interface GroupedEquipment {
   category: string;
@@ -29,31 +29,21 @@ const warehouses = [
   Market.WESTERN_NEW_YORK,
 ];
 
-interface SearchPageProps {
-  lang: Locale;
-}
-
-const SearchPage = (props: SearchPageProps) => {
-  const { lang } = props;
+const SearchPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchMode, setSearchMode] = useState<'equipment' | 'location'>('equipment');
   const [groupedEquipmentList, setGroupedEquipmentList] = useState<GroupedEquipment[]>([]);
   const [selectedEquipments, setSelectedEquipments] = useState<Set<string>>(new Set());
-  const [dict, setDict] = useState<{ [key: string]: any }>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   const auth = useAuth();
+  const { dict } = useI18n();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   useEffect(() => {
-    const loadDict = async () => {
-      const dict = await getDict(lang);
-      setDict(dict);
-    }
-
     const fetchProducts = async () => {
       try {
         const res = await fetch(`/api/products?idToken=${auth.token?.token}`);
@@ -72,7 +62,7 @@ const SearchPage = (props: SearchPageProps) => {
     }
 
     setLoading(true);
-    Promise.all([loadDict(), fetchProducts()]).then(() => setLoading(false));
+    fetchProducts().then(() => setLoading(false));
   }, []);
 
   const applyFilters = (): Market[] | GroupedEquipment[] => {
@@ -119,14 +109,14 @@ const SearchPage = (props: SearchPageProps) => {
           <Input
             value={searchTerm}
             onChange={handleSearch}
-            placeholder={dict.searchPage.searchBar.text}
+            placeholder={dict?.searchPage.searchBar.text}
             className="pl-14 pr-4 w-full border-teal-light2 bg-teal-light2 rounded-3xl text-white font-ubuntu-condensed placeholder:text-white"
           />
         </div>
       </div>
 
       <div className="flex items-center space-x-3 mb-4 font-ubuntu-condensed">
-        <span className="text-black font-ubuntu-condensed">{dict.searchPage.toggleMenu.menuText.text}</span>
+        <span className="text-black font-ubuntu-condensed">{dict?.searchPage.toggleMenu.menuText.text}</span>
         <Select 
           onValueChange={(value: "equipment" | "location") => setSearchMode(value)} 
           value={searchMode}
@@ -135,8 +125,8 @@ const SearchPage = (props: SearchPageProps) => {
             <SelectValue placeholder="Search by..." />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="equipment" className="font-ubuntu-condensed">{dict.searchPage.toggleMenu.equipment.text}</SelectItem>
-            <SelectItem value="location" className="font-ubuntu-condensed">{dict.searchPage.toggleMenu.warehouses.text}</SelectItem>
+            <SelectItem value="equipment" className="font-ubuntu-condensed">{dict?.searchPage.toggleMenu.equipment.text}</SelectItem>
+            <SelectItem value="location" className="font-ubuntu-condensed">{dict?.searchPage.toggleMenu.warehouses.text}</SelectItem>
           </SelectContent>
         </Select>
       </div>

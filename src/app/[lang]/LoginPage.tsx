@@ -10,31 +10,13 @@ import TennisIcon from "@/components/icons/sports/TennisIcon";
 import VolleyballIcon from "@/components/icons/sports/VolleyballIcon";
 import GoogleIcon from "@/components/icons/GoogleIcon";
 import LocalizationButton from "@/components/LocalizationButton";
-import { useState, useEffect } from "react";
-import { Locale, getDict } from "@/lib/i18n/dictionaries";
-import Loading from "@/components/Loading";
 import { signInWithGooglePopup } from "@/lib/firebase/clientAuthentication";
 import { useRouter } from "next/navigation";
+import { useI18n } from "@/components/I18nProvider";
 
-interface LoginPageProps {
-  lang: Locale;
-}
-
-export default function LoginPage(props: LoginPageProps) {
-  const { lang } = props;
-  const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
+export default function LoginPage() {
   const router = useRouter();
-
-  useEffect(() => {
-    const loadDict = async () => {
-      const loadedDict = await getDict(lang);
-      setDict(loadedDict);
-    }
-
-    loadDict().then(() => setLoading(false));
-  }, []);
+  const { dict } = useI18n();
 
   const handleLoginWithGoogle = async () => {
     try {
@@ -42,10 +24,6 @@ export default function LoginPage(props: LoginPageProps) {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  if (loading) {
-    return <Loading />
   }
 
   return (

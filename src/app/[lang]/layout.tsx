@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import AuthProvider from "@/components/auth/AuthProvider";
+import I18nProvider from "@/components/I18nProvider";
+import { Locale } from "@/lib/i18n/dictionaries";
 
 const breeSerif = localFont({
   src: "../../../public/fonts/BreeSerif-Regular.ttf",
@@ -45,16 +46,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params
 }: Readonly<{
   children: JSX.Element;
+  params: { lang: Locale };
 }>) {
   return (
-    <html lang="en">
+    <html lang={params.lang}>
       <body
         className={`${breeSerif.variable} ${cabin.variable} ${cabinCondensed.variable} ${ubuntuCondensed.variable} antialiased bg-white-dark`}
       >
         <AuthProvider>
-          {children}
+          <I18nProvider locale={params.lang}>{children}</I18nProvider>
         </AuthProvider>
       </body>
     </html>

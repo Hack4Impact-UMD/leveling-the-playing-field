@@ -4,11 +4,10 @@ import XIcon from '@/components/icons/XIcon';
 import ConfirmationModal from './ConfirmationModal';
 import AttentionCircleIcon from '@/components/icons/AttentionCircleIcon';
 import { Contact } from '@/types/types';
+import { useI18n } from '@/components/I18nProvider';
 
 
 interface ContactItemProps {
-    dictLabels : any;
-    dictErrors : any;
     firstName: string;
     lastName: string
     phoneNumber: string;
@@ -17,7 +16,7 @@ interface ContactItemProps {
     onDelete: () => void;
 }
 
-export default function ContactEntry({ dictLabels, dictErrors, firstName, lastName, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
+export default function ContactEntry({ firstName, lastName, phoneNumber, email, onEdit, onDelete}: ContactItemProps) {
     const [isFirstNameEditable, setIsFirstNameEditable] = useState(false);
     const [isLastNameEditable, setIsLastNameEditable] = useState(false);
     const [isPhoneEditable, setIsPhoneEditable] = useState(false);
@@ -35,6 +34,8 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
     const lastNameInputRef = useRef<HTMLInputElement>(null);
     const phoneInputRef = useRef<HTMLInputElement>(null);
     const emailInputRef = useRef<HTMLInputElement>(null);
+
+    const { dict } = useI18n();
 
     const handleFirstNameEditClick = () => {
         setIsFirstNameEditable(true);
@@ -162,7 +163,7 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                 <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.firstName.text}</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dict.profilePage.contact.firstName.text}</label>
                             {isFirstNameEditable ? (
                                 <input
                                     type="text"
@@ -184,14 +185,14 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                     {isInvalidFirstName && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
-                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactName.text}</p>
+                            <p className="text-[#00000066] text-[10px]">{dict.profilePage.errors.contactName.text}</p>
                         </div>
                     )}
                 </div>
                 <div className="basis-2/5">
                     <div className="flex items-center">
                         <div className="flex-grow flex flex-col">
-                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.lastName.text}</label>
+                            <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dict.profilePage.contact.lastName.text}</label>
                             {isLastNameEditable ? (
                                 <input
                                     type="text"
@@ -213,7 +214,7 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                     {isInvalidLastName && (
                         <div className="flex flex-row items-center space-x-1">
                             <AttentionCircleIcon />
-                            <p className="text-[#00000066] text-[10px]">{dictErrors.contactName.text}</p>
+                            <p className="text-[#00000066] text-[10px]">{dict.profilePage.errors.contactName.text}</p>
                         </div>
                     )}
                 </div> 
@@ -225,7 +226,7 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
             <div className="basis-3/5">
                 <div className="flex items-center">
                     <div className="flex-grow flex flex-col">
-                        <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.phone.text}</label>
+                        <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dict.profilePage.contact.phone.text}</label>
                         {isPhoneEditable ? (
                             <input
                                 type="tel"
@@ -247,14 +248,14 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
                 {isInvalidPhone && (
                     <div className="flex flex-row items-center space-x-1">
                         <AttentionCircleIcon />
-                        <p className="text-[#00000066] text-[10px]">{dictErrors.contactPhoneNumber.text}r</p>
+                        <p className="text-[#00000066] text-[10px]">{dict.profilePage.errors.contactPhoneNumber.text}</p>
                     </div>
                 )}
             </div>
 
             <div className="flex items-center mt-4">
                 <div className="flex-grow flex flex-col">
-                    <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dictLabels.email.text}</label>
+                    <label className="text-gray-500 text-lg font-cabin-condensed"><span className="text-red-500">*</span>{dict.profilePage.contact.email.text}</label>
                     {isEmailEditable ? (
                         <input
                             type="email"
@@ -278,17 +279,17 @@ export default function ContactEntry({ dictLabels, dictErrors, firstName, lastNa
             {isInvalidEmail && (
                 <div className="flex flex-row items-center space-x-1">
                     <AttentionCircleIcon />
-                    <p className="text-[#00000066] text-[10px]">{dictErrors.contactEmail.text}</p>
+                    <p className="text-[#00000066] text-[10px]">{dict.profilePage.errors.contactEmail.text}</p>
                 </div>
             )}
 
             <ConfirmationModal
                 isOpen={isModalOpen}
-                message={dictLabels.deletePopup.confirmationText.text}
+                message={dict.profilePage.contact.deletePopup.confirmationText.text}
                 onConfirm={handleConfirmDelete}
-                confirmText={dictLabels.deletePopup.yes.text}
+                confirmText={dict.profilePage.contact.deletePopup.yes.text}
                 onCancel={closeModal}
-                cancelText={dictLabels.deletePopup.no.text}
+                cancelText={dict.profilePage.contact.deletePopup.no.text}
             />    
         </div>
     );
