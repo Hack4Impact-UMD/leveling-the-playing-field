@@ -135,7 +135,7 @@ const ContactPopup = ({ appointment, contacts, lang, handleChangeContact }: Cont
             </SelectTrigger>
             <SelectContent>
               {contacts.map((contact, i) => (
-                <SelectItem className="hover:bg-green" value={i.toString()}>
+                <SelectItem className="hover:bg-green" value={i.toString()} key={i}>
                   {contact.Name}
                 </SelectItem>
               ))}

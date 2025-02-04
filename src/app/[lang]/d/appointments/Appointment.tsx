@@ -33,7 +33,7 @@ const Appointment = (props: AppointmentProps) => {
       <div className="flex items-center mb-2">
         <span className="font-cabin-condensed text-lg">{Name}</span>
         <span className="cursor-pointer ml-auto">
-          <button
+          <div
             onClick={
               today
                 ? () =>
@@ -53,7 +53,7 @@ const Appointment = (props: AppointmentProps) => {
                 handleChangeContact={handleChangeContact!}
               />
             )}
-          </button>
+          </div>
         </span>
       </div>
       <div className="flex flex-col justify-center text-sm ">
