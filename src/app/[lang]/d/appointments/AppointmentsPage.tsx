@@ -32,15 +32,26 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
         if (!appointmentsRes.ok) {
           throw Error(await appointmentsRes.json());
         }
-        const appointments = await appointmentsRes.json();
-        setAppointments(appointments.map((appointment: Opportunity) => {
+        const appointments = (await appointmentsRes.json()).sort((a: Opportunity, b: Opportunity) => {
+          if (a.CloseDate === b.CloseDate) {
+            return a.Name.localeCompare(b.Name);
+          }
+          return new Date(a.CloseDate).getTime() - new Date(b.CloseDate).getTime();
+        }).map((appointment: Opportunity) => {
           return {
             Id: appointment.Id,
             Name: appointment.Name,
             CloseDate: appointment.CloseDate,
             Market__c: appointment.Market__c
           }
-        }));
+        });
+        setTodayAppointments(appointments.filter((appointment: Opportunity) => {
+          const now = new Date();
+          const timeZoneOffset = now.getTimezoneOffset() * 60 * 1000;
+          const appointmentDate = new Date(appointment.CloseDate);
+          return appointmentDate.getTime() + timeZoneOffset <= now.getTime() && now.getTime() <= appointmentDate.getTime() + timeZoneOffset + 1000 * 60 * 60 * 24;
+        }))
+        setAppointments(appointments.filter((appointment: Opportunity) => new Date(appointment.CloseDate).getTime() > new Date().getTime()));
       } catch (err) {
         console.error("Error fetching appointments:", err);
         setError("Failed to fetch appointments. Please try again later.");
@@ -94,6 +105,17 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
       </div>
 
       <div className="max-w-md w-full">
+        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">Today</h3>
+        {todayAppointments.map((appointment, x) => (
+          <AppointmentsComponent
+            key={x}
+            appointment={appointment}
+            lang={props.lang}
+          />
+        ))}
+      </div>
+      <div className="max-w-md w-full">
+        <h3 className="text-xl font-bree-serif mb-2 text-stone-950">Upcoming</h3>
         {appointments.map((appointment, x) => (
           <AppointmentsComponent
             key={x}
