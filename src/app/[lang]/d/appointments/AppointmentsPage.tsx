@@ -7,6 +7,7 @@ import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
 import { Locale } from "@/lib/i18n/dictionaries";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Contact, Opportunity, UserClaims } from "@/types/types";
+import Loading from "@/components/Loading";
 
 interface AppointmentPageProps {
   lang: Locale;
@@ -15,6 +16,7 @@ interface AppointmentPageProps {
 const AppointmentsPage = (props: AppointmentPageProps) => {
   const [isDropClicked, setIsDropClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [todayAppointments, setTodayAppointments] = useState<Pick<Opportunity, 'Id' | 'Name' | 'CloseDate' | 'Market__c'>[]>([]);
   const [appointments, setAppointments] = useState<Pick<Opportunity, 'Id' | 'Name' | 'CloseDate' | 'Market__c'>[]>([]);
   const [contacts, setContacts] = useState<Pick<Contact, 'Id' | 'Name'>[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -73,6 +75,10 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
   const handleLocationSelect = () => {
     setIsModalOpen(true);
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
