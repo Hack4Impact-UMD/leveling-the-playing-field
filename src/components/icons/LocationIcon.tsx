@@ -2,7 +2,7 @@ interface LocationIconProps {
   color?: string;
 }
 
-export default function LocationIcon({ color = "#70A8AB" }: LocationIconProps) {
+export default function LocationIcon({ color = "#14676B" }: LocationIconProps) {
   return (
     <svg
       width="20"

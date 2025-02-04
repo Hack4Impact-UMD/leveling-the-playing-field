@@ -2,7 +2,6 @@
 
 import SearchIcon from "./icons/SearchIcon";
 import ProfileIcon from "./icons/ProfileIcon";
-import ShoppingCartIcon from "./icons/ShoppingCartIcon";
 import ReceiptIcon from "./icons/ReceiptIcon";
 import { usePathname, useRouter } from "next/navigation";
 import { Locale } from "@/lib/i18n/dictionaries";

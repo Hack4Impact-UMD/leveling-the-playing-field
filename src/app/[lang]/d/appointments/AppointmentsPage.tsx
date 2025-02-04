@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import AppointmentsComponent from "./Appointment";
+import Appointment from "./Appointment";
 import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
 import { Locale } from "@/lib/i18n/dictionaries";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -37,10 +37,10 @@ const marketToCalendlyLink: Record<Market, string> = {
 const AppointmentsPage = (props: AppointmentPageProps) => {
   const [isDropClicked, setIsDropClicked] = useState(false);
   const [todayAppointments, setTodayAppointments] = useState<
-    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c">[]
+    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c">[]
   >([]);
   const [appointments, setAppointments] = useState<
-    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c">[]
+    Pick<Opportunity, "Id" | "Name" | "CloseDate" | "Market__c" | "Primary_Contact__c">[]
   >([]);
   const [contacts, setContacts] = useState<Pick<Contact, "Id" | "Name">[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -74,6 +74,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
               Name: appointment.Name,
               CloseDate: appointment.CloseDate,
               Market__c: appointment.Market__c,
+              Primary_Contact__c: appointment.Primary_Contact__c,
             };
           });
         setTodayAppointments(
@@ -103,7 +104,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
     const fetchContacts = async () => {
       try {
         const contactsRes = await fetch(
-          `/api/accounts/${accountId}/opportunities?stage=Site Visit/Call&idToken=${token?.token}`
+          `/api/accounts/${accountId}/contacts?stage=Site Visit/Call&idToken=${token?.token}`
         );
         if (!contactsRes.ok) {
           throw Error(await contactsRes.json());
@@ -161,9 +162,10 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
               Today
             </h3>
             {todayAppointments.map((appointment, i) => (
-              <AppointmentsComponent
+              <Appointment
                 key={i}
                 appointment={appointment}
+                contacts={contacts}
                 lang={props.lang}
               />
             ))}
@@ -173,9 +175,10 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
               Upcoming
             </h3>
             {appointments.map((appointment, x) => (
-              <AppointmentsComponent
+              <Appointment
                 key={x}
                 appointment={appointment}
+                contacts={contacts}
                 lang={props.lang}
               />
             ))}
