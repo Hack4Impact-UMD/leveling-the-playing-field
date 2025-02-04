@@ -43,7 +43,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-teal fixed bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-xl">
+    <div className="bg-teal bottom-0 w-full flex flex-row pb-2 pt-2 justify-around items-center rounded-t-xl">
       <IconButton
         icon={
           <ProfileIcon

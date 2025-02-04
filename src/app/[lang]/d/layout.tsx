@@ -7,10 +7,10 @@ export default function NavbarPagesLayout({
 }: Readonly<{ children: JSX.Element }>) {
   return (
     <RequireAuth allowedRoles={[Role.USER]}>
-      <>
-        {children}
+      <div className="flex flex-col h-screen">
+        <div className="overflow-y-scroll">{children}</div>
         <Navbar />
-      </>
+      </div>
     </RequireAuth>
   );
 }
