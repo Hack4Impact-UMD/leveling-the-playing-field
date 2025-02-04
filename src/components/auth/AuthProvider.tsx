@@ -3,7 +3,12 @@ import { onAuthStateChanged, User, IdTokenResult } from "@firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/lib/firebase/firebaseConfig";
 import Loading from "../Loading";
-import { AuthContextType } from "@/types/types";
+
+export interface AuthContextType {
+  user: User | null;
+  token: IdTokenResult | null;
+  loading: boolean;
+}
 
 const AuthContext = createContext<AuthContextType>(null!);
 

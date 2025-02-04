@@ -1,4 +1,4 @@
-import { IdTokenResult, ParsedToken, User } from "firebase/auth";
+import { ParsedToken } from "firebase/auth";
 
 export interface Account {
   Id: string;
@@ -85,12 +85,6 @@ export const MARKETS: Market[] = [
   Market.PHILADELPHIA,
   Market.OHIO
 ]
-
-export interface AuthContextType {
-  user: User | null;
-  token: IdTokenResult | null;
-  loading: boolean;
-}
 
 export enum Role {
   ADMIN = "admin",
