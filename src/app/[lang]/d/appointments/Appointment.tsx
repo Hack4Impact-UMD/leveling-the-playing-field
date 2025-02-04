@@ -46,7 +46,7 @@ const Appointment = (props: AppointmentProps) => {
               <ShoppingCartIcon size={20} color={"black"} opacity={0.6}/>
             ) : (
               <ContactPopup
-                opportunityId={Id!}
+                appointment={{ Id, Name, Primary_Contact__c }}
                 contacts={contacts}
                 lang={lang}
               />
