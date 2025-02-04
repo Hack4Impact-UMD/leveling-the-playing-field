@@ -24,9 +24,10 @@ interface ContactPopupProps {
   appointment: Pick<Opportunity, "Id" | "Name" | "Primary_Contact__c">;
   contacts: Pick<Contact, "Id" | "Name">[];
   lang: Locale;
+  handleChangeContact: (appointmentId: string, contactId: string) => void;
 }
 
-const ContactPopup = ({ appointment, contacts, lang }: ContactPopupProps) => {
+const ContactPopup = ({ appointment, contacts, lang, handleChangeContact }: ContactPopupProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
   const [oldContactIdx, setOldContactIdx] = useState<number | null>(
@@ -63,7 +64,6 @@ const ContactPopup = ({ appointment, contacts, lang }: ContactPopupProps) => {
 
   if (!dict) return <LoadingPage />;
 
-  // save and update new contact details
   const handleConfirm = async () => {
     const res = await fetch(`/api/opportunities/${appointment.Id}?idToken=${auth.token?.token}`, {
       method: "PUT",
@@ -81,6 +81,9 @@ const ContactPopup = ({ appointment, contacts, lang }: ContactPopupProps) => {
       console.error(error);
       setError("An error occurred. Please try again.");
       return;
+    }
+    if (contactIdx !== null) {
+      handleChangeContact(appointment.Id!, contacts[contactIdx].Id!);
     }
     setIsOpen((open) => !open);
     setOldContactIdx(contactIdx);

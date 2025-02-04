@@ -136,6 +136,16 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
     );
   }, []);
 
+  const handleChangeContact = (appointmentId: string, contactId: string) => {
+    setAppointments((appointments) =>
+      appointments.map((appointment) => {
+        return appointment.Id === appointmentId
+          ? { ...appointment, Primary_Contact__c: contactId }
+          : appointment;
+      })
+    );
+  };
+
   const dropDown = () => setIsDropClicked(!isDropClicked);
 
   if (loading) {
@@ -191,6 +201,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
                   contacts={contacts}
                   lang={props.lang}
                   today={false}
+                  handleChangeContact={handleChangeContact}
                 />
               ))}
             </div>

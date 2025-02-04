@@ -79,7 +79,7 @@ const CheckoutPage = ({ lang, opportunityId }: { lang: Locale; opportunityId: st
       }))
     );
     try {
-      const response = await fetch(`/api/opportunities/${opportunityId}?idToken=${auth.token?.token}`, {
+      const response = await fetch(`/api/opportunities/${opportunityId}/checkout?idToken=${auth.token?.token}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

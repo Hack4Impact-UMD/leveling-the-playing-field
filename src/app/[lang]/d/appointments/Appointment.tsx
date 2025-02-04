@@ -18,12 +18,13 @@ type AppointmentProps = {
   contacts: Pick<Contact, "Id" | "Name">[];
   lang: Locale;
   today: boolean;
+  handleChangeContact?: (appointmentId: string, contactId: string) => void;
 };
 
 const Appointment = (props: AppointmentProps) => {
   const { Id, Name, CloseDate, Market__c, Primary_Contact__c } =
     props.appointment;
-  const { contacts, today, lang } = props;
+  const { contacts, today, lang, handleChangeContact } = props;
 
   const router = useRouter();
 
@@ -49,6 +50,7 @@ const Appointment = (props: AppointmentProps) => {
                 appointment={{ Id, Name, Primary_Contact__c }}
                 contacts={contacts}
                 lang={lang}
+                handleChangeContact={handleChangeContact!}
               />
             )}
           </button>
