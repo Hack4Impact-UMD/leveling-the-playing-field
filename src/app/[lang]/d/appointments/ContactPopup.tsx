@@ -1,26 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import XIcon from '@/components/icons/XIcon';
-import { getDict, Locale } from '@/lib/i18n/dictionaries';
-import LoadingPage from '../../loading';
+import React, { useState, useEffect } from "react";
+import { getDict, Locale } from "@/lib/i18n/dictionaries";
+import LoadingPage from "../../loading";
+import EditIcon from "@/components/icons/EditIcon";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/Dialog";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SelectItem } from "@radix-ui/react-select";
+import XIcon from "@/components/icons/XIcon";
+import { Contact } from "@/types/types";
 
 interface ContactPopupProps {
-  onButtonClick: () => void;
-  opportunityid: string;
+  opportunityId: string;
+  contacts: Pick<Contact, "Id" | "Name">[];
   lang: Locale;
 }
 
-interface ContactPopupProps {
-  onButtonClick: () => void;
-  opportunityid: string;
-  lang: Locale;
-}
-
-const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps) => {
+const ContactPopup = ({
+  opportunityId,
+  contacts,
+  lang,
+}: ContactPopupProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [dict, setDict] = useState<{ [key: string]: any } | null>(null);
-  const [name, setName] = useState('Name');
-  const [phoneNumber, setPhoneNumber] = useState('Phone Number');
-  const [email, setEmail] = useState('Email');
+  const [contactIdx, setContactIdx] = useState<number | null>(null);
 
   // retrieve localization dict
   useEffect(() => {
@@ -29,7 +36,7 @@ const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps)
         const loadedDict = await getDict(lang);
         setDict(loadedDict);
       } catch (error) {
-        console.error('Error loading dictionary:', error);
+        console.error("Error loading dictionary:", error);
       }
     };
     loadDict();
@@ -37,37 +44,14 @@ const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps)
 
   if (!dict) return <LoadingPage />;
 
-  // retrieve contact information
-  const fetchContactDetails = async (opportunityId: string) => {
-    try {
-      const response = await fetch(`/api/opportunity/${opportunityId}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error fetching opportunity details:", errorData);
-        return;
-      }
-
-      const data = await response.json();
-      setName(data.Name || "Name");
-      setPhoneNumber(data.Phone || "Phone Number");
-      setEmail(data.Email || "Email");
-    } catch (error) {
-      console.error("Error fetching opportunity:", error);
-    }
-  };
-
   // save and update new contact details
+
   const handleSave = async (opportunityId: string) => {
     try {
       const body = {
-        Name: name,
-        Phone: phoneNumber,
-        Email: email,
+        
       };
-  
+
       const response = await fetch(`/api/opportunity/${opportunityId}`, {
         method: "PUT",
         headers: {
@@ -79,66 +63,46 @@ const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps)
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error updating opportunity:", errorData);
-        return; 
+        return;
       }
-  
+
       console.log("Opportunity updated successfully!");
     } catch (error) {
       console.error("Error during save:", error);
     }
   };
-  
 
   return (
-    <div>
-      <button className="absolute top-2 right-2" onClick={onButtonClick}>
-        <XIcon />
-      </button>
-      <div className="bg-white-dark rounded-xl p-4 w-80 mx-auto shadow-lg text-black">
-        <h1 className="text-md font-bold mb-2 text-center font-bree-serif">
-          {dict.appointmentsPage.contactPopup.contactTitle.text}
-        </h1>
-
-        <div className="flex items-center justify-center mb-2">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="text-md font-cabin-condensed border rounded px-2"
-          />
+    <Dialog>
+      <DialogTrigger>
+        <DialogTitle className="hidden">Change Primary Contact</DialogTitle>
+        <EditIcon size={20} />
+      </DialogTrigger>
+      <DialogContent
+        className="flex flex-col justify-start items-center w-4/5 h-1/3 rounded-md text-black"
+        hideClose
+        aria-describedby="Dialog to change primary contact of an appointment"
+      >
+        <DialogClose className="self-end">
+          <XIcon />
+        </DialogClose>
+        <div className="w-4/5">
+          <p className="font-cabin-condensed">Primary Contact</p>
+          <Select value={contactIdx !== null ? contactIdx.toString() : ""} onValueChange={(value: string) => setContactIdx(Number(value))}>
+            <SelectTrigger className="border-teal-dark text-black">
+              <SelectValue className="text-black border-4" placeholder="N/A">
+                {contactIdx !== null && contacts[contactIdx].Name}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {contacts.map((contact, i) => (
+                <SelectItem className="hover:bg-green" value={i.toString()}>{contact.Name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-
-        <div className="flex items-center justify-center mb-2">
-          <input
-            type="text"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            className="text-md font-cabin-condensed border rounded px-2"
-          />
-        </div>
-
-        <div className="flex items-center justify-center mb-2">
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="text-md font-cabin-condensed border rounded px-2"
-          />
-        </div>
-
-        <div className="flex justify-center text-black">
-        <button
-          className="bg-green px-6 py-1 rounded-lg font-bree-serif"
-          onClick={(e) => {
-            e.preventDefault();
-            handleSave(opportunityid);
-          }}
-        >
-          {dict.appointmentsPage.contactPopup.save.text}
-        </button>
-        </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
