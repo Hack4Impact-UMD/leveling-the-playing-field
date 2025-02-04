@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import React, { use } from "react";
+import React from "react";
 import ContactPopup from "./ContactPopup";
 import { Contact, Opportunity } from "@/types/types";
 import LocationIcon from "@/components/icons/LocationIcon";
