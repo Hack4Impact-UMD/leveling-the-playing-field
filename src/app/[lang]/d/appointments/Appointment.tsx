@@ -24,7 +24,7 @@ const Appointment = (props: AppointmentProps) => {
     props.appointment;
   const { contacts, today, handleChangeContact } = props;
 
-  const { dict, locale } = useI18n();
+  const { locale } = useI18n();
   const router = useRouter();
 
   return (

@@ -158,7 +158,7 @@ const AppointmentsPage = () => {
           </div>
         </div>
         <h2 className="text-3xl font-bree-serif text-stone-950">
-          Appointments
+          {dict.appointmentsPage.title.text}
         </h2>
       </div>
 
@@ -173,7 +173,7 @@ const AppointmentsPage = () => {
           {todayAppointments.length > 0 && (
             <div className="max-w-md w-full">
               <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
-                Today
+                {dict.appointmentsPage.todayAppointments.text}
               </h3>
               {todayAppointments.map((appointment, i) => (
                 <Appointment
@@ -188,7 +188,7 @@ const AppointmentsPage = () => {
           {appointments.length > 0 && (
             <div className="max-w-md w-full">
               <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
-                Upcoming
+                {dict.appointmentsPage.upcomingAppointments.text}
               </h3>
               {appointments.map((appointment, x) => (
                 <Appointment
@@ -206,13 +206,13 @@ const AppointmentsPage = () => {
 
       <div className="mt-4 text-center">
         <h3 className="text-xl font-bree-serif mb-2 text-stone-950">
-          Book New Appointment
+          {dict.appointmentsPage.bookNewAppointment.text}
         </h3>
         <button
           className="bg-teal text-white py-2 px-6 rounded-lg shadow-lg w-[380px] font-cabin-condensed"
           onClick={dropDown}
         >
-          Select Location
+          {dict.appointmentsPage.button.text}
         </button>
 
         {isDropClicked && (

@@ -138,7 +138,7 @@
             "text": "Citas",
             "note": "Header text"
         },
-        "lowerTitle": {
+        "bookNewAppointment": {
             "text": "Reservar Nueva Cita",
             "note": "Text above button"
         },
@@ -146,9 +146,13 @@
             "text": "Seleccionar Ubicación",
             "note": "text inside the button"
         },
-        "appointmentDetails": {
-            "text": "Cita Próxima",
-            "note": "Text within upcoming appointment box"
+        "upcomingAppointments": {
+            "text": "Próxima",
+            "note": "Header for future appointments"
+        },
+        "todayAppointments": {
+            "text": "Hoy",
+            "note": "Header for today's appointments"
         },
         "confirmationPopup": {
             "confirmationText": {
@@ -166,12 +170,16 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Contacto de recogida actual",
+                "text": "Contacto de recogida",
                 "note": "title text for pickup contact"
             },
-            "save": {
-                "text": "Guardar",
-                "note": "text for green save button"
+            "confirm": {
+                "text": "Confirmar",
+                "note": "text for pickup contact confirm button"
+            },
+            "cancel": {
+                "text": "Cancelar",
+                "note": "text for pickup contact cancel button"
             }
         }
     },

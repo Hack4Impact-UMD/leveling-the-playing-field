@@ -138,7 +138,7 @@
             "text": "Rendez-vous",
             "note": "Header text"
         },
-        "lowerTitle": {
+        "bookNewAppointment": {
             "text": "Prendre un Nouveau Rendez-vous",
             "note": "Text above button"
         },
@@ -146,9 +146,13 @@
             "text": "Sélectionner l'Emplacement",
             "note": "text inside the button"
         },
-        "appointmentDetails": {
-            "text": "Rendez-vous à Venir",
-            "note": "Text within upcoming appointment box"
+        "upcomingAppointments": {
+            "text": "Prochaine",
+            "note": "Header for future appointments"
+        },
+        "todayAppointments": {
+            "text": "Aujourd'hui",
+            "note": "Header for today's appointments"
         },
         "confirmationPopup": {
             "confirmationText": {
@@ -166,12 +170,16 @@
         },
         "contactPopup": {
             "contactTitle": {
-                "text": "Contact de prise de courant",
+                "text": "Contact de ramassage",
                 "note": "title text for pickup contact"
             },
-            "save": {
-                "text": "Sauvegarder",
-                "note": "text for green save button"
+            "confirm": {
+                "text": "Confirmer",
+                "note": "text for pickup contact confirm button"
+            },
+            "cancel": {
+                "text": "Annuler",
+                "note": "text for pickup contact cancel button"
             }
         }
     },

@@ -95,13 +95,13 @@ const ContactPopup = ({ appointment, contacts, handleChangeContact }: ContactPop
       <DialogContent
         className="flex flex-col justify-start items-center w-4/5 h-4/7 rounded-md text-black"
         hideClose
-        aria-describedby="Dialog to change primary contact of an appointment"
+        aria-describedby="Dialog to change pickup contact of an appointment"
       >
         <DialogClose className="self-end">
           <XIcon />
         </DialogClose>
         <div className="w-4/5">
-          <p className="font-cabin-condensed">Primary Contact</p>
+          <p className="font-cabin-condensed">{dict.appointmentsPage.contactPopup.contactTitle.text}</p>
           <Select
             value={contactIdx !== null ? contactIdx.toString() : ""}
             onValueChange={(value: string) => {
@@ -130,11 +130,11 @@ const ContactPopup = ({ appointment, contacts, handleChangeContact }: ContactPop
             className="w-2/5 h-full py-2 text-black bg-orange rounded-md"
             onClick={handleConfirm}
           >
-            Confirm
+            {dict.appointmentsPage.contactPopup.confirm.text}
           </button>
           <DialogClose className="w-2/5 h-full py-2">
             <button className="w-full h-full py-2 text-black bg-teal-light rounded-md">
-              Cancel
+              {dict.appointmentsPage.contactPopup.cancel.text}
             </button>
           </DialogClose>
         </div>

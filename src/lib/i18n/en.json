@@ -138,7 +138,7 @@
             "text": "Appointments",
             "note": "Header text"
         },
-        "lowerTitle": {
+        "bookNewAppointment": {
             "text": "Book New Appointment",
             "note": "Text above button"
         },
@@ -146,9 +146,13 @@
             "text": "Select Location",
             "note": "text inside the button"
         },
-        "appointmentDetails": {
-            "text": "Upcoming Appointment",
-            "note": "Text within upcoming appointment box"
+        "upcomingAppointments": {
+            "text": "Upcoming",
+            "note": "Header for future appointments"
+        },
+        "todayAppointments": {
+            "text": "Today",
+            "note": "Header for today's appointments"
         },
         "confirmationPopup": {
             "confirmationText": {
@@ -166,12 +170,16 @@
         }, 
         "contactPopup": {
             "contactTitle": {
-                "text": "Current Pickup Contact",
+                "text": "Pickup Contact",
                 "note": "title text for pickup contact"
             },
-            "save": {
-                "text": "Save",
-                "note": "text for green save button"
+            "confirm": {
+                "text": "Confirm",
+                "note": "text for pickup contact confirm button"
+            },
+            "cancel": {
+                "text": "Cancel",
+                "note": "text for pickup contact cancel button"
             }
         }
     },
