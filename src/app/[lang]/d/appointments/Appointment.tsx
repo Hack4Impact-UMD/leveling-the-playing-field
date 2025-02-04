@@ -18,10 +18,6 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
   const togglePopup = () => {
     setIsPopupVisible(prevState => !prevState);
   };
-  {isPopupVisible && 
-    (<div className='absolute z-index: 10'> 
-      <ContactPopup onButtonClick={togglePopup} opportunityid={''} lang={'en'}/>
-      </div>)}
 
   return (
     <div className="relative text-white p-4 rounded-lg mb-4 shadow-lg bg-[#549396] border-2 border-[#14676B]">
@@ -43,7 +39,7 @@ const AppointmentsComponent = (props: AppointmentsComponentProps) => {
           </div>)}
       </div>
       <div className="flex items-center text-sm">
-        <span className='flex'>
+        <span className='flex font-cabin-condensed text-base'>
           <LocationIcon />
           {Market__c}
         </span>

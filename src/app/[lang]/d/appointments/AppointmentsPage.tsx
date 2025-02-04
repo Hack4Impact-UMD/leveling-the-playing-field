@@ -4,7 +4,6 @@
 import React, { useState, useEffect } from "react";
 import AppointmentsComponent from "./Appointment";
 import AppointmentsIcon from "@/components/icons/AppointmentsIcon";
-import ContactPopup from "./ContactPopup";
 import { Locale } from "@/lib/i18n/dictionaries";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Contact, Opportunity, UserClaims } from "@/types/types";
@@ -14,7 +13,7 @@ interface AppointmentPageProps {
 }
 
 const AppointmentsPage = (props: AppointmentPageProps) => {
-  const [isDropclicked, setIsDropclicked] = useState(false);
+  const [isDropClicked, setIsDropClicked] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointments, setAppointments] = useState<Pick<Opportunity, 'Id' | 'Name' | 'CloseDate' | 'Market__c'>[]>([]);
   const [contacts, setContacts] = useState<Pick<Contact, 'Id' | 'Name'>[]>([]);
@@ -69,7 +68,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
     Promise.all([fetchAppointments(), fetchContacts()]).then(() => setLoading(false));
   }, []);
 
-  const dropDown = () => setIsDropclicked(!isDropclicked);
+  const dropDown = () => setIsDropClicked(!isDropClicked);
 
   const handleLocationSelect = () => {
     setIsModalOpen(true);
@@ -109,7 +108,7 @@ const AppointmentsPage = (props: AppointmentPageProps) => {
           Select Location
         </button>
 
-        {isDropclicked && (
+        {isDropClicked && (
           <div className="mt-2 w-[380px] overflow-y-auto max-h-40 bg-white rounded-md shadow-lg ">
             {["Warehouse 1", "Warehouse 2", "Warehouse 3", "Warehouse 4"].map(
               (location) => (
