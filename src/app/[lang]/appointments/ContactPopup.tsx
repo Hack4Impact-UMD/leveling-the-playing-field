@@ -37,28 +37,6 @@ const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps)
 
   if (!dict) return <LoadingPage />;
 
-  // retrieve contact information
-  const fetchContactDetails = async (opportunityId: string) => {
-    try {
-      const response = await fetch(`/api/opportunity/${opportunityId}`, {
-        method: "GET",
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error fetching opportunity details:", errorData);
-        return;
-      }
-
-      const data = await response.json();
-      setName(data.Name || "Name");
-      setPhoneNumber(data.Phone || "Phone Number");
-      setEmail(data.Email || "Email");
-    } catch (error) {
-      console.error("Error fetching opportunity:", error);
-    }
-  };
-
   // save and update new contact details
   const handleSave = async (opportunityId: string) => {
     try {
@@ -143,3 +121,29 @@ const ContactPopup = ({ onButtonClick, opportunityid, lang }: ContactPopupProps)
 };
 
 export default ContactPopup;
+  // retrieve contact information
+  export const fetchContactDetails = async (opportunityId: string,
+    setName: (name: string) => void,
+    setPhoneNumber: (name: string) => void,
+    setEmail: (name: string) => void,
+  ) => {
+    try {
+      const response = await fetch(`/api/opportunity/${opportunityId}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error fetching opportunity details:", errorData);
+        return;
+      }
+
+      const data = await response.json();
+      setName(data.Name || "Name");
+      setPhoneNumber(data.Phone || "Phone Number");
+      setEmail(data.Email || "Email");
+    } catch (error) {
+      console.error("Error fetching opportunity:", error);
+    }
+  };
+;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 //  this relies on the appointments component
 "use client";
 
@@ -5,17 +6,27 @@ import React, { useState , useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import ContactPopup from './ContactPopup';
+import { fetchContactDetails } from '../appointments/ContactPopup';
 import { useAuth } from ''; 
+import { Locale } from '@/lib/i18n/dictionaries';
 export type Appointment = {
   title: string; 
   location: string;
   timeStart: string;
   timeEnd: string;
 }
+export interface ContactPopupProps {
+  onButtonClick: () => void;
+  opportunityid: string;
+  lang: Locale;
+}
 
 
 const AppointmentsPage = () => {
     const { accountId } = useAuth(); 
+    const [name,setName] = useState('Name');
+    const [phoneNumber,setPhoneNumber] = useState('Phone Number');
+    const [email,setEmail] = useState('Email');
     const [isDropclicked, setIsisDropclicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -80,7 +91,7 @@ const AppointmentsPage = () => {
     setIsModalOpen(true); 
     async function loadContactDetails() {
       try {
-        await ContactPopup.fetchContactDetails(idToken);
+        await fetchContactDetails(idToken,setName,setPhoneNumber,setEmail);
       } catch (err) {
         console.error(err);
       }
