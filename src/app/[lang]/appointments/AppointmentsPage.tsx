@@ -9,12 +9,12 @@ import ContactPopup from './ContactPopup';
 import { fetchContactDetails } from '../appointments/ContactPopup';
 import { useAuth } from ''; 
 import { Locale } from '@/lib/i18n/dictionaries';
-export type Appointment = {
-  title: string; 
-  location: string;
-  timeStart: string;
-  timeEnd: string;
-}
+export type Opportunity = {
+    id: string;
+    name: string;
+    closeDate: Date;
+    primaryContactId: string;
+  }
 export interface ContactPopupProps {
   onButtonClick: () => void;
   opportunityid: string;
@@ -29,7 +29,7 @@ const AppointmentsPage = () => {
     const [email,setEmail] = useState('Email');
     const [isDropclicked, setIsisDropclicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
-    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [appointments, setAppointments] = useState<Opportunity[]>([]);
     // const { token } = useAuth();
     // let idToken = token?.token;
     // idToken=token.salesforceIds?.accountId(edited);
@@ -59,7 +59,7 @@ const AppointmentsPage = () => {
                     timeStart?: string;
                     timeEnd?: string;
                   }
-                  const newAppointments: Appointment[] = data.map((item: itemty) => ({
+                  const newAppointments: Opportunity[] = data.map((item: itemty) => ({
                     title: item.title || "Upcoming Appointment",
                     location: item.location || "[Insert Warehouse Address]",
                     timeStart: item.timeStart || "00:00 p.m",
