@@ -5,6 +5,7 @@ import React, { useState , useEffect} from 'react';
 import AppointmentsComponent from './Appointment';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import ContactPopup from './ContactPopup';
+import { useAuth } from ''; 
 export type Appointment = {
   title: string; 
   location: string;
@@ -14,6 +15,7 @@ export type Appointment = {
 
 
 const AppointmentsPage = () => {
+    const { accountId } = useAuth(); 
     const [isDropclicked, setIsisDropclicked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(true);
     const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -25,7 +27,7 @@ const AppointmentsPage = () => {
         
           const fetchAppointments = async () => {
               try {
-                 const contactResponse = await fetch(`/api/accounts/[accountId]/opportunities?stage=Site Visit/Call&idToken=${idToken}`, {
+                 const contactResponse = await fetch(`/api/accounts/${accountId}/opportunities?stage=Site Visit/Call&idToken=${idToken}`, {
                       method: 'GET',
                   });
   
@@ -57,7 +59,10 @@ const AppointmentsPage = () => {
                   console.error('Error fetching appointments:', err);
               }
           };
+
+          
           fetchAppointments();
+
 });
 
 
@@ -71,24 +76,23 @@ const AppointmentsPage = () => {
 
   const dropDown = () => setIsisDropclicked(!isDropclicked);
 
-  const handleFetch = async () => {
-    try {
-      const data = ContactPopup.fetchContactDetails(idToken); 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      console.error('Error');
-    }
-  };
-  
   const handleLocationSelect = () => {
     setIsModalOpen(true); 
+    async function loadContactDetails() {
+      try {
+        await ContactPopup.fetchContactDetails(idToken);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadContactDetails();
   };
 
     return (
     <div className="flex flex-col p-6 bg-gray-100 items-center min-h-screen overflow-auto">
       <div className="flex flex-col mb-6 items-center">
         <div className="bg-teal mb-2 rounded-full p-6 relative">
-          <div className='relative -top-0.5'> <button onClick={handleFetch}></button>
+          <div className='relative -top-0.5'> 
           <AppointmentsIcon/>
           </div>
         </div>
