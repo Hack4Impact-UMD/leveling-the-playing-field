@@ -3,6 +3,7 @@ import { onAuthStateChanged, User, IdTokenResult } from "@firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/lib/firebase/firebaseConfig";
 import Loading from "../Loading";
+import Error from "../Error";
 
 export interface AuthContextType {
   user: User | null;
@@ -21,41 +22,53 @@ export default function AuthProvider({
   const [token, setToken] = useState<IdTokenResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<number | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (newUser) => {
       setLoading(true);
-      if (newUser) {
-        let newToken = await newUser.getIdTokenResult();
-        if (!newToken.claims.role) {
-          const res = await fetch(`/api/auth?idToken=${newToken.token}`, {
-            method: "POST",
-          });
-          if (!res.ok) {
-            console.error(await res.json());
-            setUser(null);
-            setToken(null);
-            setError(
-              "We were unable to log you in. Please ensure you've been added to your organization's contacts list and try again later."
-            );
-            auth.signOut();
-            return;
+      try {
+        if (newUser) {
+          let newToken = await newUser.getIdTokenResult();
+          if (!newToken.claims.role) {
+            const res = await fetch(`/api/auth?idToken=${newToken.token}`, {
+              method: "POST",
+            });
+            // for resolved but rejected requests
+            if (!res.ok) {
+              console.error(await res.json());
+              setUser(null);
+              setToken(null);
+              setError(res.statusText);
+              setErrorCode(res.status);
+              console.log(res.statusText);
+              auth.signOut();
+              return;
+            }
+            newToken = await newUser.getIdTokenResult(true); // Force refresh token since claims have changed
           }
-          newToken = await newUser.getIdTokenResult(true); // Force refresh token since claims have changed
+          setUser(newUser);
+          setToken(newToken);
+        } else {
+          setUser(null);
+          setToken(null);
         }
-        setUser(newUser);
-        setToken(newToken);
-      } else {
+      // for requests that don't resolve
+      } catch (err) {
+        setError("Unexpected error during authentication.");
+        setErrorCode(500);
         setUser(null);
         setToken(null);
+        auth.signOut();
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
+  if (error && errorCode) {
+    return <Error message={error} code={errorCode} />
   }
 
   if (loading) {
